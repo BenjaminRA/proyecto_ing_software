@@ -1,7 +1,9 @@
 # Instrucciones
 
+##Solo la primera vez
 1) `docker-compose run web rails new .`
 
 2) `docker-compose build`
 
-3) `docker-compose up`
+##Para levantar el servidor
+1) `docker-compose up`
