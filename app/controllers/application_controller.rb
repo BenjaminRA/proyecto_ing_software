@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::Base
 
-    def Index
-        puts 'asdasd'
+    def index
+        
     end
 
 end
