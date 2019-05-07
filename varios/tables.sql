@@ -1,17 +1,18 @@
 create table categorias(
-    id INTEGER AUTO_INCREMENT PRIMARY KEY,
+    id INTEGER PRIMARY KEY autoincrement,
     categoria VARCHAR(255)
 );
 
 create table habilidades(
-    id INTEGER AUTO_INCREMENT PRIMARY KEY,
+    id INTEGER PRIMARY KEY autoincrement,
     habilidad VARCHAR(255),
     categoria_id INTEGER,
     FOREIGN KEY (categoria_id) REFERENCES categorias(id)
 );
 
 create table perfiles(
-    id INTEGER AUTO_INCREMENT PRIMARY KEY,
+    id INTEGER PRIMARY KEY autoincrement,
+    perfil VARCHAR(255),
     descripcion TEXT
 );
 
@@ -23,22 +24,34 @@ create table perfil_habilidad(
     FOREIGN KEY (habilidad_id) REFERENCES habilidades(id)
 );
 
+create table usuarios(
+    id INTEGER PRIMARY KEY autoincrement,
+    nombre VARCHAR(255),
+    rut INTEGER,
+    pwd VARCHAR(255),
+    correo VARCHAR(255)
+);
+
 create table estados(
-    id INTEGER AUTO_INCREMENT PRIMARY KEY,
+    id INTEGER PRIMARY KEY autoincrement,
     estado VARCHAR(255)
 );
 
 create table colaboradores(
-    id INTEGER AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(255),
-    rut INTEGER,
-    correo VARCHAR(255),
+    id INTEGER PRIMARY KEY autoincrement,
+    usuario_id INTEGER,
     estado_id INTEGER,
-    FOREIGN KEY (estado_id) REFERENCES estados(id)
+    FOREIGN KEY (estado_id) REFERENCES estados(id),
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
+);
+
+create table administradores(
+    usuario_id INTEGER PRIMARY KEY,
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
 );
 
 create table periodos(
-    id INTEGER AUTO_INCREMENT PRIMARY KEY,
+    id INTEGER PRIMARY KEY autoincrement,
     feha_inicio DATE,
     fecha_termino DATE
 );
@@ -46,12 +59,14 @@ create table periodos(
 create table colaborador_periodo(
     colaborador_id INTEGER,
     periodo_id INTEGER,
+    perfil_id INTEGER,
     FOREIGN KEY (colaborador_id) REFERENCES colaboradores(id),
-    FOREIGN KEY (periodo_id) REFERENCES periodos(id)
+    FOREIGN KEY (periodo_id) REFERENCES periodos(id),
+    FOREIGN KEY (perfil_id) REFERENCES prefiles(id)
 );
 
 create table evaluadores(
-    id INTEGER AUTO_INCREMENT PRIMARY KEY,
+    id INTEGER PRIMARY KEY autoincrement,
     colaborador_id INTEGER,
     periodo_id INTEGER,
     FOREIGN KEY (colaborador_id) REFERENCES colaboradores(id),
@@ -59,7 +74,7 @@ create table evaluadores(
 );
 
 create table evaluaciones(
-    id INTEGER AUTO_INCREMENT PRIMARY KEY,
+    id INTEGER PRIMARY KEY autoincrement,
     colaborador_id INTEGER,
     evaluador_id INTEGER,
     FOREIGN KEY (colaborador_id) REFERENCES colaboradores(id),
@@ -72,13 +87,4 @@ create table evaluacion_habilidad(
     valor INTEGER,
     FOREIGN KEY (habilidad_id) REFERENCES habilidades(id),
     FOREIGN KEY (evaluacion_id) REFERENCES evaluaciones(id)
-);
-
-create table administradores(
-    id INTEGER AUTO_INCREMENT PRIMARY KEY,
-    usuario VARCHAR(255),
-    pass VARCHAR(255),
-    nombre VARCHAR(255),
-    rut INTEGER,
-    correo VARCHAR(255)
 );
