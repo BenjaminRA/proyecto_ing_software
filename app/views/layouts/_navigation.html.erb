@@ -13,12 +13,25 @@
                         <li><a class="dropdown-item" >Contacts</a></li>
                         <li><a class="dropdown-item" >Mailbox</a></li>
                         <li class="dropdown-divider"></li>
-                        <li><a class="dropdown-item">Logout</a></li> %>
+                        <li><a class="dropdown-item">Logout</a></li>
                     </ul>
                 </div>
                 <div class="logo-element">
-                    IN+
+                    Contac
                 </div>
+            </li>
+            <li class="<%= is_active_controller('dashboard') %>">
+                <a href="<%= url_for :controller => 'dashboard', :action => 'index'%>"><i class="fa fa-th-large"></i> <span class="nav-label" data-i18n="nav.dashboard">Dashboards</span> <span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level collapse <%= is_active_controller('dashboard', 'in') %>">
+                    <li class="<%= is_active_action('dashboard_1') %>"><%= link_to "Dashboard", root_path %></li>
+                    <li class="<%= is_active_action('dashboard_2') %>"><%= link_to "Dashboard", root_path %></li>
+                    <li class="<%= is_active_action('dashboard_3') %>"><%= link_to "Dashboard", root_path %></li>
+                    <li class="<%= is_active_action('dashboard_4_1') %>"><%= link_to "Dashboard", root_path %></li>
+                    <li class="<%= is_active_action('dashboard_5') %>"><%= link_to "Dashboard", root_path %></li>
+                </ul>
+            </li>
+            <li class="<%= is_active_controller('users') %>">
+                <a href="<%= url_for :controller => 'users', :action => 'index'%>"><i class="fa fa-users"></i> <span class="nav-label" data-i18n="nav.dashboard">Usuarios</span></a>
             </li>
         </ul>
 
