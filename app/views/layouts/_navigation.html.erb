@@ -30,8 +30,8 @@
                     <li class="<%= is_active_action('dashboard_5') %>"><%= link_to "Dashboard", root_path %></li>
                 </ul>
             </li>
-            <li class="<%= is_active_controller('users') %>">
-                <a href="<%= url_for :controller => 'users', :action => 'index'%>"><i class="fa fa-users"></i> <span class="nav-label" data-i18n="nav.dashboard">Usuarios</span></a>
+            <li class="<%= is_active_controller('colaboradores') %>">
+                <a href="<%= url_for :controller => 'colaboradores', :action => 'index'%>"><i class="fa fa-users"></i> <span class="nav-label" data-i18n="nav.dashboard">Colaboradores</span></a>
             </li>
         </ul>
 

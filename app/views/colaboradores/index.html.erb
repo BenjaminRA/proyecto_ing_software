@@ -6,7 +6,7 @@
                 <a href="<%= url_for :controller => 'dashboard', :action => 'index' %>">Dashboard</a>
             </li>
             <li class="breadcrumb-item">
-                <strong>Usuarios</strong>
+                <strong>Colaboradores</strong>
             </li>
         </ol>
     </div>
@@ -15,7 +15,7 @@
 <div class="wrapper wrapper-content animated fadeInRight">
 
 
-<%= form_tag users_path, :method => 'get' do %>
+<%= form_tag colaboradores_path, :method => 'get' do %>
 <div class="ibox-content m-b-sm border-bottom">
     <div class="row">
         <div class="col-sm-2">
@@ -107,7 +107,7 @@
                         </td>
                         <td class="text-right">
                             <div class="btn-group">
-                                <button class="btn-white btn btn-xs"><%= link_to "Ver", user_path({id: '1'}) %></button>
+                                <button class="btn-white btn btn-xs"><%= link_to "Ver", colaboradores_path({id: '1'}) %></button>
                                 <button class="btn-warning btn btn-xs">Editar</button>
                                 <button class="btn-danger btn btn-xs">Borrar</button>
                             </div>
