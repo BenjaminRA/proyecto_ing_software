@@ -5,7 +5,7 @@
                 <div class="dropdown profile-element">
                     <img alt="image" class="rounded-circle" src="<%= image_path('profile_small.jpg') %>"/>
                     <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                        <span class="block m-t-xs font-bold">David Williams</span>
+                        <span class="block m-t-xs font-bold">Nombre_de_Usuario</span>
                         <span class="text-muted text-xs block">Art Director <b class="caret"></b></span>
                     </a>
                     <ul class="dropdown-menu animated fadeInRight m-t-xs">
@@ -17,8 +17,18 @@
                     </ul>
                 </div>
                 <div class="logo-element">
-                    IN+
+                    CONTAC
                 </div>
+            </li>
+            <li class="<%= is_active_controller('dashboard') %>">
+            <li class="">
+                <a href=""><i class="fa fa-user-o"></i> 
+                    <span class="nav-label" data-i18n="nav.dashboard">Usuarios</span>
+                    <span class="fa arrow"></span>
+                </a>
+                <ul class="nav nav-second-level collapse <%= is_active_controller('dashboard', 'in') %>">
+                    <li class="<%= is_active_action('dashboard') %>"><%= link_to "Crear" %></li>
+                </ul>
             </li>
         </ul>
 
