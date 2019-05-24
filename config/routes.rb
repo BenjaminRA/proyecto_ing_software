@@ -4,5 +4,9 @@ Rails.application.routes.draw do
   root 'dashboard#index'
   # get 'users/index'
 
-  resources :colaboradores
+  resources :collaborators
+  resources :admins
+  resources :profiles
+  resources :abilities
+  resources :profile_abilities
 end

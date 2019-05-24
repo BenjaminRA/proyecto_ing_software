@@ -21,19 +21,122 @@
                 </div>
             </li>
             <li class="<%= is_active_controller('dashboard') %>">
-                <a href="<%= url_for :controller => 'dashboard', :action => 'index'%>"><i class="fa fa-th-large"></i> <span class="nav-label" data-i18n="nav.dashboard">Dashboards</span> <span class="fa arrow"></span></a>
-                <ul class="nav nav-second-level collapse <%= is_active_controller('dashboard', 'in') %>">
-                    <li class="<%= is_active_action('dashboard_1') %>"><%= link_to "Dashboard", root_path %></li>
-                    <li class="<%= is_active_action('dashboard_2') %>"><%= link_to "Dashboard", root_path %></li>
-                    <li class="<%= is_active_action('dashboard_3') %>"><%= link_to "Dashboard", root_path %></li>
-                    <li class="<%= is_active_action('dashboard_4_1') %>"><%= link_to "Dashboard", root_path %></li>
-                    <li class="<%= is_active_action('dashboard_5') %>"><%= link_to "Dashboard", root_path %></li>
+                <a href="<%= url_for :controller => 'dashboard', :action => 'index'%>"><i class="fa fa-th-large"></i> <span class="nav-label" data-i18n="nav.dashboard">Dashboards</span></a>
+            </li>
+            <li class="<%= is_active_controller('collaborators') %>">
+                <a href="<%= url_for :controller => 'collaborators', :action => 'index'%>"><i class="fa fa-users"></i> <span class="nav-label" data-i18n="nav.dashboard">Colaboradores</span><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level collapse <%= is_active_controller('collaborators', 'in') %>">
+                    <li class="<%= is_active_action('index') %>"><a href="<%= url_for :controller => 'collaborators', :action => 'index' %>"><i class="fa fa-list"></i>Colaboradores</a></li>
+                    <li class="<%= is_active_action('new') %>"><a href="<%= url_for :controller => 'collaborators', :action => 'new' %>"><i class="fa fa-plus"></i>Crear Colaborador</a></li>
                 </ul>
             </li>
-            <li class="<%= is_active_controller('colaboradores') %>">
-                <a href="<%= url_for :controller => 'colaboradores', :action => 'index'%>"><i class="fa fa-users"></i> <span class="nav-label" data-i18n="nav.dashboard">Colaboradores</span></a>
+            <li class="<%= is_active_controller('admins') %>">
+                <a href="<%= url_for :controller => 'admins', :action => 'index'%>"><i class="fa fa-id-badge"></i> <span class="nav-label" data-i18n="nav.dashboard">Administradores</span><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level collapse <%= is_active_controller('admins', 'in') %>">
+                    <li class="<%= is_active_action('index') %>"><a href="<%= url_for :controller => 'admins', :action => 'index' %>"><i class="fa fa-list"></i>Administradores</a></li>
+                    <li class="<%= is_active_action('new') %>"><a href="<%= url_for :controller => 'admins', :action => 'new' %>"><i class="fa fa-plus"></i>Crear Administrador</a></li>
+                </ul>
+            </li>
+            <li class="<%= is_active_controller('profiles') %>">
+                <a href="<%= url_for :controller => 'profiles', :action => 'index'%>"><i class="fa fa-tasks"></i> <span class="nav-label" data-i18n="nav.dashboard">Perfiles</span><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level collapse <%= is_active_controller('profiles', 'in') %>">
+                    <li class="<%= is_active_action('index') %>"><a href="<%= url_for :controller => 'profiles', :action => 'index' %>"><i class="fa fa-list"></i>Perfiles</a></li>
+                    <li class="<%= is_active_action('new') %>"><a href="<%= url_for :controller => 'profiles', :action => 'new' %>"><i class="fa fa-plus"></i>Crear Perfil</a></li>
+                </ul>
+            </li>
+            <li class="<%= is_active_controller('abilities') %>">
+                <a href="<%= url_for :controller => 'abilities', :action => 'index'%>"><i class="fa fa-graduation-cap"></i> <span class="nav-label" data-i18n="nav.dashboard">Habilidades</span><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level collapse <%= is_active_controller('abilities', 'in') %>">
+                    <li class="<%= is_active_action('index') %>"><a href="<%= url_for :controller => 'abilities', :action => 'index' %>"><i class="fa fa-list"></i>Todo</a></li>
+                    <li class="<%= is_active_action('new') %>"><a data-toggle="modal" href="#crear-habilidad-form"><i class="fa fa-plus"></i>Crear Habilidad</a></li>
+                    <li class="">
+                        <a href="#">Competencias Técnicas <span class="fa arrow"></span></a>
+                        <li>
+                            <i class="fa fa-list"></i>Habilidades</a>
+                        </li>
+                    <li>
+                        <a href="#">Third Level <span class="fa arrow"></span></a>
+                        <ul class="nav nav-third-level">
+                            <li>
+                                <a href="#">Third Level Item</a>
+                            </li>
+                            <li>
+                                <a href="#">Third Level Item</a>
+                            </li>
+                            <li>
+                                <a href="#">Third Level Item</a>
+                            </li>
+
+                        </ul>
+                    </li>
+                </ul>
             </li>
         </ul>
 
     </div>
 </nav>
+
+<div id="crear-habilidad-form" class="modal fade" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm"><h3 class="m-t-none m-b">Crear Competencia</h3>
+                        <%= form_tag abilities_path, :method => 'post' do %>
+                            <div class="form-group">
+                                <label>Competencia</label>
+                                <%= text_field_tag :new_ability, params[:new_ability], {
+                                    :class => "form-control",
+                                    :placeholder => "Habilidad"
+                                }%>
+                            </div>
+                            <div class="form-group">
+                                <label>Categoria</label>
+                                <%= select_tag :new_category, options_for_select([["Competencia Técnica", 1], ["Competencia Blanda", 2]]), {
+                                    :class => "form-control",
+                                    :id => "new_category"
+                                }%>
+                            </div>
+                            <div id="new_blanda_category_form_group" style="display: none">
+                                <div class="form-group">
+                                    <label>Categoria</label>
+                                    <%= select_tag :new_blanda_category, options_for_select([["Transversales", 1], ["Específicas", 2]]), {
+                                        :class => "form-control",
+                                        :id => "new_blanda_category"
+                                    }%>
+                                </div>
+                                <div class="form-group">
+                                    <label>Área</label>
+                                    <%= select_tag :new_blanda_area, options_for_select([["Transversal", 1], ["Cognitivas", 2], ["De Gestión", 3], ["Interpersonales", 4]]), {
+                                        :class => "form-control",
+                                        :id => "new_blanda_category"
+                                    }%>
+                                </div>
+                            </div>
+                            <div>
+                                <button class="btn btn-primary float-right" type="submit"><strong>Crear</strong></button>
+                            </div>
+                        <% end %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<% content_for :javascript do %>
+
+<script type="text/javascript">
+
+$(function() {
+    $("#new_category").on('change', (e) => {
+        if (e.target.value == 2) {
+            $("#new_blanda_category_form_group").show("fast")
+        } else $("#new_blanda_category_form_group").hide("fast")
+    })
+
+});
+
+</script>
+
+<% end %>

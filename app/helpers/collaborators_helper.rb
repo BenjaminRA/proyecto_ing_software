@@ -1,4 +1,4 @@
-module UsersHelper
+module CollaboratorsHelper
     def state_class(state)
         if (state == "activo")
             "label-primary"

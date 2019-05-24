@@ -1,0 +1,18 @@
+<div class="row">
+    <div class="col-lg-6 habilidad">
+        <div class="form-group">
+            <label>Habilidad </label>
+            <div>
+                <%= f.select :ability, options_for_select( @tecnicas.map {|ability| [ability.ability, ability.id]} ), {
+                    :class => "habilidad_select form-control"
+                } %>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <label>Valor esperado</label>
+            <%= f.text_field :value %>
+        </div>
+    </div>
+</div>

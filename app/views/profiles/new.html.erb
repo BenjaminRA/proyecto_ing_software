@@ -1,0 +1,210 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>Perfiles</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="<%= url_for :controller => 'profiles', :action => 'index' %>">Perfiles</a>
+            </li>
+            <li class="breadcrumb-item">
+                <strong>Crear Perfiles</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox">
+            <div class="ibox-content">
+                <h2>
+                    Validation Wizard Form
+                </h2>
+                <p>
+                    This example show how to use Steps with jQuery Validation plugin.
+                </p>
+                <%= form_for @profile, :html => {:id => "form", :class => "wizard-big"} do |f| %>
+                    <h1>Perfil</h1>
+                    <fieldset style="position: relative">
+                        <h2>Perfil</h2>
+                        <div class="row">
+                            <div class="col-lg-8">
+                                <div class="form-group">
+                                    <%= f.label "Nombre del perfil *" %>
+                                    <%= f.text_field :profile, {:class => "form-control"} %>
+                                </div>
+                                <div class="form-group">
+                                    <%= f.label "Objetivo *" %>
+                                    <%= f.text_area :objective, {:class => "form-control", :rows => "5"} %>
+                                </div>
+                                <div class="form-group">
+                                    <%= f.label "Funciones *s" %>
+                                    <%= f.text_area :functions, {:class => "form-control", :rows => "10"} %>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="text-center">
+                                    <div style="margin-top: 20px">
+                                        <i class="fa fa-tasks" style="font-size: 180px;color: #e5e5e5 "></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <h1>Habilidades Técnicas</h1>
+                    <fieldset style="position: relative">
+                        <h2>Habilidades Técnicas</h2>
+                        <div class="abilities-fields-tecnicas">
+                            <%= f.fields_for :profile_abilities do |builder| %>
+                                <%= render 'tecnicas_profile_ability_fields', f: builder %>
+                            <% end %>
+                        </div>
+                        <div class="row">
+                            <div class="offset-lg-11 col-lg-1">
+                                <%= link_to_add_association f, :profile_abilities, :partial => "tecnicas_profile_ability_fields", data: {
+                                    association_insertion_node: '.abilities-fields-tecnicas', association_insertion_method: :append
+                                }, :class => "btn btn-primary", :id => "add_association" do %>
+                                    <i class="fa fa-plus"></i>&nbsp;Agregar Habilidad
+                                <% end %>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <h1>Habilidades Blandas</h1>
+                    <fieldset style="position: relative">
+                        <h2>Habilidades Blandas</h2>
+                        <div class="abilities-fields-blandas">
+                            <%= f.fields_for :profile_abilities do |builder| %>
+                                <%= render 'blandas_profile_ability_fields', f: builder %>
+                            <% end %>
+                        </div>
+                        <div class="row">
+                            <div class="offset-lg-11 col-lg-1">
+                                <%= link_to_add_association f, :profile_abilities, :partial => "blandas_profile_ability_fields", data: {
+                                    association_insertion_node: '.abilities-fields-blandas', association_insertion_method: :append
+                                }, :class => "btn btn-primary", :id => "add_association" do %>
+                                    <i class="fa fa-plus"></i>&nbsp;Agregar Habilidad
+                                <% end %>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <h1>Finalizar</h1>
+                    <fieldset style="position: relative">
+                        <h2>Terms and Conditions</h2>
+                        <input id="acceptTerms" name="acceptTerms" type="checkbox" class="required"> <label for="acceptTerms">I agree with the Terms and Conditions.</label>
+                    </fieldset>
+                <% end %>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<% content_for :javascript do %>
+
+<script type="text/javascript">
+
+var i = 0
+
+$(function() {
+    
+    $("#form").steps({
+        bodyTag: "fieldset",
+        onStepChanging: function (event, currentIndex, newIndex) {
+            // Always allow going backward even if the current step contains invalid fields!
+            if (currentIndex > newIndex) {
+                return true;
+            }
+
+            // Forbid suppressing "Warning" step if the user is to young
+            if (newIndex === 3 && Number($("#age").val()) < 18) {
+                return false;
+            }
+
+            var form = $(this);
+
+            // Clean up if user went backward before
+            if (currentIndex < newIndex) {
+                // To remove error styles
+                $(".body:eq(" + newIndex + ") label.error", form).remove();
+                $(".body:eq(" + newIndex + ") .error", form).removeClass("error");
+            }
+
+            // Disable validation on fields that are disabled or hidden.
+            form.validate().settings.ignore = ":disabled,:hidden";
+
+            // Start validation; Prevent going forward if false
+            return form.valid();
+        },
+        onStepChanged: function (event, currentIndex, priorIndex) {
+            // Suppress (skip) "Warning" step if the user is old enough.
+            if (currentIndex === 2 && Number($("#age").val()) >= 18) {
+                $(this).steps("next");
+            }
+
+            // Suppress (skip) "Warning" step if the user is old enough and wants to the previous step.
+            if (currentIndex === 2 && priorIndex === 3) {
+                $(this).steps("previous");
+            }
+        },
+        onFinishing: function (event, currentIndex) {
+            var form = $(this);
+
+            // Disable validation on fields that are disabled.
+            // At this point it's recommended to do an overall check (mean ignoring only disabled fields)
+            form.validate().settings.ignore = ":disabled";
+
+            // Start validation; Prevent form submission if false
+            return form.valid();
+        },
+        onFinished: function (event, currentIndex) {
+            var form = $(this);
+
+            // Submit form input
+            form.submit();
+        }
+    }).validate({
+        errorPlacement: function (error, element) {
+            element.before(error);
+        },
+        rules: {
+            confirm: {
+                equalTo: "#password"
+            }
+        }
+    });
+
+    $('.touchspin').TouchSpin({
+        min: 0,
+        max: 7,
+        step: 1,
+        verticalbuttons: true,
+        buttondown_class: 'btn btn-white',
+        buttonup_class: 'btn btn-white',
+        verticalupclass: 'fa fa-sort-asc',
+        verticaldownclass: 'fa fa-sort-desc'
+    });
+
+    $('.abilities-fields').on('cocoon:after-insert', () => {
+        
+    })
+
+    $(".habilidad_select").select2({
+        placeholder: "Seleccione las habilidades",
+        language: {
+            noResults: function (params) {
+            return "No hay coincidencias";
+            }
+        }
+    });
+
+    $("#agregar-habilidad-tecnica").on("click", (e) => {
+        console.log(e)
+    })
+
+});
+
+</script>
+
+<% end %>
