@@ -2,8 +2,10 @@
 
 one:
   ability: MyString
-  category: one
+  abilities_type: one
+  area: one
 
 two:
   ability: MyString
-  category: two
+  abilities_type: two
+  area: two

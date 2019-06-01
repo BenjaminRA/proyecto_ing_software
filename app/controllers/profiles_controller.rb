@@ -3,6 +3,12 @@ class ProfilesController < ApplicationController
         @title = "Perfiles"
         @abilities = Ability.all
         @profiles = Profile.joins(:abilities)
+        
+        @categories = Category.all
+        @areas = Area.all
+
+        gon.categories = @categories
+        gon.areas = @areas
 
         @profiles = @profiles.where(['profile like ?', "%#{params[:profile]}%"]) if params[:profile].present?
 
@@ -15,8 +21,9 @@ class ProfilesController < ApplicationController
 
     def create
         profile = Profile.create({
-            :profile => params[:profileName],
-            :description => params[:description]
+            :profile => params[:profile][:profile],
+            :objective => params[:profile][:objective],
+            :functions => params[:profile][:functions]
         })
         params[:profile][:profile_abilities_attributes].each do |ability|
             ProfileAbility.create({
@@ -33,7 +40,12 @@ class ProfilesController < ApplicationController
         @title = "Crear Perfiles"
         @profile = Profile.new
         @abilities = Ability.new
-        @tecnicas = Ability.where('category_id = 1')
-        @blandas = Ability.where('category_id = 2')
+        @categories = Category.all
+        @areas = Area.all
+
+        gon.categories = @categories
+        gon.areas = @areas
+        @tecnicas = Ability.where('abilities_type_id = 1')
+        @blandas = Ability.where('abilities_type_id = 2')
     end
 end

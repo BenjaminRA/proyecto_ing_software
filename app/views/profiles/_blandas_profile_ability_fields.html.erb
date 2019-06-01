@@ -1,12 +1,8 @@
 <div class="row">
     <div class="col-lg-6 habilidad">
         <div class="form-group">
-            <label>Habilidad</label>
-            <div>
-                <%= f.select :ability, options_for_select( @blandas.map {|ability| [ability.ability, ability.id]} ), {
-                    :class => "habilidad_select form-control"
-                } %>
-            </div>
+            <label>Competencia</label>
+            <%= f.select :ability, options_for_select( @blandas.map {|ability| [ability.ability, ability.id]} ) %>
         </div>
     </div>
     <div class="col-md-6">

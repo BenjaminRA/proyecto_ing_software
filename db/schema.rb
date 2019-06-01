@@ -14,12 +14,18 @@ ActiveRecord::Schema.define(version: 2019_05_16_163202) do
 
   create_table "abilities", force: :cascade do |t|
     t.string "ability"
-    t.integer "category_id"
+    t.integer "abilities_type_id"
+    t.integer "area_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "professional_comp_area_id"
-    t.index ["category_id"], name: "index_abilities_on_category_id"
-    t.index ["professional_comp_area_id"], name: "index_abilities_on_professional_comp_area_id"
+    t.index ["abilities_type_id"], name: "index_abilities_on_abilities_type_id"
+    t.index ["area_id"], name: "index_abilities_on_area_id"
+  end
+
+  create_table "abilities_types", force: :cascade do |t|
+    t.string "type_name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "admins", force: :cascade do |t|
@@ -27,6 +33,14 @@ ActiveRecord::Schema.define(version: 2019_05_16_163202) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_admins_on_user_id"
+  end
+
+  create_table "areas", force: :cascade do |t|
+    t.string "area"
+    t.integer "category_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_areas_on_category_id"
   end
 
   create_table "categories", force: :cascade do |t|
@@ -42,20 +56,6 @@ ActiveRecord::Schema.define(version: 2019_05_16_163202) do
     t.datetime "updated_at", null: false
     t.index ["state_id"], name: "index_collaborators_on_state_id"
     t.index ["user_id"], name: "index_collaborators_on_user_id"
-  end
-
-  create_table "professional_comp_areas", force: :cascade do |t|
-    t.string "area"
-    t.integer "professional_comp_cat_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["professional_comp_cat_id"], name: "index_professional_comp_areas_on_professional_comp_cat_id"
-  end
-
-  create_table "professional_comp_cats", force: :cascade do |t|
-    t.string "category"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
   create_table "profile_abilities", force: :cascade do |t|

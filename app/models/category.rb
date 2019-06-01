@@ -1,3 +1,3 @@
 class Category < ApplicationRecord
-    has_many :ability
+    has_many :areas
 end
