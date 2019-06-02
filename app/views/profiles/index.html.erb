@@ -79,9 +79,11 @@
                         </td>
                         <td class="text-right">
                             <div class="btn-group">
-                                <button class="btn-white btn btn-xs"><%= link_to "Ver", collaborators_path({id: '1'}) %></button>
-                                <button class="btn-warning btn btn-xs">Editar</button>
-                                <button class="btn-danger btn btn-xs">Borrar</button>
+                                <button class="btn-white btn btn-xs" style="border-radius: 0px;"><%= link_to "Ver", profile_path(profile) %></button>
+                                <button class="btn-warning btn btn-xs" style="border-radius: 0px;">Editar</button>
+                                <%= link_to "/profiles/#{profile.id}", :controller => "profiles", :action => "destroy", :method => "delete" do %>
+                                        <button class="btn-danger btn btn-xs" style="border-radius: 0px;">Borrar</button>
+                                    <% end %>
                             </div>
                         </td>
                     </tr>

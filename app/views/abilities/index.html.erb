@@ -31,6 +31,7 @@
                     @categories.map {|category| [category.category, category.id]}
                 ), {
                     :class => "form-control",
+                    :id => "categories-buscador",
                     :include_blank => "Todo"
                 } %>
             </div>
@@ -144,6 +145,14 @@ $(function() {
         $("#modificar-form").attr("action", `/abilities/${gon.abilities[index].id}`)
     })
 
+    $("#categories-buscador").select2({
+        placeholder: "Categoria",
+        language: {
+            noResults: function (params) {
+            return "No hay coincidencias";
+            }
+        }
+    })
 
 });
 

@@ -79,7 +79,7 @@
                             <td class="text-right">
                                 <div class="btn-group">
                                     <button data-toggle="modal" href="#modificar-habilidad-form" id="edit-button-<%= index %>" class="btn-warning btn btn-xs" style="border-radius: 0px;">Editar</button>
-                                    <%= link_to "/abilities/blandas/areas/#{area.id}", :controller => "abilities", :action => "areas_destroy", :method => "delete" do %>
+                                    <%= link_to "/abilities/blandas/areas/#{area.id}", :controller => "abilities", :action => "destroy", :method => "delete" do %>
                                         <button class="btn-danger btn btn-xs" style="border-radius: 0px;">Borrar</button>
                                     <% end %>
                                 </div>
@@ -152,6 +152,15 @@ $(function() {
         $("#updated_area").val(gon.areas[index].area)
         $("#updated_category").val(gon.areas[index].category_id)
         $("#modificar-form").attr("action", `/abilities/blandas/areas/${gon.areas[index].id}`)
+    })
+
+    $("#category_search").select2({
+        placeholder: "Seleccione las Competencias",
+        language: {
+            noResults: function (params) {
+            return "No hay coincidencias";
+            }
+        }
     })
 
 

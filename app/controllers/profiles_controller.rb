@@ -36,6 +36,14 @@ class ProfilesController < ApplicationController
         redirect_to profiles_path
     end
 
+    def destroy
+        profile = Profile.find(params[:id])
+        profile.destroy
+
+        redirect_to profiles_path
+
+    end
+
     def new
         @title = "Crear Perfiles"
         @profile = Profile.new

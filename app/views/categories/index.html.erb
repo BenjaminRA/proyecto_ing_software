@@ -74,7 +74,7 @@
                             <td class="text-right">
                                 <div class="btn-group">
                                     <button data-toggle="modal" href="#modificar-categoria-form" id="edit-button-<%= index %>" class="btn-warning btn btn-xs" style="border-radius: 0px;">Editar</button>
-                                    <%= link_to "/abilities/blandas/categories/#{category.id}", :controller => "abilities", :action => "categories_destroy", :method => "delete" do %>
+                                    <%= link_to "/abilities/blandas/categories/#{category.id}", :controller => "abilities", :action => "destroy", :method => "delete" do %>
                                         <button class="btn-danger btn btn-xs" style="border-radius: 0px;">Borrar</button>
                                     <% end %>
                                 </div>

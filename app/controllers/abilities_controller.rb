@@ -102,4 +102,14 @@ class AbilitiesController < ApplicationController
         redirect_to "/abilities"
     end
 
+    private def ability_url(type_name)
+        url = "/abilities"
+        if (type_name == 1)
+            url = "/abilities/tecnicas"
+        else
+            url = "/abilities/blandas"
+        end
+        return url
+    end
+
 end

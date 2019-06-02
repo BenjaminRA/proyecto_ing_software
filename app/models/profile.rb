@@ -1,5 +1,5 @@
 class Profile < ApplicationRecord
-    has_many :profile_abilities
+    has_many :profile_abilities, :dependent => :destroy
     has_many :reports_tos
     has_many :replace_bies
     has_many :abilities, through: :profile_abilities
