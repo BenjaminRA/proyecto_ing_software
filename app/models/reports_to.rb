@@ -1,3 +1,3 @@
 class ReportsTo < ApplicationRecord
-  belongs_to :profile
+  belongs_to :profile, required: false
 end

@@ -50,6 +50,29 @@
 
                     <div class="hr-line-dashed"></div>
                     <h2>Competencias Blandas</h2>
+                    <div class="row">
+                        <div class="col-md-6 habilidad">
+                            <div class="form-group">
+                                <label>Competencia</label>
+                                <%= select_tag "profile[profile_abilities_attributes][first][ability]", options_for_select( @blandas.map {|ability| [ability.ability, ability.id]} ), {
+                                    :id => "fisrt_blanda_select",
+                                    :class => "form-control"
+                                } %>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Valor esperado</label>
+                                <%= text_field_tag "profile[profile_abilities_attributes][first][value]", 0, {:class => "form-control", type: "number", min: "0", max: "5"} %>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label> &nbsp; </label>
+                                <button class="form-control btn btn-danger eliminar-competencia" type="button"><i class="fa fa-times"></i>&nbsp;&nbsp;&nbsp;Eliminar Competencia</button>
+                            </div>
+                        </div>
+                    </div>
                     <div id="add-blandas-association" class="abilities-fields-blandas">
                         <%= f.fields_for :profile_abilities do |builder| %>
                             <%= render 'blandas_profile_ability_fields', f: builder %>
@@ -67,6 +90,29 @@
                     
                     <div class="hr-line-dashed"></div>
                     <h2>Competencias Técnicas</h2>
+                    <div class="row">
+                        <div class="col-md-6 habilidad">
+                            <div class="form-group">
+                                <label>Competencia</label>
+                                <%= select_tag "profile[profile_abilities_attributes][last][ability]", options_for_select( @tecnicas.map {|ability| [ability.ability, ability.id]} ), {
+                                    :id => "fisrt_tecnica_select",
+                                    :class => "form-control"
+                                } %>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Valor esperado</label>
+                                <%= text_field_tag "profile[profile_abilities_attributes][last][value]", 0, {:class => "form-control", type: "number", min: "0", max: "5"} %>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label> &nbsp; </label>
+                                <button class="form-control btn btn-danger eliminar-competencia" type="button"><i class="fa fa-times"></i>&nbsp;&nbsp;&nbsp;Eliminar Competencia</button>
+                            </div>
+                        </div>
+                    </div>
                     <div id="add-tecnicas-association" class="abilities-fields-tecnicas">
                         <%= f.fields_for :profile_abilities do |builder| %>
                             <%= render 'tecnicas_profile_ability_fields', f: builder %>
@@ -181,6 +227,10 @@ $(function() {
                 }
             }
         })
+        button = insertedItem[0].lastChild.previousSibling.firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling
+        $(button).on("click", (e) => {
+            e.target.parentElement.parentElement.parentElement.remove()
+        })
         // valor_esperado = insertedItem[0].lastChild.previousSibling.firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling
         // $(valor_esperado).TouchSpin({
         //     min: 0,
@@ -206,7 +256,10 @@ $(function() {
                 }
             }
         })
-        // valor_esperado = insertedItem[0].lastChild.previousSibling.firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling
+        button = insertedItem[0].lastChild.previousSibling.firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling
+        $(button).on("click", (e) => {
+            e.target.parentElement.parentElement.parentElement.remove()
+        })
         // $(valor_esperado).TouchSpin({
         //     min: 0,
         //     max: 7,
@@ -217,6 +270,24 @@ $(function() {
         //     verticalupclass: 'fa fa-sort-asc',
         //     verticaldownclass: 'fa fa-sort-desc'
         // });
+    })
+
+    $("#fisrt_blanda_select").select2({
+        placeholder: "Seleccione la Competencia",
+        language: {
+            noResults: function (params) {
+            return "No hay coincidencias";
+            }
+        }
+    })
+    
+    $("#fisrt_tecnica_select").select2({
+        placeholder: "Seleccione la Competencia",
+        language: {
+            noResults: function (params) {
+            return "No hay coincidencias";
+            }
+        }
     })
 
     $("#reports_to_fields").select2({
@@ -244,6 +315,10 @@ $(function() {
             return "No hay coincidencias";
             }
         }
+    })
+
+    $(".eliminar-competencia").on("click", (e) => {
+        e.target.parentElement.parentElement.parentElement.remove()
     })
 
 });
