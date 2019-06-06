@@ -1,4 +1,3 @@
 class ReportsTo < ApplicationRecord
-  belongs_to :sender
-  belongs_to :reciever
+  belongs_to :profile
 end

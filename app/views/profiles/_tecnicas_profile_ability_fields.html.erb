@@ -8,7 +8,7 @@
     <div class="col-md-6">
         <div class="form-group">
             <label>Valor esperado</label>
-            <%= f.text_field :value, { :class => "form-control", :value => 0 } %>
+            <%= f.text_field :value, {:class => "form-control", value: "0", type: "number", min: "0", max: "5"} %>
         </div>
     </div>
 </div>

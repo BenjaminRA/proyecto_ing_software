@@ -1,12 +1,12 @@
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10">
-        <h2>Crear Colaborador</h2>
+        <h2>Editar Colaborador</h2>
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
                 <a href="<%= url_for :controller => 'dashboard', :action => 'index' %>">Colaboradores</a>
             </li>
             <li class="breadcrumb-item">
-                <strong>Crear Colaborador</strong>
+                <strong>Editar Colaborador</strong>
             </li>
         </ol>
     </div>
@@ -17,10 +17,10 @@
     <div class="col-lg-12">
         <div class="ibox ">
             <div class="ibox-title">
-                <h5>Rellenar los campos del nuevo colaborador</h5>
+                <h5>Editar los campos del colaborador</h5>
             </div>
             <div class="ibox-content">
-                <%= form_for @collaborator, :url => "/collaborators", :method => "post" do |f|%>
+                <%= form_for @collaborator, :url => "/collaborators/#{@collaborator.id}", :method => "put" do |f|%>
 
                     <div class="form-group row">
                         <div class="form-group col-md-6 col-sm-12">
@@ -57,7 +57,7 @@
                     <div class="form-group row">
                         <div class="form-group col-md-6 col-sm-12">
                             <%= f.label "Perfil Professional" %>
-                            <%= select_tag "user[profile_id]", options_for_select(@profiles.map {|profile| [profile.profile, profile.id]}), {:class => "form-control", id: "user_profile_id", include_blank: true} %>
+                            <%= select_tag "user[profile_id]", options_for_select(@profiles.map {|profile| [profile.profile, profile.id]}), {:class => "form-control", :value => @collaborator.collaborator.profile.id, id: "user_profile_id", include_blank: true} %>
                         </div>
                     </div>
 
@@ -79,7 +79,8 @@
 <script type="text/javascript">
 
 $(function() {
-    $("#user_profile_id").select2({
+    const select = $("#user_profile_id")
+    select.select2({
         placeholder: "Seleccione el perfil",
         language: {
             noResults: function (params) {
@@ -87,6 +88,9 @@ $(function() {
             }
         }
     })
+
+    select.val(gon.profile)
+    select.trigger("change")
 })
 
 </script>

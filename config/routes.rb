@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   resources :collaborators
   resources :admins
   resources :profiles
+  resources :users
 
 
   post '/abilities', to: 'abilities#create'

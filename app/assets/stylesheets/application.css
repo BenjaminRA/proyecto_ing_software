@@ -13,3 +13,17 @@
  *= require_tree .
  *= require_self
  */
+
+#user_rut {
+    -moz-appearance:textfield;
+}
+
+#user_rut::-webkit-outer-spin-button,
+#user_rut::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
+.select2-selection .select2-selection--single {
+    height: 38px;
+    line-height: 37px;
+}

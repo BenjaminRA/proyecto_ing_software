@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_16_163202) do
+ActiveRecord::Schema.define(version: 2019_06_05_183701) do
 
   create_table "abilities", force: :cascade do |t|
     t.string "ability"
@@ -54,8 +54,19 @@ ActiveRecord::Schema.define(version: 2019_05_16_163202) do
     t.integer "state_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "profile_id"
+    t.index ["profile_id"], name: "index_collaborators_on_profile_id"
     t.index ["state_id"], name: "index_collaborators_on_state_id"
     t.index ["user_id"], name: "index_collaborators_on_user_id"
+  end
+
+  create_table "direct_supervisions", force: :cascade do |t|
+    t.integer "from_id"
+    t.integer "to_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["from_id"], name: "index_direct_supervisions_on_from_id"
+    t.index ["to_id"], name: "index_direct_supervisions_on_to_id"
   end
 
   create_table "profile_abilities", force: :cascade do |t|
@@ -107,6 +118,7 @@ ActiveRecord::Schema.define(version: 2019_05_16_163202) do
     t.string "email"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "last_name"
   end
 
 end
