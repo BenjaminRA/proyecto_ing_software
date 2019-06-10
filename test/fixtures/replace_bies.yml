@@ -1,0 +1,9 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  to_replace: one
+  replacement: one
+
+two:
+  to_replace: two
+  replacement: two

@@ -13,24 +13,226 @@
                         <li><a class="dropdown-item" >Contacts</a></li>
                         <li><a class="dropdown-item" >Mailbox</a></li>
                         <li class="dropdown-divider"></li>
-                        <li><a class="dropdown-item">Logout</a></li> %>
+                        <li><a class="dropdown-item">Logout</a></li>
                     </ul>
                 </div>
                 <div class="logo-element">
-                    CONTAC
+                    Contac
                 </div>
             </li>
             <li class="<%= is_active_controller('dashboard') %>">
-            <li class="">
-                <a href=""><i class="fa fa-user-o"></i> 
-                    <span class="nav-label" data-i18n="nav.dashboard">Usuarios</span>
-                    <span class="fa arrow"></span>
-                </a>
-                <ul class="nav nav-second-level collapse <%= is_active_controller('dashboard', 'in') %>">
-                    <li class="<%= is_active_action('dashboard') %>"><%= link_to "Crear" %></li>
+                <a href="<%= url_for :controller => 'dashboard', :action => 'index'%>"><i class="fa fa-th-large"></i> <span class="nav-label" data-i18n="nav.dashboard">Dashboards</span></a>
+            </li>
+            <li class="<%= is_active_controller('admins') %>">
+                <a href="<%= url_for :controller => 'admins', :action => 'index' %>"><i class="fa fa-id-badge"></i> <span class="nav-label" data-i18n="nav.dashboard">Administradores</span><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level collapse <%= is_active_controller('admins', 'in') %>">
+                    <li class="<%= is_active_action('index') %>"><a href="<%= url_for :controller => 'admins', :action => 'index' %>"><i class="fa fa-list"></i>Administradores</a></li>
+                    <li class="<%= is_active_action('new') %>"><a href="<%= url_for :controller => 'admins', :action => 'new' %>"><i class="fa fa-plus"></i>Crear Administrador</a></li>
+                </ul>
+            </li>
+            <li class="<%= is_active_controller('collaborators') %>">
+                <a href="<%= url_for :controller => 'collaborators', :action => 'index' %>"><i class="fa fa-users"></i> <span class="nav-label" data-i18n="nav.dashboard">Colaboradores</span><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level collapse <%= is_active_controller('collaborators', 'in') %>">
+                    <li class="<%= is_active_action('index') %>"><a href="<%= url_for :controller => 'collaborators', :action => 'index' %>"><i class="fa fa-list"></i>Colaboradores</a></li>
+                    <li class="<%= is_active_action('new') %>"><a href="<%= url_for :controller => 'collaborators', :action => 'new' %>"><i class="fa fa-plus"></i>Crear Colaborador</a></li>
+                </ul>
+            </li>
+            <li class="<%= is_active_controller('periods') %>">
+                <a href="<%= url_for :controller => 'periods', :action => 'index' %>"><i class="fa fa-calendar-o"></i> <span class="nav-label" data-i18n="nav.dashboard">Períodos</span><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level collapse <%= is_active_controller('periods', 'in') %>">
+                    <li class="<%= is_active_action('index') %>"><a href="<%= url_for :controller => 'periods', :action => 'index' %>"><i class="fa fa-calendar-o"></i>Períodos</a></li>
+                    <li class="<%= is_active_action('new') %>"><a href="<%= url_for :controller => 'periods', :action => 'new' %>"><i class="fa fa-plus"></i>Crear Administrador</a></li>
+                </ul>
+            </li>
+            <li class="<%= is_active_controller('profiles') %>">
+                <a href="<%= url_for :controller => 'profiles', :action => 'index' %>"><i class="fa fa-tasks"></i> <span class="nav-label" data-i18n="nav.dashboard">Perfiles</span><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level collapse <%= is_active_controller('profiles', 'in') %>">
+                    <li class="<%= is_active_action('index') %>"><a href="<%= url_for :controller => 'profiles', :action => 'index' %>"><i class="fa fa-list"></i>Perfiles</a></li>
+                    <li class="<%= is_active_action('new') %>"><a href="<%= url_for :controller => 'profiles', :action => 'new' %>"><i class="fa fa-plus"></i>Crear Perfil</a></li>
+                </ul>
+            </li>
+            <li class="<%= is_active_controller('abilities') %> <%= is_active_controller('abilities_tecnicas') %> <%= is_active_controller('abilities_blandas') %> <%= is_active_controller('categories') %> <%= is_active_controller('areas') %>">
+                <a href="<%= url_for :controller => 'abilities', :action => 'index' %>"><i class="fa fa-graduation-cap"></i> <span class="nav-label" data-i18n="nav.dashboard">Competencias</span><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level collapse <%= is_active_controller('abilities', 'in') %> <%= is_active_controller('abilities_tecnicas', 'in') %> <%= is_active_controller('abilities_blandas', 'in') %> <%= is_active_controller('categories', 'in') %> <%= is_active_controller('areas', 'in') %>">
+                    <li class="<%= is_active_controller('abilities') %>"><a href="<%= url_for :controller => 'abilities', :action => 'index' %>"><i class="fa fa-list"></i>Todo</a></li>
+                    <li class="<%= is_active_controller('abilities_blandas') %> <%= is_active_controller('categories') %> <%= is_active_controller('areas') %>">
+                        <a href="/abilities/blandas"><i class="fa fa-smile-o"></i>Blandas<span class="fa arrow"></span></a>
+                        <ul class="nav nav-third-level collapse <%= is_active_controller('abilities_blandas', 'in') %>">
+                            <li class="<%= is_active_controller_action('abilities_blandas', 'index') %>" >
+                                <a href="/abilities/blandas">Competencias</a>
+                            </li>
+                            <li class="<%= is_active_controller('categories') %>">
+                                <a href="/abilities/blandas/categories">Categorias</a>
+                            </li>
+                            <li class="<%= is_active_controller('areas') %>">
+                                <a href="/abilities/blandas/areas">Áreas</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="<%= is_active_controller('abilities_tecnicas') %>"><a href="<%= url_for :controller => 'abilities_tecnicas', :action => 'index' %>"><i class="fa fa-wrench"></i>Técnicas</a></li>
+                    <li class="<%= is_active_action('new') %>"><a data-toggle="modal" href="#crear-habilidad-form"><i class="fa fa-plus"></i>Crear Competencia</a></li>
                 </ul>
             </li>
         </ul>
 
     </div>
 </nav>
+
+<div id="crear-habilidad-form" class="modal fade" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm"><h3 class="m-t-none m-b">Crear Competencia</h3>
+                        <%= form_tag '/abilities', :method => 'post' do %>
+                            <div class="form-group">
+                                <label>Competencia</label>
+                                <%= text_field_tag :new_ability, params[:new_ability], {
+                                    :class => "form-control",
+                                    :placeholder => "Competencia"
+                                }%>
+                            </div>
+                            <div class="form-group">
+                                <label>Tipo</label>
+                                <%= select_tag :new_type, options_for_select([["Competencia Técnica", 1], ["Competencia Blanda", 2]]), {
+                                    :class => "form-control",
+                                    :id => "new_category"
+                                }%>
+                            </div>
+                            <div id="new_blanda_category_form_group" style="display: none">
+                                <div class="form-group">
+                                    <label>Categoria</label>
+                                    <%= select_tag :new_blanda_category, options_for_select([["Agregar Categoria", 0]] + categories.map {|category| [category.category, category.id]}), {
+                                        :include_blank => true,
+                                        :class => "form-control",
+                                        :id => "new_blanda_category"
+                                    }%>
+                                </div>
+                                <div class="form-group">
+                                    <label>Área</label>
+                                    <%= select_tag :new_blanda_area, options_for_select([ ["Agregar Área", 0] ]), {
+                                        :include_blank => true,
+                                        :class => "form-control",
+                                        :id => "new_blanda_area"
+                                    }%>
+                                </div>
+                            </div>
+                            <div>
+                                <button class="btn btn-primary float-right" type="submit"><strong>Crear</strong></button>
+                            </div>
+                        <% end %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="crear-categoria-form" class="modal fade" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm"><h3 class="m-t-none m-b">Crear Categoria</h3>
+                        <div class="form-group">
+                            <label>Categoria</label>
+                            <input class="form-control" id="new_categoria_blanda" placeholder="Categoria" autofocus/>
+                        </div>
+                        <div>
+                            <button id="crear-categoria-form-button" class="btn btn-primary float-right" type="button" data-toggle="modal" href="#crear-categoria-form"><strong>Crear</strong></button>
+                            <button class="btn btn-danger float-right" type="button" data-toggle="modal" href="#crear-categoria-form"><strong>Cancelar</strong></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="crear-area-form" class="modal fade" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm"><h3 class="m-t-none m-b">Crear Area</h3>
+                        <div class="form-group">
+                            <label>Area</label>
+                            <input class="form-control" id="new_area_blanda" placeholder="Area" autofocus/>
+                        </div>
+                        <div>
+                            <button id="crear-area-form-button" class="btn btn-primary float-right" type="button" data-toggle="modal" href="#crear-area-form"><strong>Crear</strong></button>
+                            <button class="btn btn-danger float-right" type="button" data-toggle="modal" href="#crear-area-form"><strong>Cancelar</strong></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<% content_for :javascript do %>
+
+<script type="text/javascript">
+
+$(function() {
+
+    $("#new_category").on('change', (e) => {
+        if (e.target.value == 2) {
+            $("#new_blanda_category_form_group").show("fast")
+        } else {
+            $("#new_blanda_category_form_group").hide("fast")
+        }
+    })
+
+    $("#new_blanda_category").on("change", (e) => {
+        if (e.target.value == 0) {
+            $("#crear-categoria-form").modal()
+        } else {
+            let index = null
+            for (let i = 0; i < gon.categories.length; ++i) {
+                if (gon.categories[i].id == e.target.value) {
+                    index = i
+                    break
+                }
+            }
+            const select = $("#new_blanda_area")
+            select.empty()
+            select.append(`<option value=" "></option>`)
+            select.append(`<option value="0">Agregar Área</option>`)
+            for (let area of gon.categories[index].areas)
+                select.append(`<option value="${area.id}">${area.area}</option>`)
+        }
+    })
+
+    $("#crear-categoria-form-button").on("click", (e) => {
+        let index = $('#new_blanda_category').children('option').length
+        $("#new_blanda_category").append($('<option>', {
+            value: $("#new_categoria_blanda").val(),
+            text: $("#new_categoria_blanda").val()
+        }))
+        $("#new_blanda_category").val($("#new_categoria_blanda").val())
+    })
+
+    $('#crear-categoria-form').on('hidden', function () {
+        console.log("cerrando crear-categoria-form")
+    })
+
+    $("#new_blanda_area").on("change", (e) => {
+        if (e.target.value == 0) {
+            $("#crear-area-form").modal()
+        }
+    })
+
+    $("#crear-area-form-button").on("click", (e) => {
+        $("#new_blanda_area").append($('<option>', {
+            value: $("#new_area_blanda").val(),
+            text: $("#new_area_blanda").val()
+        }))
+        $("#new_blanda_area").val($("#new_area_blanda").val())
+    })
+
+});
+
+</script>
+
+<% end %>

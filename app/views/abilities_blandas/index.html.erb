@@ -1,0 +1,305 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>Competencias</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                Competencias
+            </li>
+            <li class="breadcrumb-item">
+                Blandas
+            </li>
+            <li class="breadcrumb-item">
+                <a href="<%= url_for :controller => 'abilities_blandas', :action => 'index' %>">Competencias</a>
+            </li>
+        </ol>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+
+
+<%= form_tag "/abilities/blandas", :method => 'get' do %>
+<div class="ibox-content m-b-sm border-bottom">
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label class="col-form-label" for="competencia">Competencia</label>
+                <%= text_field_tag :ability, params[:ability], {
+                    :class => "form-control",
+                    :placeholder => "Competencia"
+                } %>
+            </div>
+        </div>
+        <div class="col-sm">
+            <div class="form-group">
+                <label class="col-form-label" for="categoria">Categoría</label>
+                <%= select_tag :category, options_for_select(
+                    @categories.map {|category| [category.category, category.id]}
+                ), {
+                    :class => "form-control",
+                    :include_blank => "Todo",
+                    :id => "category_search"
+                } %>
+            </div>
+        </div>
+        <div class="col-sm">
+            <div class="form-group">
+                <label class="col-form-label" for="categoria">Área</label>
+                <%= select_tag :area, options_for_select(
+                    @areas.map {|area| [area.area, area.id]}
+                ), {
+                    :class => "form-control",
+                    :include_blank => "Todo",
+                    :id => "area_search"
+                } %>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-1 offset-lg-11">
+            <%= button_tag :submit, {:class => "btn btn-primary float-right"} do %>
+                <i class="fa fa-search"></i>&nbsp;Buscar
+            <% end %>
+        </div>
+    </div>
+</div>
+<% end %>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox">
+            <div class="ibox-content">
+
+                <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="15">
+                    <thead>
+                    <tr>
+
+                        <th data-toggle="true">Habilidad</th>
+                        <th data-hide="phone">Categoría</th>
+                        <th data-hide="phone">Área</th>
+                        <th class="text-right" data-sort-ignore="true">Acciones</th>
+
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <% @abilities.each_with_index do |ability, index| %>
+                        <tr>
+                            <td id="ability-<%= index %>">
+                                <%= ability.ability %>
+                            </td>
+                            <td id="category-<%= index %>">
+                               <%= ability.area.category.category %>
+                            </td>
+                            <td id="area-<%= index %>">
+                               <%= ability.area.area %>
+                            </td>
+                            <td class="text-right">
+                                <div class="btn-group">
+                                    <button data-toggle="modal" href="#modificar-habilidad-form" id="edit-button-<%= index %>" class="btn-warning btn btn-xs" style="border-radius: 0px;">Editar</button>
+                                    <%= link_to "/abilities/#{ability.id}", :controller => "abilities", :action => "destroy", :method => "delete" do %>
+                                        <button class="btn-danger btn btn-xs" style="border-radius: 0px;">Borrar</button>
+                                    <% end %>
+                                </div>
+                            </td>
+                        </tr>
+                    <% end %>
+
+                    <% if (@abilities.empty?) %>
+                        <tr>
+                            <td id="ability">
+                                No hay coincidencias
+                            </td>
+                            <td id="category">
+                            </td>
+                            <td id="area">
+                            </td>
+                            <td class="text-right">
+                                <div class="btn-group">
+                                </div>
+                            </td>
+                        </tr>
+                    <% end %>
+
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <td colspan="6">
+                            <ul class="pagination float-right"></ul>
+                        </td>
+                    </tr>
+                    </tfoot>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+
+<div id="modificar-habilidad-form" class="modal fade" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm"><h3 class="m-t-none m-b">Modificar Competencia</h3>
+                        <%= form_tag "/abilities/1", :method => 'put', :id => 'modificar-form' do %>
+                            <div class="form-group">
+                                <label>Competencia</label>
+                                <%= text_field_tag :updated_ability, params[:updated_ability], {
+                                    :class => "form-control",
+                                    :placeholder => "Competencia",
+                                    :id => "updated_ability_ability"
+
+                                }%>
+                            </div>
+                            <div class="form-group">
+                                <label>Tipo</label>
+                                <%= select_tag :updated_type, options_for_select([["Competencia Técnica", 1], ["Competencia Blanda", 2]]), {
+                                    :class => "form-control",
+                                    :id => "updated_ability_type",
+                                }%>
+                            </div>
+                            <div id="updated_blanda_category_form_group" style="display: none">
+                                <div class="form-group">
+                                    <label>Área</label>
+                                    <%= select_tag :updated_blanda_area, options_for_select([["Agregar Área", 0]] + @areas.map {|area| [area.area, area.id]}), {
+                                        :include_blank => true,
+                                        :class => "form-control",
+                                        :id => "updated_blanda_area"
+                                    }%>
+                                </div>
+                            </div>
+                            <div>
+                                <button class="btn btn-primary float-right" type="submit"><strong>Guardar Cambios</strong></button>
+                            </div>
+                        <% end %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<% content_for :javascript do %>
+
+<script type="text/javascript">
+
+console.log(gon.areas)
+
+$(function() {
+
+    $('.footable').footable();
+
+    $('[id^="edit-button-"]').on('click', (e) => {
+        const index = e.target.id.substring(12, e.target.id.length)
+        let category_index = null
+        $("#updated_ability_ability").val(gon.abilities[index].ability)
+        $("#updated_ability_type").val(gon.abilities[index].abilities_type_id)
+        $("#updated_blanda_area").val(gon.abilities[index].area.id)
+
+        if (gon.abilities[index].abilities_type_id == 2) {
+            $("#updated_blanda_category_form_group").show("fast")
+        }
+        $("#modificar-form").attr("action", `/abilities/${gon.abilities[index].id}`)
+    })
+
+    $("#category_search").on("change", (e) => {
+        let index = null
+        const select = $("#area_search")
+        if (e.target.value === '') {
+            select.empty()
+            select.append(`<option value>Todo</option>`)
+            for (let area of gon.areas)
+                select.append(`<option value="${area.id}">${area.area}</option>`)
+        } else {
+            for (let i = 0; i < gon.categories.length; ++i) {
+                if (gon.categories[i].id == e.target.value) {
+                    index = i
+                    break
+                }
+            }
+            select.empty()
+            select.append(`<option value>Todo</option>`)
+            for (let area of gon.categories[index].areas)
+                select.append(`<option value="${area.id}">${area.area}</option>`)
+        }
+    })
+
+    $("#updated_category").on('change', (e) => {
+        if (e.target.value == 2) {
+            $("#updated_blanda_category_form_group").show("fast")
+        } else {
+            $("#updated_blanda_category_form_group").hide("fast")
+        }
+    })
+
+    $("#updated_blanda_category").on("change", (e) => {
+        if (e.target.value == 0) {
+            $("#crear-categoria-form").modal()
+        } else {
+            let index = null
+            for (let i = 0; i < gon.categories.length; ++i) {
+                if (gon.categories[i].id == e.target.value) {
+                    index = i
+                    break
+                }
+            }
+            const select = $("#updated_blanda_area")
+            select.empty()
+            select.append(`<option value=" "></option>`)
+            select.append(`<option value="0">Agregar Área</option>`)
+            for (let area of gon.categories[index].areas)
+                select.append(`<option value="${area.id}">${area.area}</option>`)
+        }
+    })
+
+    $("#crear-categoria-form-button").on("click", (e) => {
+        let index = $('#updated_blanda_category').children('option').length
+        $("#updated_blanda_category").append($('<option>', {
+            value: $("#updated_categoria_blanda").val(),
+            text: $("#updated_categoria_blanda").val()
+        }))
+        $("#updated_blanda_category").val($("#updated_categoria_blanda").val())
+    })
+
+    $('#crear-categoria-form').on('hidden', function () {
+        console.log("cerrando crear-categoria-form")
+    })
+
+    $("#updated_blanda_area").on("change", (e) => {
+        if (e.target.value == 0) {
+            $("#crear-area-form").modal()
+        }
+    })
+
+    $("#crear-area-form-button").on("click", (e) => {
+        $("#updated_blanda_area").append($('<option>', {
+            value: $("#updated_area_blanda").val(),
+            text: $("#updated_area_blanda").val()
+        }))
+        $("#updated_blanda_area").val($("#updated_area_blanda").val())
+    })
+
+    $("#category_search").select2({
+        placeholder: "Categoría",
+        language: {
+            noResults: function (params) {
+            return "No hay coincidencias";
+            }
+        }
+    })
+
+    $("#area_search").select2({
+        placeholder: "Área",
+        language: {
+            noResults: function (params) {
+            return "No hay coincidencias";
+            }
+        }
+    })
+
+});
+
+</script>
+
+<% end %>

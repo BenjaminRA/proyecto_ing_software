@@ -1,0 +1,328 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>Perfiles</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="<%= url_for :controller => 'profiles', :action => 'index' %>">Perfiles</a>
+            </li>
+            <li class="breadcrumb-item">
+                <strong>Crear Perfiles</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox ">
+            <div class="ibox-title">
+                <h5>Rellenar los campos del nuevo perfil</h5>
+            </div>
+            <div class="ibox-content">
+                <%= form_for @profile do |f| %>
+                    <div class="form-group">
+                        <%= f.label "Nombre del perfil *" %>
+                        <%= f.text_field :profile, {:class => "form-control"} %>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <%= f.label "Reporta a:" %>
+                        <%= select_tag "reports_tos", options_for_select(@profiles.map {|profile| [profile.profile, profile.id]}), {:class => "form-control", :id => "reports_to_fields", :include_blank => true, :multiple => true} %>
+                    </div>
+                    <div class="form-group">
+                        <%= f.label "Supervisión Directa:" %>
+                        <%= select_tag "direct_supervisions", options_for_select(@profiles.map {|profile| [profile.profile, profile.id]}), {:class => "form-control", :id => "direct_supervision_fields", :include_blank => true, :multiple => true} %>
+                    </div>
+                    <div class="form-group">
+                        <%= f.label "Es Reemplazado por:" %>
+                        <%= select_tag "replace_bies", options_for_select(@profiles.map {|profile| [profile.profile, profile.id]}), {:class => "form-control", :id => "replace_by_fields", :include_blank => true, :multiple => true} %>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <%= f.label "Objetivo *" %>
+                        <%= f.text_area :objective, {:class => "form-control", :rows => "5"} %>
+                    </div>
+                    <div class="form-group">
+                        <%= f.label "Funciones *" %>
+                        <%= f.text_area :functions, {:class => "form-control", :rows => "15"} %>
+                    </div>
+
+                    <div class="hr-line-dashed"></div>
+                    <h2>Competencias Blandas</h2>
+                    <div class="row">
+                        <div class="col-md-6 habilidad">
+                            <div class="form-group">
+                                <label>Competencia</label>
+                                <%= select_tag "profile[profile_abilities_attributes][first][ability]", options_for_select( @blandas.map {|ability| [ability.ability, ability.id]} ), {
+                                    :id => "fisrt_blanda_select",
+                                    :class => "form-control"
+                                } %>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Valor esperado</label>
+                                <%= text_field_tag "profile[profile_abilities_attributes][first][value]", 0, {:class => "form-control", type: "number", min: "0", max: "5"} %>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label> &nbsp; </label>
+                                <button class="form-control btn btn-danger eliminar-competencia" type="button"><i class="fa fa-times"></i>&nbsp;&nbsp;&nbsp;Eliminar Competencia</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="add-blandas-association" class="abilities-fields-blandas">
+                        <%= f.fields_for :profile_abilities do |builder| %>
+                            <%= render 'blandas_profile_ability_fields', f: builder %>
+                        <% end %>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm">
+                            <%= link_to_add_association f, :profile_abilities, :partial => "blandas_profile_ability_fields", data: {
+                                association_insertion_node: '.abilities-fields-blandas', association_insertion_method: :append
+                            }, :class => "btn btn-primary float-right", :id => "add_association" do %>
+                                <i class="fa fa-plus"></i>&nbsp;Agregar Habilidad
+                            <% end %>
+                        </div>
+                    </div>
+                    
+                    <div class="hr-line-dashed"></div>
+                    <h2>Competencias Técnicas</h2>
+                    <div class="row">
+                        <div class="col-md-6 habilidad">
+                            <div class="form-group">
+                                <label>Competencia</label>
+                                <%= select_tag "profile[profile_abilities_attributes][last][ability]", options_for_select( @tecnicas.map {|ability| [ability.ability, ability.id]} ), {
+                                    :id => "fisrt_tecnica_select",
+                                    :class => "form-control"
+                                } %>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Valor esperado</label>
+                                <%= text_field_tag "profile[profile_abilities_attributes][last][value]", 0, {:class => "form-control", type: "number", min: "0", max: "5"} %>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label> &nbsp; </label>
+                                <button class="form-control btn btn-danger eliminar-competencia" type="button"><i class="fa fa-times"></i>&nbsp;&nbsp;&nbsp;Eliminar Competencia</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="add-tecnicas-association" class="abilities-fields-tecnicas">
+                        <%= f.fields_for :profile_abilities do |builder| %>
+                            <%= render 'tecnicas_profile_ability_fields', f: builder %>
+                        <% end %>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm">
+                            <%= link_to_add_association f, :profile_abilities, :partial => "tecnicas_profile_ability_fields", data: {
+                                association_insertion_node: '.abilities-fields-tecnicas', association_insertion_method: :append
+                            }, :class => "btn btn-primary float-right" do %>
+                                <i class="fa fa-plus"></i>&nbsp;Agregar Habilidad
+                            <% end %>
+                        </div>
+                    </div>
+                    
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group row">
+                        <div class="col-sm-4 col-sm-offset-2">
+                            <button class="btn btn-primary btn-sm" type="submit">Guardar</button>
+                        </div>
+                    </div>
+                <% end %>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<% content_for :javascript do %>
+
+<script type="text/javascript">
+
+var i = 0
+
+$(function() {
+    
+    $("#form").steps({
+        bodyTag: "fieldset",
+        onStepChanging: function (event, currentIndex, newIndex) {
+            // Always allow going backward even if the current step contains invalid fields!
+            if (currentIndex > newIndex) {
+                return true;
+            }
+
+            // Forbid suppressing "Warning" step if the user is to young
+            if (newIndex === 3 && Number($("#age").val()) < 18) {
+                return false;
+            }
+
+            var form = $(this);
+
+            // Clean up if user went backward before
+            if (currentIndex < newIndex) {
+                // To remove error styles
+                $(".body:eq(" + newIndex + ") label.error", form).remove();
+                $(".body:eq(" + newIndex + ") .error", form).removeClass("error");
+            }
+
+            // Disable validation on fields that are disabled or hidden.
+            form.validate().settings.ignore = ":disabled,:hidden";
+
+            // Start validation; Prevent going forward if false
+            return form.valid();
+        },
+        onStepChanged: function (event, currentIndex, priorIndex) {
+            // Suppress (skip) "Warning" step if the user is old enough.
+            if (currentIndex === 2 && Number($("#age").val()) >= 18) {
+                $(this).steps("next");
+            }
+
+            // Suppress (skip) "Warning" step if the user is old enough and wants to the previous step.
+            if (currentIndex === 2 && priorIndex === 3) {
+                $(this).steps("previous");
+            }
+        },
+        onFinishing: function (event, currentIndex) {
+            var form = $(this);
+
+            // Disable validation on fields that are disabled.
+            // At this point it's recommended to do an overall check (mean ignoring only disabled fields)
+            form.validate().settings.ignore = ":disabled";
+
+            // Start validation; Prevent form submission if false
+            return form.valid();
+        },
+        onFinished: function (event, currentIndex) {
+            var form = $(this);
+
+            // Submit form input
+            form.submit();
+        }
+    }).validate({
+        errorPlacement: function (error, element) {
+            element.before(error);
+        },
+        rules: {
+            confirm: {
+                equalTo: "#password"
+            }
+        }
+    });
+
+    $('#add-tecnicas-association').on('cocoon:after-insert', (e, insertedItem) => {
+        ability_select = insertedItem[0].firstChild.nextSibling.firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling
+        ability_select.classList.add("form-control")
+        ability_select.classList.add("habilidades_select")
+        $(ability_select).select2({
+            placeholder: "Seleccione las Competencias",
+            language: {
+                noResults: function (params) {
+                return "No hay coincidencias";
+                }
+            }
+        })
+        button = insertedItem[0].lastChild.previousSibling.firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling
+        $(button).on("click", (e) => {
+            e.target.parentElement.parentElement.parentElement.remove()
+        })
+        // valor_esperado = insertedItem[0].lastChild.previousSibling.firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling
+        // $(valor_esperado).TouchSpin({
+        //     min: 0,
+        //     max: 7,
+        //     step: 1,
+        //     verticalbuttons: true,
+        //     buttondown_class: 'btn btn-white',
+        //     buttonup_class: 'btn btn-white',
+        //     verticalupclass: 'fa fa-sort-asc',
+        //     verticaldownclass: 'fa fa-sort-desc'
+        // });
+    })
+
+    $('#add-blandas-association').on('cocoon:after-insert', (e, insertedItem) => {
+        ability_select = insertedItem[0].firstChild.nextSibling.firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling
+        ability_select.classList.add("form-control")
+        ability_select.classList.add("habilidades_select")
+        $(ability_select).select2({
+            placeholder: "Seleccione las Competencias",
+            language: {
+                noResults: function (params) {
+                return "No hay coincidencias";
+                }
+            }
+        })
+        button = insertedItem[0].lastChild.previousSibling.firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling
+        $(button).on("click", (e) => {
+            e.target.parentElement.parentElement.parentElement.remove()
+        })
+        // $(valor_esperado).TouchSpin({
+        //     min: 0,
+        //     max: 7,
+        //     step: 1,
+        //     verticalbuttons: true,
+        //     buttondown_class: 'btn btn-white',
+        //     buttonup_class: 'btn btn-white',
+        //     verticalupclass: 'fa fa-sort-asc',
+        //     verticaldownclass: 'fa fa-sort-desc'
+        // });
+    })
+
+    $("#fisrt_blanda_select").select2({
+        placeholder: "Seleccione la Competencia",
+        language: {
+            noResults: function (params) {
+            return "No hay coincidencias";
+            }
+        }
+    })
+    
+    $("#fisrt_tecnica_select").select2({
+        placeholder: "Seleccione la Competencia",
+        language: {
+            noResults: function (params) {
+            return "No hay coincidencias";
+            }
+        }
+    })
+
+    $("#reports_to_fields").select2({
+        placeholder: "Seleccione los perfiles",
+        language: {
+            noResults: function (params) {
+            return "No hay coincidencias";
+            }
+        }
+    })
+
+    $("#direct_supervision_fields").select2({
+        placeholder: "Seleccione los perfiles",
+        language: {
+            noResults: function (params) {
+            return "No hay coincidencias";
+            }
+        }
+    })
+    
+    $("#replace_by_fields").select2({
+        placeholder: "Seleccione los perfiles",
+        language: {
+            noResults: function (params) {
+            return "No hay coincidencias";
+            }
+        }
+    })
+
+    $(".eliminar-competencia").on("click", (e) => {
+        e.target.parentElement.parentElement.parentElement.remove()
+    })
+
+});
+
+</script>
+
+<% end %>

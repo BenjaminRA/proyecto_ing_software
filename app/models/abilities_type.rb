@@ -1,0 +1,3 @@
+class AbilitiesType < ApplicationRecord
+    
+end

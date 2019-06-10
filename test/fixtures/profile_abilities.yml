@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  profile: one
+  ability: one
+  value: 1
+
+two:
+  profile: two
+  ability: two
+  value: 1

@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  ability: MyString
+  abilities_type: one
+  area: one
+
+two:
+  ability: MyString
+  abilities_type: two
+  area: two

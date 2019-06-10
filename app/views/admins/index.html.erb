@@ -1,0 +1,140 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>Administradores</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="<%= url_for :controller => 'collaborators', :action => 'index' %>">Administradores</a>
+            </li>
+        </ol>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+
+
+<%= form_tag admins_path, :method => 'get' do %>
+<div class="ibox-content m-b-sm border-bottom">
+    <div class="row">
+        <div class="col-sm-2">
+            <div class="form-group">
+                <label class="col-form-label" for="nombre">Nombre</label>
+                <%= text_field_tag :nombre, params[:nombre], {
+                    :class => "form-control",
+                    :placeholder => "Nombre"
+                } %>
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <div class="form-group">
+                <label class="col-form-label" for="rut">Rut</label>
+                <%= text_field_tag :rut, params[:rut], {
+                    :class => "form-control",
+                    :placeholder => "Rut"
+                } %>
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <div class="form-group">
+                <label class="col-form-label" for="email">Correo Electrónico</label>
+                <%= text_field_tag :email, params[:email], {
+                    :class => "form-control",
+                    :placeholder => "Correo Electrónico"
+                } %>
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <div class="form-group">
+                <label class="col-form-label" for="perfil">Perfil</label>
+                <%= text_field_tag :perfil, params[:perfil], {
+                    :class => "form-control",
+                    :placeholder => "Perfil"
+                } %>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label class="col-form-label" for="status">Estado</label>
+                <%= select_tag 'status', options_for_select(["Activo", "Inactivo"]), {:class => "form-control"}%>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-1 offset-lg-11">
+            <%= button_tag :submit, {:class => "btn btn-primary"} do %>
+                <i class="fa fa-search"></i>&nbsp;Buscar
+            <% end %>
+        </div>
+    </div>
+</div>
+<% end %>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox">
+            <div class="ibox-content">
+
+                <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="15">
+                    <thead>
+                    <tr>
+                        <th data-toggle="true">Nombre</th>
+                        <th data-hide="phone">Rut</th>
+                        <th data-hide="phone,tablet" >Correo Electrónico</th>
+                        <th class="text-right" data-sort-ignore="true">Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <% @admins.each do |user| %>
+                    <tr>
+                        <td>
+                            <%= user.name %> <%= user.last_name %>
+                        </td>
+                        <td>
+                            <%= user.rut %>
+                        </td>
+                        <td>
+                            <%= user.email %>
+                        </td>
+                        <td class="text-right">
+                            <div class="btn-group">
+                                <%= link_to "/admins/#{user.id}", :controller => "admins", :action => "show", :method => "get" do %>
+                                    <button class="btn-white btn btn-xs" style="border-radius: 0px;">Ver</button>
+                                <% end %>
+                                <%= link_to "/admins/#{user.id}/edit", :controller => "admins", :action => "edit", :method => "get" do %>
+                                    <button class="btn-warning btn btn-xs" style="border-radius: 0px;">Editar</button>
+                                <% end %>
+                                <%= link_to "/admins/#{user.id}", :controller => "admins", :action => "destroy", :method => "delete" do %>
+                                    <button class="btn-danger btn btn-xs" style="border-radius: 0px;">Borrar</button>
+                                <% end %>
+                            </div>
+                        </td>
+                    </tr>
+                    <% end %>
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <td colspan="6">
+                            <ul class="pagination float-right"></ul>
+                        </td>
+                    </tr>
+                    </tfoot>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+
+<% content_for :javascript do %>
+
+<script type="text/javascript">
+
+// console.log('<%= @title %>')
+
+$(function() {
+    $('.footable').footable();
+});
+
+</script>
+
+<% end %>

@@ -1,0 +1,98 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>Editar Colaborador</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="<%= url_for :controller => 'dashboard', :action => 'index' %>">Colaboradores</a>
+            </li>
+            <li class="breadcrumb-item">
+                <strong>Editar Colaborador</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox ">
+            <div class="ibox-title">
+                <h5>Editar los campos del colaborador</h5>
+            </div>
+            <div class="ibox-content">
+                <%= form_for @collaborator, :url => "/collaborators/#{@collaborator.id}", :method => "put" do |f|%>
+
+                    <div class="form-group row">
+                        <div class="form-group col-md-6 col-sm-12">
+                            <%= f.label "Nombre" %>
+                            <%= f.text_field :name, {:class => "form-control"} %>
+                        </div>
+                        <div class="form-group col-md-6 col-sm-12">
+                            <%= f.label "Apellido" %>
+                            <%= f.text_field :last_name, {:class => "form-control"} %>
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+
+                    <div class="form-group row">
+                        <div class="form-group col-md-6 col-sm-12">
+                            <%= f.label "Rut" %>
+                            <%= f.text_field :rut, {:class => "form-control", type: "number"} %>
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+
+                    <div class="form-group row">
+                        <div class="form-group col-md-6 col-sm-12">
+                            <%= f.label "Mail" %>
+                            <%= f.text_field :email, {:class => "form-control"} %>
+                        </div>
+                        <div class="form-group col-md-6 col-sm-12">
+                            <%= f.label "Contraseña" %>
+                            <%= f.text_field :password_digest, {:class => "form-control", type: "password"} %>
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+
+                    <div class="form-group row">
+                        <div class="form-group col-md-6 col-sm-12">
+                            <%= f.label "Perfil Professional" %>
+                            <%= select_tag "user[profile_id]", options_for_select(@profiles.map {|profile| [profile.profile, profile.id]}), {:class => "form-control", :value => @collaborator.collaborator.profile.id, id: "user_profile_id", include_blank: true} %>
+                        </div>
+                    </div>
+
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group row">
+                        <div class="col-sm-4 col-sm-offset-2">
+                            <button class="btn btn-primary btn-sm" type="submit">Guardar</button>
+                        </div>
+                    </div>
+                <% end %>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<% content_for :javascript do %>
+
+<script type="text/javascript">
+
+$(function() {
+    const select = $("#user_profile_id")
+    select.select2({
+        placeholder: "Seleccione el perfil",
+        language: {
+            noResults: function (params) {
+            return "No hay coincidencias";
+            }
+        }
+    })
+
+    select.val(gon.profile)
+    select.trigger("change")
+})
+
+</script>
+
+<% end %>

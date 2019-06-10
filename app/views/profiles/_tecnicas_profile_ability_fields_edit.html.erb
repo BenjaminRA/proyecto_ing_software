@@ -1,0 +1,35 @@
+<% if f.object.ability.inspect[f.object.ability.inspect.index("abilities_type_id: ").to_i + "abilities_type_id: ".size, + 1] != "2"%>
+<div class="row">
+    <div class="col-md-6 habilidad">
+        <div class="form-group">
+            <label>Competencia</label>
+            <%= f.select :ability, options_for_select(@tecnicas.map {|ability| [ability.ability, ability.id]}, f.object.ability_id), {}, {
+                :class => "form-control select-tecnicas-#{f.object.ability_id}"
+            } %>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <label>Valor esperado</label>
+            <%= f.text_field :value, {:class => "form-control", value: f.object.value, type: "number", min: "0", max: "5"} %>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="form-group">
+            <label> &nbsp; </label>
+            <button class="form-control btn btn-danger eliminar-competencia" type="button"><i class="fa fa-times"></i>&nbsp;&nbsp;&nbsp;Eliminar Competencia</button>
+        </div>
+    </div>
+</div>
+<% end %>
+
+<script>
+    $(".select-tecnicas-<%= f.object.ability_id %>").select2({
+        placeholder: "Seleccione las Competencias",
+        language: {
+            noResults: function (params) {
+            return "No hay coincidencias";
+            }
+        }
+    })
+</script>
