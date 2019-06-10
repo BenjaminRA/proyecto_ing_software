@@ -38,10 +38,10 @@
                 </ul>
             </li>
             <li class="<%= is_active_controller('periods') %>">
-                <a href="<%= url_for :controller => 'admins', :action => 'index' %>"><i class="fa fa-calendar-o"></i> <span class="nav-label" data-i18n="nav.dashboard">Períodos</span><span class="fa arrow"></span></a>
+                <a href="<%= url_for :controller => 'periods', :action => 'index' %>"><i class="fa fa-calendar-o"></i> <span class="nav-label" data-i18n="nav.dashboard">Períodos</span><span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level collapse <%= is_active_controller('periods', 'in') %>">
-                    <li class="<%= is_active_action('index') %>"><a href="<%= url_for :controller => 'admins', :action => 'index' %>"><i class="fa fa-calendar-o"></i>Períodos</a></li>
-                    <li class="<%= is_active_action('new') %>"><a href="<%= url_for :controller => 'admins', :action => 'new' %>"><i class="fa fa-plus"></i>Crear Administrador</a></li>
+                    <li class="<%= is_active_action('index') %>"><a href="<%= url_for :controller => 'periods', :action => 'index' %>"><i class="fa fa-calendar-o"></i>Períodos</a></li>
+                    <li class="<%= is_active_action('new') %>"><a href="<%= url_for :controller => 'periods', :action => 'new' %>"><i class="fa fa-plus"></i>Crear Administrador</a></li>
                 </ul>
             </li>
             <li class="<%= is_active_controller('profiles') %>">
@@ -57,7 +57,7 @@
                     <li class="<%= is_active_controller('abilities') %>"><a href="<%= url_for :controller => 'abilities', :action => 'index' %>"><i class="fa fa-list"></i>Todo</a></li>
                     <li class="<%= is_active_controller('abilities_blandas') %> <%= is_active_controller('categories') %> <%= is_active_controller('areas') %>">
                         <a href="/abilities/blandas"><i class="fa fa-smile-o"></i>Blandas<span class="fa arrow"></span></a>
-                        <ul class="nav nav-third-level">
+                        <ul class="nav nav-third-level collapse <%= is_active_controller('abilities_blandas', 'in') %>">
                             <li class="<%= is_active_controller_action('abilities_blandas', 'index') %>" >
                                 <a href="/abilities/blandas">Competencias</a>
                             </li>

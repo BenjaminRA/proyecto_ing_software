@@ -1,8 +1,7 @@
 class Profile < ApplicationRecord
     belongs_to :collaborators, required: false
     has_many :profile_abilities, :dependent => :destroy
-    # has_many :sender,  through: :reports_tos, :foreign_key => 'sender_id', :dependent => :destroy
-    # has_many :sender, through: :reports_tos, :dependent => :destroy
+    has_many :sender,  through: :reports_tos, :foreign_key => 'sender_id', :dependent => :destroy
     # has_many :reciever, through: :reports_tos, :dependent => :destroy
     # has_many :replacement, through: :replace_bies, :dependent => :destroy
     # has_many :to_replace, through: :replace_bies, :dependent => :destroy

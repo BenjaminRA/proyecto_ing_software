@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   resources :admins
   resources :profiles
   resources :users
+  resources :periods
 
 
   post '/abilities', to: 'abilities#create'

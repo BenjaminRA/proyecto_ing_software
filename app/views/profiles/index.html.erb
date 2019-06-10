@@ -50,7 +50,7 @@
                     <tr>
                         <th data-toggle="true">Perfil</th>
                         <th data-hide="all">Objetivo</th>
-                        <th data-hide="all">Habilidades</th>
+                        <th data-hide="all">Funciones</th>
                         <th class="text-right" data-sort-ignore="true">Acciones</th>
                     </tr>
                     </thead>
@@ -64,15 +64,10 @@
                             <%= profile.objective %>
                         </td>
                         <td>
-                            <table class="table table-stripped" style="margin: 20px 0px;">
-                                <tr>
-                                    <th>Habilidad</th>
-                                    <th>Valor esperado</th>
-                                <tr>
-                                <% profile.profile_abilities.each do |ability| %>
+                            <table class="table" style="margin: 20px 0px;">
+                                <% profile.functions.split("\r\n\r\n").each do |function| %>
                                     <tr>
-                                        <td><%= ability.ability.ability %></td>
-                                        <td><%= ability.value %></td>
+                                        <td><%= function %></td>
                                     </tr>
                                 <% end %>
                             </table>
@@ -80,10 +75,12 @@
                         <td class="text-right">
                             <div class="btn-group">
                                 <button class="btn-white btn btn-xs" style="border-radius: 0px;"><%= link_to "Ver", profile_path(profile) %></button>
-                                <button class="btn-warning btn btn-xs" style="border-radius: 0px;">Editar</button>
+                                <%= link_to "/profiles/#{profile.id}/edit", :controller => "profiles", :action => "edit", :method => "get" do %>
+                                    <button class="btn-warning btn btn-xs" style="border-radius: 0px;">Editar</button>
+                                <% end %>
                                 <%= link_to "/profiles/#{profile.id}", :controller => "profiles", :action => "destroy", :method => "delete" do %>
-                                        <button class="btn-danger btn btn-xs" style="border-radius: 0px;">Borrar</button>
-                                    <% end %>
+                                    <button class="btn-danger btn btn-xs" style="border-radius: 0px;">Borrar</button>
+                                <% end %>
                             </div>
                         </td>
                     </tr>
