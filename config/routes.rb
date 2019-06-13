@@ -1,14 +1,18 @@
 Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
-  root 'dashboard#index'
-  # get 'users/index'
+  root 'login#index'
+  get '/dashboard', to: 'dashboard#index'
+
+  post '/login', to: 'login#authenticate'
+  get '/logout', to: 'login#logout'
 
   resources :collaborators
   resources :admins
   resources :profiles
   resources :users
   resources :periods
+  resources :profile_abilities
 
 
   post '/abilities', to: 'abilities#create'
@@ -27,5 +31,4 @@ Rails.application.routes.draw do
   get '/abilities/blandas/areas', to: 'areas#index'
   delete '/abilities/blandas/areas/:id', to: 'areas#destroy'
   put '/abilities/blandas/areas/:id', to: 'areas#update'
-  resources :profile_abilities
 end

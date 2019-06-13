@@ -1,12 +1,11 @@
 class ApplicationController < ActionController::Base
+    include ApplicationHelper
+    before_action :ability_helper
+    before_action :signed_in
 
     def index
         @title = "Dashboard"
-        @categories = Category.all
-        @areas = Area.all
 
-        gon.categories = @categories
-        gon.areas = @areas
     end
 
 end

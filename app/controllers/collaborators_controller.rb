@@ -1,4 +1,5 @@
 class CollaboratorsController < ApplicationController
+    before_action :is_admin
 
     def index
         @title = "Colaboradores"
@@ -6,11 +7,7 @@ class CollaboratorsController < ApplicationController
         # puts @collaborators.inspect
 
 
-        @categories = Category.all
-        @areas = Area.all
 
-        gon.categories = @categories
-        gon.areas = @areas
 
         # render :plain => @collaborators[0].collaborator.profile.inspect
     end
@@ -20,20 +17,12 @@ class CollaboratorsController < ApplicationController
         @collaborator = User.new
         @profiles = Profile.all
 
-        @categories = Category.all
-        @areas = Area.all
 
-        gon.categories = @categories
-        gon.areas = @areas
 
     end
 
     def show
-        @categories = Category.all
-        @areas = Area.all
 
-        gon.categories = @categories
-        gon.areas = @areas
     end
 
     def edit

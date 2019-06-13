@@ -38,4 +38,38 @@ module ApplicationHelper
       end
     end
 
+    def ability_helper
+      @user = Admin.where(:user_id => session[:user_id]).joins(:user).first
+      unless(@user) 
+        @user = Collaborator.where(:user_id => session[:user_id]).joins(:user).first
+      end
+      @categories = Category.all
+      @areas = Area.all
+
+      gon.categories = @categories
+      gon.areas = @areas
+    end
+
+    def signed_in
+      if(!session[:user_id].present? && request.fullpath != "/")
+        redirect_to "/"
+      elsif(request.fullpath == "/")
+        redirect_to "/dashboard"
+      end
+    end
+
+    def signed_in?
+      return session[:user_id].present?
+    end
+
+    def is_admin
+      user = Admin.where(:user_id => session[:user_id]).first
+      unless(user)
+        redirect_to "/"
+      end
+    end
+
+    def is_admin?
+      return !@user.methods.include?(:profile)
+    end
 end

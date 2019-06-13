@@ -35,6 +35,8 @@ gem "cocoon"
 
 gem 'gon'
 
+gem "clearance"
+
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
 

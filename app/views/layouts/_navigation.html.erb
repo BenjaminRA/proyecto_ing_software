@@ -4,17 +4,10 @@
             <li class="nav-header">
                 <div class="dropdown profile-element">
                     <img alt="image" class="rounded-circle" src="<%= image_path('profile_small.jpg') %>"/>
-                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                        <span class="block m-t-xs font-bold">David Williams</span>
-                        <span class="text-muted text-xs block">Art Director <b class="caret"></b></span>
+                    <a data-toggle="dropdown" class="dropdown-toggle" href="" style="cursor: default;">
+                        <span class="block m-t-xs font-bold"><%= @user.user.name %> <%= @user.user.last_name %></span>
+                        <span class="text-muted text-xs block">Administrador</span>
                     </a>
-                    <ul class="dropdown-menu animated fadeInRight m-t-xs">
-                        <li><a class="dropdown-item" >Profile</a></li>
-                        <li><a class="dropdown-item" >Contacts</a></li>
-                        <li><a class="dropdown-item" >Mailbox</a></li>
-                        <li class="dropdown-divider"></li>
-                        <li><a class="dropdown-item">Logout</a></li>
-                    </ul>
                 </div>
                 <div class="logo-element">
                     Contac

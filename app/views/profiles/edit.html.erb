@@ -102,6 +102,33 @@
 
 $(function() {
 
+    $("#edit_profile_<%= @profile.id %>").validate({
+        rules: {
+            "profile[profile]": {
+                required: true,
+            },
+
+            "profile[objective]": {
+                required: true,
+            },
+
+            "profile[functions]": {
+                required: true,
+            },
+        },
+        messages: {
+            "profile[profile]": {
+                required: "Este campo es requerido."
+            },
+            "profile[objective]": {
+                required: "Este campo es requerido."
+            },
+            "profile[functions]": {
+                required: "Este campo es requerido."
+            },
+        }
+    })
+
     $('#add-tecnicas-association').on('cocoon:after-insert', (e, insertedItem) => {
         ability_select = insertedItem[0].firstChild.nextSibling.firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling
         ability_select.classList.add("form-control")
