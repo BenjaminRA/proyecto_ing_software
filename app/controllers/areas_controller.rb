@@ -1,11 +1,8 @@
 class AreasController < ApplicationController
+    before_action :is_admin
+    
     def index
         @title = "Competencias Blandas - Categorias"
-        @categories = Category.all
-        @areas = Area.all
-
-        gon.categories = @categories
-        gon.areas = @areas
 
         @areas = @areas.where(['areas.area like ?', "%#{params[:area]}%"]) if params[:area].present?
         @areas = @areas.where(['areas.category_id = ?', params[:category]]) if params[:category].present?

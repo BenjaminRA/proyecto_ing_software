@@ -1,8 +1,8 @@
 class CategoriesController < ApplicationController
+    before_action :is_admin
+    
     def index
         @title = "Competencias Blandas - Categorias"
-        @categories = Category.all
-        gon.categories = @categories
 
         @categories = @categories.where(['categories.category like ?', "%#{params[:category]}%"]) if params[:category].present?
     end

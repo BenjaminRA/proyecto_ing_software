@@ -1,14 +1,12 @@
 class ProfilesController < ApplicationController
+    before_action :is_admin
+    
     def index
         @title = "Perfiles"
         @abilities = Ability.all
         @profiles = Profile.joins(:abilities)
         
-        @categories = Category.all
-        @areas = Area.all
 
-        gon.categories = @categories
-        gon.areas = @areas
 
         @profiles = @profiles.where(['profile like ?', "%#{params[:profile]}%"]) if params[:profile].present?
 
@@ -92,11 +90,7 @@ class ProfilesController < ApplicationController
         @profiles = Profile.all
 
         @abilities = Ability.new
-        @categories = Category.all
-        @areas = Area.all
 
-        gon.categories = @categories
-        gon.areas = @areas
         gon.profile = {
             :id => @profile.id,
             :profile => @profile.profile,
@@ -239,11 +233,7 @@ class ProfilesController < ApplicationController
         @profile = Profile.new
         @profiles = Profile.all
         @abilities = Ability.new
-        @categories = Category.all
-        @areas = Area.all
 
-        gon.categories = @categories
-        gon.areas = @areas
         @tecnicas = Ability.where('abilities_type_id = 1')
         @blandas = Ability.where('abilities_type_id = 2')
     end
