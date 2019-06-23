@@ -34,7 +34,7 @@
                 <a href="<%= url_for :controller => 'periods', :action => 'index' %>"><i class="fa fa-calendar-o"></i> <span class="nav-label" data-i18n="nav.dashboard">Períodos</span><span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level collapse <%= is_active_controller('periods', 'in') %>">
                     <li class="<%= is_active_action('index') %>"><a href="<%= url_for :controller => 'periods', :action => 'index' %>"><i class="fa fa-calendar-o"></i>Períodos</a></li>
-                    <li class="<%= is_active_action('new') %>"><a href="<%= url_for :controller => 'periods', :action => 'new' %>"><i class="fa fa-plus"></i>Crear Administrador</a></li>
+                    <li class="<%= is_active_action('new') %>"><a href="<%= url_for :controller => 'periods', :action => 'new' %>"><i class="fa fa-plus"></i>Crear Período</a></li>
                 </ul>
             </li>
             <li class="<%= is_active_controller('profiles') %>">

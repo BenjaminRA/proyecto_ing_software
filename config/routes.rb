@@ -13,6 +13,7 @@ Rails.application.routes.draw do
   resources :users
   resources :periods
   resources :profile_abilities
+  resources :evaluations
 
 
   post '/abilities', to: 'abilities#create'

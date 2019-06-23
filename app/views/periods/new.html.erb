@@ -12,8 +12,40 @@
     </div>
 </div>
 
+
 <div class="wrapper wrapper-content animated fadeInRight">
 <div class="ibox-content m-b-sm border-bottom">
+<%= form_tag "/periods", :method => "post", :id => "new_period", :autocomplete => "off"%>
+    <div class="form-group">
+        <label>Inicio y término del periodo</label>
+        <div class="input-daterange input-group" id="datepicker">
+            <input type="text" class="form-control-sm form-control" name="start"/>
+            <span class="input-group-addon input-group-addon">Hasta</span>
+            <input type="text" class="form-control-sm form-control" name="end"/>
+        </div>
+    </div>
+    <div class="hr-line-dashed"></div>
+    <div id="wizard">
+        <h1>Colaboradores</h1>
+        <div class="step-content" style="position: relative">
+            <label>Seleccione a los colaboradores de este periodo</label>
+            <select name="collaborators[]" class="form-control collaborators_select" multiple>
+                <% @collaborators.each_with_index do |collaborator, index| %>
+                    <option value="<%= collaborator.id %>"><%= collaborator.user.name %> <%= collaborator.user.last_name %> - <%= collaborator.user.rut %></option>
+                <% end %>
+            </select>
+        </div>
+
+        <h1>Evaluadores</h1>
+        <div class="step-content" style="position: relative">
+            <select name="evaluators[]" class="form-control evaulators_select" multiple>
+
+            </select>
+        </div>
+    </div>
+    <button class="form-control btn" type="submit" >Submit</button>
+</form>
+<!--
     <form id="new_priod" action="/periods" accept-charset="UTF-8" method="post" autocomplete="off">
         <div class="form-group">
             <label>Inicio y término del periodo</label>
@@ -48,13 +80,34 @@
             </div>
         </div>
     </form>
+-->
 </div>
 </div>
 
 <% content_for :javascript do %>
 
 <script>
+
+    let indexes_evaluators = []
+    let indexes_collaborators = []
+    let collaborators = []
+    let evaluators = []
+    let select_fields = []
+
+    addOption = function(e) {
+        for(let select_field of select_fields) {
+            $(select_field).append(e)
+            select_field.bootstrapDualListbox("refresh")
+        }
+    }
+
     $(function() {
+
+        $("#wizard").steps({
+            enableAllSteps: true,
+            enableFinishButton: false,
+        });
+        
         $('.input-daterange').datepicker({
             keyboardNavigation: false,
             forceParse: false,
@@ -64,6 +117,23 @@
         const collaborators_select = $(".collaborators_select")
         collaborators_select.bootstrapDualListbox({
             selectorMinimalHeight: 160,
+            filterPlaceHolder: "Buscar Colaborador",
+            preserveSelectionOnMove: 'moved',
+            infoText: 'Mostrando {0}',
+            infoTextFiltered: '<span class="label label-warning">Fildrados</span> {0} de {1}',
+            infoTextEmpty: 'Lista vacía',
+        })
+
+        const collaborators_select_container = $('select[name="collaborators[]"]').bootstrapDualListbox('getContainer');
+        collaborators_select_container.find('.moveall i').removeClass().addClass('fa fa-arrow-right');
+        collaborators_select_container.find('.removeall i').removeClass().addClass('fa fa-arrow-left');
+        collaborators_select_container.find('.move i').removeClass().addClass('fa fa-arrow-right');
+        collaborators_select_container.find('.remove i').removeClass().addClass('fa fa-arrow-left');
+
+        const evaulators_select = $(".evaulators_select")
+        evaulators_select.bootstrapDualListbox({
+            selectorMinimalHeight: 160,
+            filterPlaceHolder: "Buscar Evaluador",
             infoText: 'Mostrando {0}',
             infoTextFiltered: '<span class="label label-warning">Fildrados</span> {0} de {1}',
             infoTextEmpty: 'Lista vacía',
@@ -71,9 +141,122 @@
             iconRemove: 'fa-arrow-circle-o-left'
         })
 
-        collaborators_select.on("changea", function(e, aux) {
-            console.log(e)
-            console.log(aux)
+        const evaulators_select_container = $('select[name="evaluators[]"]').bootstrapDualListbox('getContainer');
+        evaulators_select_container.find('.moveall i').removeClass().addClass('fa fa-arrow-right');
+        evaulators_select_container.find('.removeall i').removeClass().addClass('fa fa-arrow-left');
+        evaulators_select_container.find('.move i').removeClass().addClass('fa fa-arrow-right');
+        evaulators_select_container.find('.remove i').removeClass().addClass('fa fa-arrow-left');
+
+        select_fields.push(evaulators_select)
+
+        collaborators_select.on("change", function(e) {
+            let ids = $(this).val()
+            if(ids.length >= indexes_collaborators.length) {
+                for(let diff = 0; diff < Math.abs(ids.length - indexes_collaborators.length); ++diff) {
+                    let current_collaborator = null
+                    inner_loop:
+                    for (let i = 0; i < ids.length; ++i) {
+                        for (let j = 0; j < gon.collaborators.length; ++j) {
+                            if(gon.collaborators[j].id == ids[i] && !indexes_collaborators.includes(j)) {
+                                indexes_collaborators.push(j)
+                                current_collaborator = gon.collaborators[j]
+                                break inner_loop
+                            }
+                        }
+                    }
+                    addOption($('<option>', {
+                        value: current_collaborator.id,
+                        text: `${current_collaborator.name} ${current_collaborator.last_name} - ${current_collaborator.rut}`
+                    }))
+                }
+                console.log(indexes_collaborators)
+            }
+            else {
+                for(let diff = 0; diff < Math.abs(indexes_collaborators.length - ids.length); ++diff) {
+                    let index = null
+                    console.log(ids)
+                    inner_loop:
+                    for (let i = 0; i < indexes_collaborators.length; ++i) {
+                        if (!ids.includes(gon.collaborators[i].id.toString())) {
+                            index = i
+                            break inner_loop
+                        }
+                    }
+                    console.log(`iteración: ${diff+1} -- index: ${index}`)
+                    indexes_collaborators = indexes_collaborators.filter((e) => e !== index)
+                    $("#wizard").steps("remove",  index + 2)
+                }
+                console.log(indexes_collaborators)
+            }
+        })
+
+        evaulators_select.on("change", function(e) {
+            let ids = $(this).val()
+            if(ids.length >= indexes_evaluators.length) {
+                for(let diff = 0; diff < Math.abs(ids.length - indexes_evaluators.length); ++diff) {
+                    let current_collaborator = null
+                    inner_loop:
+                    for (let i = 0; i < ids.length; ++i) {
+                        for (let j = 0; j < gon.collaborators.length; ++j) {
+                            if(gon.collaborators[j].id == ids[i] && !indexes_evaluators.includes(j)) {
+                                indexes_evaluators.push(j)
+                                current_collaborator = gon.collaborators[j]
+                                break inner_loop
+                            }
+                        }
+                    }
+                    $("#wizard").steps("add", {
+                        title: `Evaluador: ${current_collaborator.name} ${current_collaborator.last_name}`,
+                        content: `
+                        <div class="step-content">
+                            <select name="evaluates[${current_collaborator.id}][]" class="form-control evaluates${current_collaborator.id}_select" multiple>
+
+                            </select>
+                        </div>
+                        `
+                    })
+                    const current_option = $(`.evaluates${current_collaborator.id}_select`)
+                    select_fields.push(current_option)
+                    for (let index of indexes_collaborators) {
+                        $(current_option).append($('<option>', {
+                            value: gon.collaborators[index].id,
+                            text: `${gon.collaborators[index].name} ${gon.collaborators[index].last_name} - ${gon.collaborators[index].rut}`
+                        }))
+                    }
+                    current_option.bootstrapDualListbox({
+                        selectorMinimalHeight: 160,
+                        filterPlaceHolder: "Buscar Colaborador",
+                        preserveSelectionOnMove: 'moved',
+                        infoText: 'Mostrando {0}',
+                        infoTextFiltered: '<span class="label label-warning">Fildrados</span> {0} de {1}',
+                        infoTextEmpty: 'Lista vacía',
+                    })
+                    current_option[0].parentNode.parentNode.style.position = "relative"
+                    const current_collaborators_select_container = current_option.bootstrapDualListbox('getContainer');
+                    current_collaborators_select_container.find('.moveall i').removeClass().addClass('fa fa-arrow-right');
+                    current_collaborators_select_container.find('.removeall i').removeClass().addClass('fa fa-arrow-left');
+                    current_collaborators_select_container.find('.move i').removeClass().addClass('fa fa-arrow-right');
+                    current_collaborators_select_container.find('.remove i').removeClass().addClass('fa fa-arrow-left');
+                }
+                console.log(indexes_evaluators)
+            }
+            else {
+                for(let diff = 0; diff < Math.abs(indexes_evaluators.length - ids.length); ++diff) {
+                    let index = null
+                    console.log(ids)
+                    inner_loop:
+                    for (let i = 0; i < indexes_evaluators.length; ++i) {
+                        if (!ids.includes(gon.collaborators[i].id.toString())) {
+                            index = i
+                            break inner_loop
+                        }
+                    }
+                    console.log(`iteración: ${diff+1} -- index: ${index}`)
+                    indexes_evaluators = indexes_evaluators.filter((e) => e !== index)
+                    $("#wizard").steps("remove",  index + 2)
+                }
+                console.log(indexes_evaluators)
+            }
         })
     })
 </script>

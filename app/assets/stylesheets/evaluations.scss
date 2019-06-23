@@ -1,0 +1,56 @@
+// Place all the styles related to the evaluations controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+.e-b {
+    background-color: white;
+    border-width: 1px;
+    border-color: black;
+    border-style: solid;
+}
+
+.e-b-h {
+    background-color: white;
+    border-width: 0px;
+    border-left-width: 1px !important;
+    border-right-width: 1px !important;
+    border-color: black;
+    border-style: solid;
+}
+
+.e-b-v {
+    background-color: white;
+    border-width: 0px;
+    border-top-width: 1px !important;
+    border-bottom-width: 1px !important;
+    border-color: black;
+    border-style: solid;
+}
+.e-b-l {
+    background-color: white;
+    border-width: 0px;
+    border-left-width: 1px !important;
+    border-color: black;
+    border-style: solid;
+}
+.e-b-r {
+    background-color: white;
+    border-width: 0px;
+    border-right-width: 1px !important;
+    border-color: black;
+    border-style: solid;
+}
+.e-b-t {
+    background-color: white;
+    border-width: 0px;
+    border-top-width: 1px !important;
+    border-color: black;
+    border-style: solid;
+}
+.e-b-b {
+    background-color: white;
+    border-width: 0px;
+    border-bottom-width: 1px !important;
+    border-color: black;
+    border-style: solid;
+}
