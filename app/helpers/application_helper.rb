@@ -72,4 +72,33 @@ module ApplicationHelper
     def is_admin?
       return !@user.methods.include?(:profile)
     end
+
+    def to_autoevaluate?
+      period = Period.where("start_date < :current_date and finish_date > :current_date", {
+        :current_date => Date.today
+      }).first
+      if(period.nil?)
+        return false
+      else
+        evaluation = Evaluation.joins(:evaluator).where("evaluations.collaborator_id = evaluators.collaborator_id")
+          .where(["evaluations.collaborator_id = ?", session[:user_id]])
+          .where(["evaluators.period_id = ?", period.id])
+        return evaluation.exists?
+      end
+    end
+
+    def autoevalation_done?
+      period = Period.where("start_date < :current_date and finish_date > :current_date", {
+        :current_date => Date.today
+      }).first
+      if(period.nil?)
+        return false
+      else
+        evaluation = Evaluation.joins(:evaluator).where("evaluations.collaborator_id = evaluators.collaborator_id")
+          .where(["evaluations.collaborator_id = ?", session[:user_id]])
+          .where(["evaluators.period_id = ?", period.id])
+          .joins(:evaluation_abilities)
+        return evaluation.exists?
+      end
+    end
 end

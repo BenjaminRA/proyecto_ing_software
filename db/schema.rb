@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_05_183701) do
+ActiveRecord::Schema.define(version: 2019_06_23_165823) do
 
   create_table "abilities", force: :cascade do |t|
     t.string "ability"
@@ -67,6 +67,41 @@ ActiveRecord::Schema.define(version: 2019_06_05_183701) do
     t.datetime "updated_at", null: false
     t.index ["from_id"], name: "index_direct_supervisions_on_from_id"
     t.index ["to_id"], name: "index_direct_supervisions_on_to_id"
+  end
+
+  create_table "evaluation_abilities", force: :cascade do |t|
+    t.integer "ability_id"
+    t.integer "evaluation_id"
+    t.integer "value"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["ability_id"], name: "index_evaluation_abilities_on_ability_id"
+    t.index ["evaluation_id"], name: "index_evaluation_abilities_on_evaluation_id"
+  end
+
+  create_table "evaluations", force: :cascade do |t|
+    t.integer "collaborator_id"
+    t.integer "evaluator_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["collaborator_id"], name: "index_evaluations_on_collaborator_id"
+    t.index ["evaluator_id"], name: "index_evaluations_on_evaluator_id"
+  end
+
+  create_table "evaluators", force: :cascade do |t|
+    t.integer "collaborator_id"
+    t.integer "period_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["collaborator_id"], name: "index_evaluators_on_collaborator_id"
+    t.index ["period_id"], name: "index_evaluators_on_period_id"
+  end
+
+  create_table "periods", force: :cascade do |t|
+    t.date "start_date"
+    t.date "finish_date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "profile_abilities", force: :cascade do |t|

@@ -13,7 +13,9 @@ Rails.application.routes.draw do
   resources :users
   resources :periods
   resources :profile_abilities
-  resources :evaluations
+
+  get "/evaluations/:id/", to: "evaluations#new"
+  get "/evaluations/:id/edit", to: "evaluations#edit"
 
 
   post '/abilities', to: 'abilities#create'

@@ -4,12 +4,11 @@ class PeriodsController < ApplicationController
     
     def index
         @title = "Periodos"
-
+        @periods = Period.all
 
     end
 
     def show
-
 
 
     end
@@ -28,20 +27,35 @@ class PeriodsController < ApplicationController
     end
 
     def create
-        # puts params[:start]
-        # puts params[:end]
+        aux_start = params[:start].split("/")
+        aux_end = params[:end].split("/")
+        period = Period.create({
+            :start_date => "#{aux_start[2]}-#{aux_start[0]}-#{aux_start[1]}",
+            finish_date: "#{aux_end[2]}-#{aux_end[0]}-#{aux_end[1]}",
+        })
 
         params[:collaborators].each do |collaborator_id|
-            # puts collaborator_id
-        end
-
-        params[:evaluators].each do |collaborator_id|
-            # puts collaborator_id
+            evaluator = Evaluator.create({
+                :collaborator_id => collaborator_id,
+                :period_id => period.id
+            })
+            Evaluation.create({
+                :collaborator_id => collaborator_id,
+                :evaluator_id => evaluator.id
+            })
         end
 
         params[:evaluates].each do |aux|
-            puts "#{aux[0]} -> #{aux[1]}"
+            evaluator = Evaluator.where(:period_id => period.id, :collaborator_id => aux[0]).first
+            aux[1].each do |collaborator_id|
+                Evaluation.create({
+                    :collaborator_id => collaborator_id,
+                    :evaluator_id => evaluator.id
+                })
+            end
         end
+
+        redirect_to "/periods"
 
     end
 

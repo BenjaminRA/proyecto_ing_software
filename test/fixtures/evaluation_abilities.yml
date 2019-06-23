@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  ability: one
+  evaluation: one
+  value: 1
+
+two:
+  ability: two
+  evaluation: two
+  value: 1
