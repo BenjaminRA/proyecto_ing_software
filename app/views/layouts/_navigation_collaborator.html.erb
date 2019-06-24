@@ -13,9 +13,9 @@
                     Contac
                 </div>
             </li>
-            <li class="<%= is_active_controller('dashboard') %>">
+            <!-- <li class="<%= is_active_controller('dashboard') %>">
                 <a href="<%= url_for :controller => 'dashboard', :action => 'index'%>"><i class="fa fa-th-large"></i> <span class="nav-label" data-i18n="nav.dashboard">Dashboards</span></a>
-            </li>
+            </li> -->
             <li class="<%= is_active_controller('evaluations') %>">
                 <% if(to_autoevaluate?) %>
                     <a href="<%= "/evaluations/#{session[:user_id]}" + (autoevalation_done? ? "/edit" : "") %>"><i class="fa fa-id-badge"></i>Autoevaluación</span></a>

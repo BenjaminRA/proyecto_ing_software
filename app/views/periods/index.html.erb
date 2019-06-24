@@ -10,13 +10,15 @@
 </div>
 
 <div class="wrapper wrapper-content animated fadeInRight">
-<div class="container-fluid">
-    <% @periods.each do |period| %>
-        <div class="row">
-            <div class="col">
-                <%= period.start_date %> hasta <%= period.finish_date %>
+<div class="ibox-content m-b-sm border-bottom">
+    <div class="container-fluid">
+        <% @periods.each do |period| %>
+            <div class="row">
+                <div class="col">
+                    <%= period.start_date %> hasta <%= period.finish_date %>
+                </div>
             </div>
-        </div>
-    <% end %>
+        <% end %>
+    </div>
 </div>
 </div>

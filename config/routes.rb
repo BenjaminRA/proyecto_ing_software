@@ -15,6 +15,9 @@ Rails.application.routes.draw do
   resources :profile_abilities
 
   get "/evaluations/:id/", to: "evaluations#new"
+  post "/evaluations", to: "evaluations#create"
+  get "/evaluations", to: "evaluations#index"
+  post "/evaluations/:id", to: "evaluations#update"
   get "/evaluations/:id/edit", to: "evaluations#edit"
 
 

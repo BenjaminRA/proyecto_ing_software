@@ -1,6 +1,6 @@
 <div class="wrapper wrapper-content animated fadeInRight">
 <div class="ibox-content m-b-sm border-bottom">
-    <%= form_tag "/evaluations", :method => "post"%>
+    <%= form_tag "/evaluations/#{@collaborator.id}", :method => "post"%>
     <input hidden name="collaborator" value="<%= @collaborator.id %>">
     <div class="container-fluid e-b">
         <div class="row">
@@ -56,32 +56,25 @@
                     </div>
                 </div>
 
-                <% @collaborator.profile.abilities.each_with_index do |ability, index|%>
-                    <% if ability.abilities_type_id != 1 %>
+                <% @evaluation.evaluation_abilities.each_with_index do |evaluation_ability, index|%>
+                    <% if evaluation_ability.ability.abilities_type_id != 1 %>
+                        <input hidden value="<%=evaluation_ability.id%>" name="abilities[<%=evaluation_ability.ability.id%>][id]"/>
                         <div class="row e-b-b">
                             <div class="col-4 text-left p-sm e-b-r e-b-l">
-                                <strong><%= ability.ability %></strong>
+                                <strong><%= evaluation_ability.ability.ability %></strong>
                             </div>
 
                             <div class="col-8">
                                 <div class="row">
-                                    <div class="col p-sm e-b-r text-center">
-                                        <input type="radio" value="1" name="abilities[<%=ability.id%>][value]"/>
-                                    </div>
-                                    <div class="col p-sm e-b-r text-center">
-                                        <input type="radio" value="2" name="abilities[<%=ability.id%>][value]"/>
-                                    </div>
-                                    <div class="col p-sm e-b-r text-center">
-                                        <input type="radio" value="3" name="abilities[<%=ability.id%>][value]"/>
-                                    </div>
-                                    <div class="col p-sm e-b-r text-center">
-                                        <input type="radio" value="4" name="abilities[<%=ability.id%>][value]"/>
-                                    </div>
-                                    <div class="col p-sm <%= 
-                                        @blandas_count > @tecnicas_count && index >= @tecnicas_count ? "e-b-r" : ""
-                                    %> text-center">
-                                        <input type="radio" value="5" name="abilities[<%=ability.id%>][value]"/>
-                                    </div>
+                                    <% (1..5).each do |index| %>
+                                        <div class="col p-sm e-b-r text-center">
+                                            <% if(evaluation_ability.value == index) %>
+                                                <input type="radio" value="<%=index%>" name="abilities[<%=evaluation_ability.ability.id%>][value]" checked/>
+                                            <% else %>
+                                                <input type="radio" value="<%=index%>" name="abilities[<%=evaluation_ability.ability.id%>][value]"/>
+                                            <% end %>
+                                        </div>
+                                    <% end %>
                                 </div>
                             </div>
                         </div>
@@ -98,13 +91,14 @@
                     </div>
                 </div>
                 
-                <% @collaborator.profile.abilities.each_with_index do |ability, index|%>
-                    <% if ability.abilities_type_id != 2 %>
+                <% @evaluation.evaluation_abilities.each_with_index do |evaluation_ability, index|%>
+                    <% if evaluation_ability.ability.abilities_type_id != 2 %>
+                        <input hidden value="<%=evaluation_ability.id%>" name="abilities[<%=evaluation_ability.ability.id%>][id]"/>
                         <div class="row e-b-b e-b-l">
                             <div class="col-8 text-center e-b-r" style="padding: 12px;">
-                                <strong><%= ability.ability %></strong>
+                                <strong><%= evaluation_ability.ability.ability %></strong>
                             </div>
-                            <input class="col-4" type="number" min="0" max="5" style="padding: 13px" name="abilities[<%=ability.id%>][value]"/>
+                            <input class="col-4" type="number" min="0" max="5" style="padding: 13px" value="<%= evaluation_ability.value %>" name="abilities[<%=evaluation_ability.ability.id%>][value]"/>
                         </div>
                     <% end %>
                 <% end %>
