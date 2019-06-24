@@ -1,7 +1,21 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>Evaluaciones</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="<%= url_for :controller => 'evaluations', :action => 'index' %>">Evaluaciónes</a>
+            </li>
+            <li class="breadcrumb-item">
+                <strong>Editar Evaluación</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+
 <div class="wrapper wrapper-content animated fadeInRight">
 <div class="ibox-content m-b-sm border-bottom">
-    <%= form_tag "/evaluations/#{@collaborator.id}", :method => "post"%>
-    <input hidden name="collaborator" value="<%= @collaborator.id %>">
+    <%= form_tag "/evaluations/#{@evaluation.id}", :method => "post"%>
+    <input hidden name="evaluation" value="<%=@evaluation.id%>">
     <div class="container-fluid e-b">
         <div class="row">
             <div class="col-4 p-md e-b-l e-b-t">
@@ -16,8 +30,8 @@
                 </div>
                 <div class="row">
                     <div class="col">
-                        <h3>Nombre: <%= @collaborator.user.name %> <%= @collaborator.user.last_name %></h3> <br>
-                        <h3>Perfil: <%= @collaborator.profile.profile %></h3> <br>
+                        <h3>Nombre: <%= @evaluation.collaborator.user.name %> <%= @evaluation.collaborator.user.last_name %></h3> <br>
+                        <h3>Perfil: <%= @evaluation.collaborator.profile.profile %></h3> <br>
                     </div>
                 </div>
             </div>

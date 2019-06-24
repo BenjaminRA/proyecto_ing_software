@@ -1,73 +1,49 @@
 class EvaluationsController < ApplicationController
-    def new
-        @collaborator = Collaborator.where(:user_id => params[:id]).joins(:user).joins(profile: :abilities).first
-        @tecnicas_count = @collaborator.profile.abilities.where(:abilities_type_id => 1).count
-        @blandas_count = @collaborator.profile.abilities.where(:abilities_type_id => 2).count
-    end
-
-    def create
-        period = Period.where("start_date < :current_date and finish_date > :current_date", {
-            :current_date => Date.today
-        }).first
-        evaluation = Evaluation.joins(:evaluator)
-            .where(["evaluations.collaborator_id = ?", session[:user_id]])
-            .where(["evaluators.collaborator_id = ?", params[:collaborator]])
-            .where(["evaluators.period_id = ?", period.id]).first
-        params[:abilities].each do |ability|
-            EvaluationAbility.create({
-                :ability_id => ability[0],
-                :evaluation_id => evaluation.id,
-                :value => ability[1][:value],
-            })
-            puts "#{ability[0]} -> #{ability[1][:value]}"
-        end
-
-        redirect_to "/evaluations"
-    end
-
-    def edit
-        period = Period.where("start_date < :current_date and finish_date > :current_date", {
-            :current_date => Date.today
-        }).first
-        @evaluation = Evaluation.joins(:evaluator)
-            .where(["evaluations.collaborator_id = ?", session[:user_id]])
-            .where(["evaluators.collaborator_id = ?", params[:id]])
-            .where(["evaluators.period_id = ?", period.id])
-            .joins(evaluation_abilities: :ability).first
-        @collaborator = Collaborator.where(:user_id => params[:id]).joins(:user).joins(profile: :abilities).first
-        @tecnicas_count = @collaborator.profile.abilities.where(:abilities_type_id => 1).count
-        @blandas_count = @collaborator.profile.abilities.where(:abilities_type_id => 2).count
-    end
-
-    def update
-        period = Period.where("start_date < :current_date and finish_date > :current_date", {
-            :current_date => Date.today
-        }).first
-        evaluation = Evaluation.joins(:evaluator)
-            .where(["evaluations.collaborator_id = ?", session[:user_id]])
-            .where(["evaluators.collaborator_id = ?", params[:collaborator]])
-            .where(["evaluators.period_id = ?", period.id]).first
-        params[:abilities].each do |ability|
-            evaluation = EvaluationAbility.find(ability[1][:id])
-            evaluation.value = ability[1][:value]
-            evaluation.save
-        end
-        redirect_to "/evaluations"
-    end
-
     def index
         period = Period.where("start_date < :current_date and finish_date > :current_date", {
             :current_date => Date.today
         }).first
         if(!period.nil?)
-            @evaluation = Evaluation.joins(:evaluator)
-                .where(["evaluations.collaborator_id = ?", session[:user_id]])
-                .where(["evaluators.collaborator_id = ?", session[:user_id]])
+            @evaluations = Evaluation.joins(:evaluator).joins(collaborator: :user)
+                .where("evaluations.collaborator_id != evaluators.collaborator_id")
+                .where(["evaluators.collaborator_id = ?", session[:collaborator_id]])
                 .where(["evaluators.period_id = ?", period.id])
-                .joins(evaluation_abilities: :ability).first
         end
-        @collaborator = Collaborator.where(:user_id => session[:user_id]).joins(:user).joins(profile: :abilities).first
-        @tecnicas_count = @collaborator.profile.abilities.where(:abilities_type_id => 1).count
-        @blandas_count = @collaborator.profile.abilities.where(:abilities_type_id => 2).count
+    end
+
+    def show
+        @evaluation = Evaluation.where(:id => params[:id]).joins(collaborator: [:user, :profile]).first
+        @evaluation_abilities = EvaluationAbility.where(:evaluation_id => params[:id]).joins(:ability)
+        # render :plain => @evaluation.collaborator.inspect
+    end
+
+    def edit
+        @evaluation = Evaluation.where(:id => params[:id]).joins(collaborator: [:user, :profile]).first
+    end
+
+    def update
+        params[:abilities].each do |ability|
+            evaluation = EvaluationAbility.find(ability[1][:id])
+            evaluation.value = ability[1][:value]
+            evaluation.save
+        end
+
+        redirect_to "/evaluations/#{params[:evaluation]}"
+    end
+
+    def create
+        params[:abilities].each do |ability|
+            EvaluationAbility.create({
+                :ability_id => ability[0],
+                :evaluation_id => params[:evaluation],
+                :value => ability[1][:value],
+            })
+        end
+
+        redirect_to "/evaluations"
+    end
+
+    def new
+        @evaluation = Evaluation.where(:id => params[:id]).joins(collaborator: [:user, :profile]).first
     end
 end

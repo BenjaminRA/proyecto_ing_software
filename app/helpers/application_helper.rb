@@ -81,7 +81,7 @@ module ApplicationHelper
         return false
       else
         evaluation = Evaluation.joins(:evaluator).where("evaluations.collaborator_id = evaluators.collaborator_id")
-          .where(["evaluations.collaborator_id = ?", session[:user_id]])
+          .where(["evaluations.collaborator_id = ?", session[:collaborator_id]])
           .where(["evaluators.period_id = ?", period.id])
         return evaluation.exists?
       end
@@ -95,10 +95,30 @@ module ApplicationHelper
         return false
       else
         evaluation = Evaluation.joins(:evaluator).where("evaluations.collaborator_id = evaluators.collaborator_id")
-          .where(["evaluations.collaborator_id = ?", session[:user_id]])
+          .where(["evaluations.collaborator_id = ?", session[:collaborator_id]])
           .where(["evaluators.period_id = ?", period.id])
           .joins(:evaluation_abilities)
         return evaluation.exists?
       end
+    end
+
+    def has_to_evaluate?
+      period = Period.where("start_date < :current_date and finish_date > :current_date", {
+        :current_date => Date.today
+      }).first
+      if(period.nil?)
+        return false
+      else
+        evaluation = Evaluation.joins(:evaluator)
+          .where(["evaluations.collaborator_id = ?", session[:collaborator_id]])
+          .where(["evaluators.period_id = ?", period.id])
+        return evaluation.exists?
+      end
+    end
+
+    def has_been_evaluated(evaluation_id)
+      evaluation = Evaluation.where(:id => evaluation_id)
+        .joins(evaluation_abilities: :ability)
+      return !evaluation.empty?
     end
 end
