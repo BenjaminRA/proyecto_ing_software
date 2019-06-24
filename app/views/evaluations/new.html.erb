@@ -81,7 +81,7 @@
                                 <div class="row">
                                     <% (1..5).each do |index| %>
                                         <div class="col p-sm e-b-r text-center">
-                                            <input type="radio" value="<%=index%>" name="abilities[<%=ability.id%>][value]"/>
+                                            <input required type="radio" value="<%=index%>" name="abilities[<%=ability.id%>][value]"/>
                                         </div>
                                     <% end %>
                                 </div>
@@ -106,7 +106,7 @@
                             <div class="col-8 text-center e-b-r" style="padding: 12px;">
                                 <strong><%= ability.ability %></strong>
                             </div>
-                            <input class="col-4" type="number" min="0" max="5" style="padding: 13px" name="abilities[<%=ability.id%>][value]"/>
+                            <input required class="col-4" type="number" min="1" max="5" style="padding: 13px" name="abilities[<%=ability.id%>][value]"/>
                         </div>
                     <% end %>
                 <% end %>

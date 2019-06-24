@@ -83,9 +83,9 @@
                                     <% (1..5).each do |index| %>
                                         <div class="col p-sm e-b-r text-center">
                                             <% if(evaluation_ability.value == index) %>
-                                                <input type="radio" value="<%=index%>" name="abilities[<%=evaluation_ability.ability.id%>][value]" checked/>
+                                                <input required type="radio" value="<%=index%>" name="abilities[<%=evaluation_ability.ability.id%>][value]" checked/>
                                             <% else %>
-                                                <input type="radio" value="<%=index%>" name="abilities[<%=evaluation_ability.ability.id%>][value]"/>
+                                                <input required type="radio" value="<%=index%>" name="abilities[<%=evaluation_ability.ability.id%>][value]"/>
                                             <% end %>
                                         </div>
                                     <% end %>
@@ -112,7 +112,7 @@
                             <div class="col-8 text-center e-b-r" style="padding: 12px;">
                                 <strong><%= evaluation_ability.ability.ability %></strong>
                             </div>
-                            <input class="col-4" type="number" min="0" max="5" style="padding: 13px" value="<%= evaluation_ability.value %>" name="abilities[<%=evaluation_ability.ability.id%>][value]"/>
+                            <input required class="col-4" type="number" min="1" max="5" style="padding: 13px" value="<%= evaluation_ability.value %>" name="abilities[<%=evaluation_ability.ability.id%>][value]"/>
                         </div>
                     <% end %>
                 <% end %>
