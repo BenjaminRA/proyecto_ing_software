@@ -111,7 +111,7 @@ module ApplicationHelper
       else
         evaluation = Evaluation.joins(:evaluator)
           .where("evaluations.collaborator_id != evaluators.collaborator_id")
-          .where(["evaluations.collaborator_id = ?", session[:collaborator_id]])
+          .where(["evaluators.collaborator_id = ?", session[:collaborator_id]])
           .where(["evaluators.period_id = ?", period.id])
         return !evaluation.empty?
       end

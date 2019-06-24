@@ -5,11 +5,27 @@ class PeriodsController < ApplicationController
     def index
         @title = "Periodos"
         @periods = Period.all
-
     end
 
     def show
+        @collaborators = Evaluation.joins(evaluator: {collaborator: :user})
+            .where("evaluations.collaborator_id = evaluators.collaborator_id")
+            .where(["evaluators.period_id = ?", params[:id]]).uniq
+        @evaluators = Evaluation.joins(evaluator: {collaborator: :user})
+            .where("evaluations.collaborator_id != evaluators.collaborator_id")
+            .where(["evaluators.period_id = ?", params[:id]])
 
+        @to_evaluate = []
+
+        @evaluators.each do |evaluator|
+            aux = Evaluation.joins(collaborator: :user, evaluator: {collaborator: :user})
+                    .where("evaluations.collaborator_id != evaluators.collaborator_id")
+                    .where(["evaluators.collaborator_id = ?", evaluator.collaborator.id])
+                    .where(["evaluators.period_id = ?", params[:id]])
+            @to_evaluate << aux
+        end
+
+        # render :plain => @evaluators.inspect
 
     end
 
