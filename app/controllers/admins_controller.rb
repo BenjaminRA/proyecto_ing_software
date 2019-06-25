@@ -2,7 +2,7 @@ class AdminsController < ApplicationController
     before_action :is_admin
 
     def index
-        @title = "Colaboradores"
+        @title = "Administradores"
         @admins = User.joins(:admin)
         # puts @collaborators.inspect
 
@@ -15,10 +15,6 @@ class AdminsController < ApplicationController
     def new
         @title = "Crear Administrador"
         @admin = User.new
-
-
-
-
     end
 
     def show
@@ -26,6 +22,7 @@ class AdminsController < ApplicationController
     end
 
     def edit
+        @title = "Editar Administrador"
         @admin = User.joins(:admin).where(["users.id = ?", params[:id]]).first
         
         @categories = Category.all

@@ -43,44 +43,8 @@
             </select>
         </div>
     </div>
-    <button class="form-control btn" type="submit" >Submit</button>
+    <button id="submit_button" hidden type="submit">Guardar</button>
 </form>
-<!--
-    <form id="new_priod" action="/periods" accept-charset="UTF-8" method="post" autocomplete="off">
-        <div class="form-group">
-            <label>Inicio y término del periodo</label>
-            <div class="input-daterange input-group" id="datepicker">
-                <input type="text" class="form-control-sm form-control" name="start"/>
-                <span class="input-group-addon input-group-addon">Hasta</span>
-                <input type="text" class="form-control-sm form-control" name="end"/>
-            </div>
-        </div>
-        <div class="hr-line-dashed"></div>
-
-        <label>Seleccione a los colaboradores de este periodo</label>
-        <select class="form-control collaborators_select" multiple>
-            <% @collaborators.each_with_index do |collaborator, index| %>
-                <option value="<%= collaborator.id %>"><%= collaborator.user.name %> <%= collaborator.user.last_name %> - <%= collaborator.user.rut %></option>
-            <% end %>
-        </select>
-
-        <div class="hr-line-dashed"></div>
-        <label>Seleccione a los evaluadores de este periodo</label>
-        <select class="form-control evaulators_select" multiple>
-            <% @collaborators.each_with_index do |collaborator, index| %>
-                <option value="<%= collaborator.id %>"><%= collaborator.user.name %> <%= collaborator.user.last_name %> - <%= collaborator.user.rut %></option>
-            <% end %>
-        </select>
-        <div class="hr-line-dashed"></div>
-
-        <div class="hr-line-dashed"></div>
-        <div class="form-group row">
-            <div class="col-sm-4 col-sm-offset-2">
-                <button class="btn btn-primary btn-sm" type="submit">Guardar</button>
-            </div>
-        </div>
-    </form>
--->
 </div>
 </div>
 
@@ -105,7 +69,19 @@
 
         $("#wizard").steps({
             enableAllSteps: true,
-            enableFinishButton: false,
+            // enableFinishButton: false,
+            labels: {
+                cancel: "Cancela",
+                current: "Página actual:",
+                pagination: "Paginación",
+                finish: "Enviar",
+                next: "Siguiente",
+                previous: "Anterior",
+                loading: "Cargando..."
+            },
+            onFinished: function (event, currentIndex) {
+                $("#submit_button").trigger("click")
+            },
         });
         
         $('.input-daterange').datepicker({
@@ -139,6 +115,7 @@
             infoTextEmpty: 'Lista vacía',
             iconMove: 'fa-arrow-circle-o-right',
             iconRemove: 'fa-arrow-circle-o-left'
+
         })
 
         const evaulators_select_container = $('select[name="evaluators[]"]').bootstrapDualListbox('getContainer');
@@ -218,10 +195,11 @@
                     const current_option = $(`.evaluates${current_collaborator.id}_select`)
                     select_fields.push(current_option)
                     for (let index of indexes_collaborators) {
-                        $(current_option).append($('<option>', {
-                            value: gon.collaborators[index].id,
-                            text: `${gon.collaborators[index].name} ${gon.collaborators[index].last_name} - ${gon.collaborators[index].rut}`
-                        }))
+                        if (gon.collaborators[index].id !== current_collaborator.id)
+                            $(current_option).append($('<option>', {
+                                value: gon.collaborators[index].id,
+                                text: `${gon.collaborators[index].name} ${gon.collaborators[index].last_name} - ${gon.collaborators[index].rut}`
+                            }))
                     }
                     current_option.bootstrapDualListbox({
                         selectorMinimalHeight: 160,

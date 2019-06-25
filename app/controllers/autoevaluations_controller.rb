@@ -1,5 +1,6 @@
 class AutoevaluationsController < ApplicationController
     def new
+        @title = "Evaluación"
         @collaborator = Collaborator.where(:id => params[:id]).joins(:user).joins(profile: :abilities).first
         @tecnicas_count = @collaborator.profile.abilities.where(:abilities_type_id => 1).count
         @blandas_count = @collaborator.profile.abilities.where(:abilities_type_id => 2).count
@@ -26,6 +27,7 @@ class AutoevaluationsController < ApplicationController
     end
 
     def edit
+        @title = "Editar Evaluación"
         period = Period.where("start_date < :current_date and finish_date > :current_date", {
             :current_date => Date.today
         }).first
@@ -56,6 +58,7 @@ class AutoevaluationsController < ApplicationController
     end
 
     def index
+        @title = "Evaluaciones"
         period = Period.where("start_date < :current_date and finish_date > :current_date", {
             :current_date => Date.today
         }).first

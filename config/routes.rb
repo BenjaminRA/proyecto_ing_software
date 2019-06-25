@@ -14,6 +14,8 @@ Rails.application.routes.draw do
   resources :periods
   resources :profile_abilities
 
+  get "/periods/:period/:collaborator", to: "periods#report"
+
   get "/autoevaluations/:id/", to: "autoevaluations#new"
   post "/autoevaluations", to: "autoevaluations#create"
   get "/autoevaluations", to: "autoevaluations#index"

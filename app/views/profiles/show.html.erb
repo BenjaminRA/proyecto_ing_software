@@ -1,12 +1,12 @@
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10">
-        <h2>Colaboradores</h2>
+        <h2>Perfiles</h2>
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
-                <a href="<%= url_for :controller => 'collaborators', :action => 'index' %>">Colaboradores</a>
+                <a href="<%= url_for :controller => 'profiles', :action => 'index' %>">Perfiles</a>
             </li>
             <li class="breadcrumb-item">
-                <strong>Colaborador</strong>
+                <strong>Perfil</strong>
             </li>
         </ol>
     </div>
@@ -24,7 +24,7 @@
                 <div class="row">
                     <div class="col text-center">
                         <h2><strong>PERFIL DE COMPETENCIAS</strong></h2>
-                        <h2><strong><%= @collaborator.profile.profile.upcase %></strong></h2>
+                        <h2><strong><%= @profile.profile.upcase %></strong></h2>
                     </div>
                 </div>
             </div>
@@ -40,7 +40,7 @@
             <div class="col-8">
                 <div class="row">
                     <div class="col">
-                        <h3><%= @collaborator.profile.profile %></h3>
+                        <h3><%= @profile.profile %></h3>
                     </div>
                 </div>
             </div>
@@ -106,12 +106,12 @@
 
     <div class="p-sm"><h2>2.- OBJETIVO DEL PERFIL</h2></div>
     <div class="container-fluid e-b p-sm">
-        <h3><%= @collaborator.profile.objective %></h3>
+        <h3><%= @profile.objective %></h3>
     </div>
 
     <div class="p-sm"><h2>3.- FUNCIONES DEL PERFIL</h2></div>
     <div class="container-fluid e-b p-sm">
-        <% @collaborator.profile.functions.split("\r\n\r\n").each do |function| %>
+        <% @profile.functions.split("\r\n\r\n").each do |function| %>
             <h3><%= function %></h3>
         <% end %>
     </div>
@@ -125,49 +125,64 @@
         </div>
         
         <div class="row text-center e-b-b">
-            <div class="col-2 e-b-r">
-                <h3>Categoría</h3>
-            </div>
-            <div class="col-2 e-b-r">
-                <h3>Área</h3>
-            </div>
-            <div class="col-6 e-b-r">
+            <div class="col-8 e-b-r">
                 <h3>Competencia</h3>
             </div>
-            <div class="col-2">
+            <div class="col-4">
                 <h3>Nivel Requerido</h3>
             </div>
         </div>
         
-        <% @blandas.each_with_index do |category, index|%>
+        <% contador = 0 %>
+        <% @profile.profile_abilities.each do |entry|%>
+            <% if entry.ability.abilities_type_id != 1 %>
+                <div class="row">
+                    <div class="col-8 e-b-r <%= contador != 0 ? "e-b-t" : "" %> vertical-center">
+                        <h4><%= entry.ability.ability %></h4>
+                    </div>
 
-            <div class="row">
-                <div class="col-2 e-b-r text-center vertical-center">
-                    <h3><%= category[:category] %></h3>
-                </div>
-
-                <div class="col-2 e-b-r text-center vertical-center">
-                    <% category[:areas].each_with_index do |area, index| %>
-                        <div class="row">
-                            <div class="col">
-                                <h3><%= area[:area] %></h3>
-                            </div>
-                        </div>
-                    <% end %>
-                </div>
-
-                <div class="col-6 e-b-r">
-                    <div class="row">
-                        <div class="col">
-                            <h3>Competencia</h3>
-                        </div>
+                    <div class="col-4 <%= contador != 0 ? "e-b-t" : "" %> text-center vertical-center">
+                        <h4><%= entry.value %></h4>
                     </div>
                 </div>
+            <% contador += 1 %>
+            <% end %>
 
-                <div class="col-2">
-                    <h3>Nivel Requerido</h3>
-                </div>
+        <% end %>
+    </div>
+
+    <div class="p-sm"><h2>5.- REQUERIMIENTOS DE COMPETENCIAS TÉCNICAS</h2></div>
+    <div class="container-fluid e-b">
+        <div class="row e-b-b">
+            <div class="col text-center">
+                <h3>Competencias Técnicas (conocimientos)</h3>
             </div>
+        </div>
+        
+        <div class="row text-center e-b-b">
+            <div class="col-8 e-b-r">
+                <h3>Competencia</h3>
+            </div>
+            <div class="col-4">
+                <h3>Nivel Requerido</h3>
+            </div>
+        </div>
+        
+        <% contador = 0 %>
+        <% @profile.profile_abilities.each do |entry|%>
+            <% if entry.ability.abilities_type_id != 2 %>
+                <div class="row">
+                    <div class="col-8 e-b-r <%= contador != 0 ? "e-b-t" : "" %> vertical-center">
+                        <h4><%= entry.ability.ability %></h4>
+                    </div>
+
+                    <div class="col-4 <%= contador != 0 ? "e-b-t" : "" %> text-center vertical-center">
+                        <h4><%= entry.value %></h4>
+                    </div>
+                </div>
+                <% contador += 1 %>
+            <% end %>
+
         <% end %>
     </div>
 

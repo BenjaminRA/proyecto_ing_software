@@ -8,6 +8,8 @@ class PeriodsController < ApplicationController
     end
 
     def show
+        @title = "Período"
+
         @collaborators = Evaluation.joins(evaluator: {collaborator: :user})
             .where("evaluations.collaborator_id = evaluators.collaborator_id")
             .where(["evaluators.period_id = ?", params[:id]]).uniq
@@ -59,7 +61,7 @@ class PeriodsController < ApplicationController
                 :collaborator_id => collaborator_id,
                 :evaluator_id => evaluator.id
             })
-        end
+        end if (params[:collaborators].present?)
 
         params[:evaluates].each do |aux|
             evaluator = Evaluator.where(:period_id => period.id, :collaborator_id => aux[0]).first
@@ -69,7 +71,7 @@ class PeriodsController < ApplicationController
                     :evaluator_id => evaluator.id
                 })
             end
-        end
+        end if (params[:evaluates].present?)
 
         redirect_to "/periods"
 
@@ -77,8 +79,41 @@ class PeriodsController < ApplicationController
 
     def edit
 
-
-
     end
 
+    def report
+        @title = "Reporte"
+
+        @collaborator = Collaborator.where(:id => params[:collaborator]).joins(:user, profile: {profile_abilities: :ability}).first
+        @autoevaluation = Evaluation.joins(evaluator: {collaborator: :user})
+            .where("evaluations.collaborator_id = evaluators.collaborator_id")
+            .where("evaluations.collaborator_id = #{params[:collaborator]}")
+            .where(["evaluators.period_id = ?", params[:period]])
+            .joins(evaluation_abilities: :ability).first
+
+        @evaluation = Evaluation.joins(evaluator: {collaborator: :user})
+            .where("evaluations.collaborator_id != evaluators.collaborator_id")
+            .where("evaluations.collaborator_id = #{params[:collaborator]}")
+            .where(["evaluators.period_id = ?", params[:period]])
+            .joins(evaluation_abilities: :ability).first
+
+        gon.collaborator = {
+            :required => @collaborator.profile.profile_abilities.map {|entry| {
+                :ability_type => entry.ability.abilities_type_id,
+                :ability => entry.ability.ability,
+                :value => entry.value
+            }},
+            :autoevaluation => !@autoevaluation.nil? ? @autoevaluation.evaluation_abilities.map {|entry| {
+                :ability_type => entry.ability.abilities_type_id,
+                :ability => entry.ability.ability,
+                :value => entry.value
+            }} : nil,
+            :evaluation => !@evaluation.nil? ? @evaluation.evaluation_abilities.map {|entry| {
+                :ability_type => entry.ability.abilities_type_id,
+                :ability => entry.ability.ability,
+                :value => entry.value
+            }} : nil,
+        }
+
+    end
 end

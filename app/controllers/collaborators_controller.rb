@@ -22,10 +22,34 @@ class CollaboratorsController < ApplicationController
     end
 
     def show
+        @title = "Colaborador"
+
+        @collaborator = Collaborator.joins(:profile, :user).where(["users.id = ?", params[:id]]).first
+        @reports_to = ReportsTo.where(:sender_id => @collaborator.profile.id)
+        @direct_supervision = DirectSupervision.where(:to_id => @collaborator.profile.id)
+        @replace_by = ReplaceBy.where(:to_replace_id => @collaborator.profile.id)
+
+        @reports_to = @reports_to.map{|entry| Profile.find(entry.reciever_id).profile}
+        @direct_supervision = @direct_supervision.map{|entry| Profile.find(entry.from_id).profile}
+        @replace_by = @replace_by.map{|entry| Profile.find(entry.replacement_id).profile}
+
+        categories = Category.all
+
+        @blandas = categories.map{|category| {
+            :category => category.category,
+            :areas => Area.where(:category_id => category.id).map{|area| {
+                :area => area.area,
+                :abilities => ProfileAbility.joins(:ability).where("abilities.area_id = #{area.id}").where("profile_abilities.profile_id = #{@collaborator.profile.id}")
+            }}
+        }}
+
+        # render :plain => categories.inspect
 
     end
 
     def edit
+        @title = "Editar Colaborador"
+
         @collaborator = User.joins(collaborator: [:profile, :state]).where(["users.id = ?", params[:id]]).first
         @profiles = Profile.all
         

@@ -1,0 +1,235 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>Períodos</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="<%= url_for :controller => 'periods', :action => 'index' %>">Períodos</a>
+            </li>
+            <li class="breadcrumb-item">
+                <strong>Reporte</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+<div class="ibox-content m-b-sm border-bottom">
+    <div class="container-fluid e-b">
+        <div class="row">
+            <div class="col-4 p-md e-b-l e-b-t">
+                <img height="120px" src="<%= image_path('logo.png') %>">
+            </div>
+
+            <div class="col-8 e-b-t e-b-r">
+                <div class="row">
+                    <div class="col text-center">
+                        <h2><strong>Evaluación de desempeño</strong></h2>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <h3>Nombre: <%= @collaborator.user.name %> <%= @collaborator.user.last_name %></h3> <br>
+                        <h3>Perfil: <%= @collaborator.profile.profile %></h3> <br>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-4 e-b-v e-b-r e-b-l">
+                <div class="text-center"><strong>COMPETENCIAS PROFESIONALES</strong></div>
+
+                <div class="row" >
+                    <div class="col-6 e-b-v text-center vertical-center">
+                        <strong>Competencia</strong>
+                    </div>
+                    <div class="col-2 e-b-v e-b-l text-center p-h-xs vertical-center">
+                        <strong>Nivel Requerido</strong>
+                    </div>
+                    <div class="col-2 e-b-v e-b-l text-center p-h-xs vertical-center">
+                        <strong>Auto Evaluación</strong>
+                    </div>
+                    <div class="col-2 e-b-v e-b-l text-center p-h-xs vertical-center">
+                        <strong>Evaluación</strong>
+                    </div>
+                </div>
+
+                <% @collaborator.profile.profile_abilities.each_with_index do |entry, index| %>
+                    <% if entry.ability.abilities_type_id != 1 %>
+                        <div class="row">
+                            <div class="col-6 e-b-b vertical-center">
+                                <%= entry.ability.ability %>
+                            </div>
+                            <div class="col-2 e-b-b e-b-l text-center vertical-center">
+                                <%= entry.value %>
+                            </div>
+                            <div class="col-2 e-b-b e-b-l text-center vertical-center">
+                                <% if @autoevaluation.nil? %>
+                                    -
+                                <% else %>
+                                    <%= @autoevaluation.evaluation_abilities[index].value %>
+                                <% end %>
+                            </div>
+                            <div class="col-2 e-b-b e-b-l text-center vertical-center">
+                                <% if @evaluation.nil? %>
+                                    -
+                                <% else %>
+                                    <%= @evaluation.evaluation_abilities[index].value %>
+                                <% end %>
+                            </div>
+                        </div>
+                    <% end %>
+                <% end %>
+
+            </div>
+
+            <div class="col-8 e-b-t e-b-b text-center">
+                <canvas id="blandas"></canvas>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-4 e-b-v e-b-r e-b-l">
+                <div class="text-center"><strong>COMPETENCIAS TÉCNICAS</strong></div>
+
+                <div class="row" >
+                    <div class="col-6 e-b-v text-center vertical-center">
+                        <strong>Competencia</strong>
+                    </div>
+                    <div class="col-2 e-b-v e-b-l text-center p-h-xs vertical-center">
+                        <strong>Nivel Requerido</strong>
+                    </div>
+                    <div class="col-2 e-b-v e-b-l text-center p-h-xs vertical-center">
+                        <strong>Auto Evaluación</strong>
+                    </div>
+                    <div class="col-2 e-b-v e-b-l text-center p-h-xs vertical-center">
+                        <strong>Evaluación</strong>
+                    </div>
+                </div>
+
+                <% @collaborator.profile.profile_abilities.each_with_index do |entry, index| %>
+                    <% if entry.ability.abilities_type_id != 2 %>
+                        <div class="row">
+                            <div class="col-6 e-b-b vertical-center">
+                                <%= entry.ability.ability %>
+                            </div>
+                            <div class="col-2 e-b-b e-b-l text-center vertical-center">
+                                <%= entry.value %>
+                            </div>
+                            <div class="col-2 e-b-b e-b-l text-center vertical-center">
+                                <% if @autoevaluation.nil? %>
+                                    -
+                                <% else %>
+                                    <%= @autoevaluation.evaluation_abilities[index].value %>
+                                <% end %>
+                            </div>
+                            <div class="col-2 e-b-b e-b-l text-center vertical-center">
+                                <% if @evaluation.nil? %>
+                                    -
+                                <% else %>
+                                    <%= @evaluation.evaluation_abilities[index].value %>
+                                <% end %>
+                            </div>
+                        </div>
+                    <% end %>
+                <% end %>
+
+            </div>
+
+            <div class="col-8 e-b-t e-b-b text-center">
+                <canvas id="tecnicas"></canvas>
+            </div>
+        </div>
+        
+
+    </div>
+</div>
+</div>
+
+<% content_for :javascript do %>
+
+<script type="text/javascript">
+
+$(function(){
+
+    new Chart(document.getElementById("blandas").getContext("2d"), {
+            type: 'radar', 
+            data: {
+                labels: gon.collaborator.required.filter((e) => e.ability_type == 2).map((e) => e.ability),
+                datasets: [
+                    {
+                        label: "Nivel Requerido",
+                        backgroundColor: "rgba(68,114,196,0.0)",
+                        borderColor: "rgba(68,114,196,1)",
+                        data: gon.collaborator.required.filter((e) => e.ability_type == 2).map((e) => e.value)
+                    },
+                    {
+                        label: "Auto Evaluación",
+                        backgroundColor: "rgba(237,125,49,0.0)",
+                        borderColor: "rgba(237,125,49,1)",
+                        data: gon.collaborator.autoevaluation ? gon.collaborator.autoevaluation.filter((e) => e.ability_type == 2).map((e) => e.value) : []
+                    },
+                    {
+                        label: "Evaluación",
+                        backgroundColor: "rgba(165,165,165,0.0)",
+                        borderColor: "rgba(165,165,165,1)",
+                        data: gon.collaborator.evaluation ? gon.collaborator.evaluation.filter((e) => e.ability_type == 2).map((e) => e.value) : []
+                    }
+                ]
+            }, 
+            options: {
+                responsive: true,
+                scale: {
+                    ticks: {
+                        min: 0,
+                        max: 5,
+                        stepSize: 1
+                    }
+                }
+            }
+        }
+    )
+    
+    new Chart(document.getElementById("tecnicas").getContext("2d"), {
+            type: 'radar', 
+            data: {
+                labels: gon.collaborator.required.filter((e) => e.ability_type == 1).map((e) => e.ability),
+                datasets: [
+                    {
+                        label: "Nivel Requerido",
+                        backgroundColor: "rgba(68,114,196,0.0)",
+                        borderColor: "rgba(68,114,196,1)",
+                        data: gon.collaborator.required.filter((e) => e.ability_type == 1).map((e) => e.value)
+                    },
+                    {
+                        label: "Auto Evaluación",
+                        backgroundColor: "rgba(237,125,49,0.0)",
+                        borderColor: "rgba(237,125,49,1)",
+                        data: gon.collaborator.autoevaluation ? gon.collaborator.autoevaluation.filter((e) => e.ability_type == 1).map((e) => e.value) : []
+                    },
+                    {
+                        label: "Evaluación",
+                        backgroundColor: "rgba(165,165,165,0.0)",
+                        borderColor: "rgba(165,165,165,1)",
+                        data: gon.collaborator.evaluation ? gon.collaborator.evaluation.filter((e) => e.ability_type == 1).map((e) => e.value) : []
+                    }
+                ]
+            }, 
+            options: {
+                responsive: true,
+                scale: {
+                    ticks: {
+                        min: 0,
+                        max: 5,
+                        stepSize: 1
+                    }
+                }
+            }
+        }
+    )
+
+})
+
+</script>
+
+<% end %>

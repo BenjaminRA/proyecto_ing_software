@@ -27,6 +27,7 @@
                             <th data-toggle="true">Nombre</th>
                             <th data-toggle="true">Rut</th>
                             <th data-toggle="true">Autoevaluación</th>
+                            <th class="text-right" data-sort-ignore="true">Acciones</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -44,6 +45,13 @@
                                 <% else %>
                                     <span class="label label-danger">Pendiente</span>
                                 <% end %>
+                            </td>
+                            <td class="text-right">
+                                <div class="btn-group">
+                                    <%= link_to "/periods/#{params[:id]}/#{collaborator.collaborator.id}", :controller => "periods", :action => "report", :method => "get" do %>
+                                        <button class="btn-white btn btn-xs" style="border-radius: 0px;">Reporte</button>
+                                    <% end %>
+                                </div>
                             </td>
                         </tr>
                         <% end %>
