@@ -30,7 +30,7 @@
                 } %>
             </div>
         </div>
-        <div class="col-sm">
+        <div class="col-sm-4">
             <div class="form-group">
                 <label class="col-form-label" for="categoria">Categoría</label>
                 <%= select_tag :category, options_for_select(
@@ -42,7 +42,7 @@
                 } %>
             </div>
         </div>
-        <div class="col-sm">
+        <div class="col-sm-4">
             <div class="form-group">
                 <label class="col-form-label" for="categoria">Área</label>
                 <%= select_tag :area, options_for_select(
@@ -143,6 +143,7 @@
                 <div class="row">
                     <div class="col-sm"><h3 class="m-t-none m-b">Modificar Competencia</h3>
                         <%= form_tag "/abilities/1", :method => 'put', :id => 'modificar-form' do %>
+                            <input hidden name="route" value="/abilities/blandas">
                             <div class="form-group">
                                 <label>Competencia</label>
                                 <%= text_field_tag :updated_ability, params[:updated_ability], {
@@ -253,7 +254,7 @@ $(function() {
         }
     })
 
-    $("#crear-categoria-form-button").on("click", (e) => {
+    $("#modificar-categoria-form-button").on("click", (e) => {
         let index = $('#updated_blanda_category').children('option').length
         $("#updated_blanda_category").append($('<option>', {
             value: $("#updated_categoria_blanda").val(),
@@ -262,17 +263,17 @@ $(function() {
         $("#updated_blanda_category").val($("#updated_categoria_blanda").val())
     })
 
-    $('#crear-categoria-form').on('hidden', function () {
-        console.log("cerrando crear-categoria-form")
+    $('#modificar-categoria-form').on('hidden', function () {
+        console.log("cerrando modificar-categoria-form")
     })
 
     $("#updated_blanda_area").on("change", (e) => {
         if (e.target.value == 0) {
-            $("#crear-area-form").modal()
+            $("#modificar-area-form").modal()
         }
     })
 
-    $("#crear-area-form-button").on("click", (e) => {
+    $("#modificar-area-form-button").on("click", (e) => {
         $("#updated_blanda_area").append($('<option>', {
             value: $("#updated_area_blanda").val(),
             text: $("#updated_area_blanda").val()

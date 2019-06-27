@@ -53,13 +53,15 @@
             <div class="col-8">
                 <div class="row">
                     <div class="col">
-                        <% @reports_to.each_with_index do |entry, index|%>
-                            <% if index == 0 %>
-                            <h3><%= entry %></h3>
-                            <% else %>
-                            <h3> / <%= entry %></h3>
+                        <h3>
+                            <% @reports_to.each_with_index do |entry, index|%>
+                                <% if index == 0 %>
+                                <%= entry %>
+                                <% else %>
+                                / <%= entry %>
+                                <% end %>
                             <% end %>
-                        <% end %>
+                        </h3>
                     </div>
                 </div>
             </div>
@@ -72,13 +74,15 @@
             <div class="col-8">
                 <div class="row">
                     <div class="col">
-                        <% @direct_supervision.each_with_index do |entry, index|%>
-                            <% if index == 0 %>
-                            <h3><%= entry %></h3>
-                            <% else %>
-                            <h3> / <%= entry %></h3>
+                        <h3>
+                            <% @direct_supervision.each_with_index do |entry, index|%>
+                                <% if index == 0 %>
+                                <%= entry %>
+                                <% else %>
+                                / <%= entry %>
+                                <% end %>
                             <% end %>
-                        <% end %>
+                        </h3>
                     </div>
                 </div>
             </div>
@@ -91,13 +95,15 @@
             <div class="col-8">
                 <div class="row">
                     <div class="col">
-                        <% @replace_by.each_with_index do |entry, index|%>
-                            <% if index == 0 %>
-                            <h3><%= entry %></h3>
-                            <% else %>
-                            <h3> / <%= entry %></h3>
+                        <h3>
+                            <% @replace_by.each_with_index do |entry, index|%>
+                                <% if index == 0 %>
+                                <%= entry %>
+                                <% else %>
+                                / <%= entry %>
+                                <% end %>
                             <% end %>
-                        <% end %>
+                        </h3>
                     </div>
                 </div>
             </div>

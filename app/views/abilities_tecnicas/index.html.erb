@@ -103,6 +103,7 @@
                 <div class="row">
                     <div class="col-sm"><h3 class="m-t-none m-b">Modificar Habilidad</h3>
                         <%= form_tag "/abilities/1", :method => 'put', :id => 'modificar-form' do %>
+                            <input hidden name="route" value="/abilities/tecnicas">
                             <div class="form-group">
                                 <label>Habilidad</label>
                                 <%= text_field_tag :updated_ability, params[:updated_ability], {

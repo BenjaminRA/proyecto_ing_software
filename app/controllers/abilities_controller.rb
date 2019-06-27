@@ -23,13 +23,14 @@ class AbilitiesController < ApplicationController
         
 
         @abilities = @abilities.where(['abilities.ability like ?', "%#{params[:ability]}%"]) if params[:ability].present?
-        @abilities = @abilities.where(['areas.category_id = ?', params[:category]]) if params[:category].present?
-        @abilities = @abilities.where(['abilities.area_id = ?', params[:area]]) if params[:area].present?
+        @abilities = @abilities.where(['abilities.abilities_type_id = ?', params[:category]]) if params[:category].present?
     end
 
     def update
         ability = Ability.find(params[:id])
-        if (params[:updated_type].to_i == 1)
+        if(!params[:updated_type].present?)
+            ability.ability = params[:updated_ability]
+        elsif (params[:updated_type].to_i == 1)
             ability.ability = params[:updated_ability]
             ability.abilities_type_id = params[:updated_type].to_i
             ability.area_id = nil
@@ -53,7 +54,7 @@ class AbilitiesController < ApplicationController
 
         ability.save
 
-        redirect_to ability_url(params[:new_type].to_i)
+        redirect_to params[:route]
     end
 
     def create
@@ -97,6 +98,8 @@ class AbilitiesController < ApplicationController
 
     def destroy
         ability = Ability.find(params[:id])
+        EvaluationAbility.where(:ability_id => ability.id).delete_all
+        ProfileAbility.where(:ability_id => ability.id).delete_all
         ability.destroy
 
         redirect_to "/abilities"

@@ -4,21 +4,20 @@ class CollaboratorsController < ApplicationController
     def index
         @title = "Colaboradores"
         @collaborators = User.joins(collaborator: [:profile, :state])
-        # puts @collaborators.inspect
+        @profiles = Profile.all
 
-
-
-
-        # render :plain => @collaborators[0].collaborator.profile.inspect
+        @collaborators = @collaborators.where(['users.name like ?', "%#{params[:nombre]}%"]) if params[:nombre].present?
+        @collaborators = @collaborators.where(['users.last_name like ?', "%#{params[:apellido]}%"]) if params[:apellido].present?
+        @collaborators = @collaborators.where(["users.rut = ?", "#{params[:rut]}"]) if params[:rut].present?
+        @collaborators = @collaborators.where(["users.email like ?", "%#{params[:email]}%"]) if params[:email].present?
+        @collaborators = @collaborators.where(["collaborators.profile_id = ?", "#{params[:perfil]}"]) if params[:perfil].present?
+        @collaborators = @collaborators.where(["collaborators.state_id = ?", "#{params[:status]}"]) if params[:status].present?
     end
 
     def new
         @title = "Crear Colaborador"
         @collaborator = User.new
         @profiles = Profile.all
-
-
-
     end
 
     def show
@@ -52,6 +51,7 @@ class CollaboratorsController < ApplicationController
 
         @collaborator = User.joins(collaborator: [:profile, :state]).where(["users.id = ?", params[:id]]).first
         @profiles = Profile.all
+        @states = State.all
         
         @categories = Category.all
         @areas = Area.all
@@ -75,6 +75,8 @@ class CollaboratorsController < ApplicationController
         }).first
 
         collaborator.profile_id = params[:user][:profile_id]
+        collaborator.state_id = params[:user][:state_id]
+        
         collaborator.save
 
         redirect_to collaborators_path

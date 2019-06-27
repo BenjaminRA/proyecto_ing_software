@@ -25,11 +25,11 @@
                     <div class="form-group row">
                         <div class="form-group col-md-6 col-sm-12">
                             <%= f.label "Nombre" %>
-                            <%= f.text_field :name, {:class => "form-control"} %>
+                            <%= f.text_field :name, {:class => "form-control", :required => ""} %>
                         </div>
                         <div class="form-group col-md-6 col-sm-12">
                             <%= f.label "Apellido" %>
-                            <%= f.text_field :last_name, {:class => "form-control"} %>
+                            <%= f.text_field :last_name, {:class => "form-control", :required => ""} %>
                         </div>
                     </div>
                     <div class="hr-line-dashed"></div>
@@ -37,7 +37,7 @@
                     <div class="form-group row">
                         <div class="form-group col-md-6 col-sm-12">
                             <%= f.label "Rut" %>
-                            <%= f.text_field :rut, {:class => "form-control", type: "number"} %>
+                            <%= f.text_field :rut, {:class => "form-control", type: "number", :required => ""} %>
                         </div>
                     </div>
                     <div class="hr-line-dashed"></div>
@@ -45,19 +45,22 @@
                     <div class="form-group row">
                         <div class="form-group col-md-6 col-sm-12">
                             <%= f.label "Mail" %>
-                            <%= f.text_field :email, {:class => "form-control"} %>
+                            <%= f.text_field :email, {:class => "form-control", :type => "email", :required => ""} %>
                         </div>
                         <div class="form-group col-md-6 col-sm-12">
                             <%= f.label "Contraseña" %>
-                            <%= f.text_field :password_digest, {:class => "form-control", type: "password"} %>
+                            <%= f.text_field :password_digest, {:class => "form-control", type: "password", :required => ""} %>
                         </div>
                     </div>
                     <div class="hr-line-dashed"></div>
-
                     <div class="form-group row">
                         <div class="form-group col-md-6 col-sm-12">
                             <%= f.label "Perfil Professional" %>
                             <%= select_tag "user[profile_id]", options_for_select(@profiles.map {|profile| [profile.profile, profile.id]}), {:class => "form-control", :value => @collaborator.collaborator.profile.id, id: "user_profile_id", include_blank: true} %>
+                        </div>
+                        <div class="form-group col-md-6 col-sm-12">
+                            <%= f.label "Estado" %>
+                            <%= select_tag "user[state_id]", options_for_select(@states.map {|state| [state.state, state.id]}), {:class => "form-control", :value => @collaborator.collaborator.state_id} %>
                         </div>
                     </div>
 
@@ -88,43 +91,6 @@ $(function() {
             }
         }
     })
-
-    $("#edit_user_<%= @collaborator.id %>").validate({
-            rules: {
-                "user[name]": {
-                    required: true,
-                },
-                "user[last_name]": {
-                    required: true,
-                },
-                "user[rut]": {
-                    required: true,
-                },
-                "user[email]": {
-                    required: true,
-                },
-                "user[password_digest]": {
-                    required: true,
-                },
-            },
-            messages: {
-                "user[name]": {
-                    required: "Este campo es requerido."
-                },
-                "user[last_name]": {
-                    required: "Este campo es requerido."
-                },
-                "user[rut]": {
-                    required: "Este campo es requerido."
-                },
-                "user[email]": {
-                    required: "Este campo es requerido."
-                },
-                "user[password_digest]": {
-                    required: "Este campo es requerido."
-                },
-            }
-        })
 
     select.val(gon.profile)
     select.trigger("change")

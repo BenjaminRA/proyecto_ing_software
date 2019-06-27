@@ -27,7 +27,7 @@
         <div class="col-sm-8">
             <div class="form-group">
                 <label class="col-form-label" for="habilidades">Habilidades</label>
-                <%= select_tag 'abilities', options_for_select(@abilities.map {|ability| [ability.ability, ability.id]}), {:class => "habilidades_select form-control", :multiple => true}%>
+                <%= select_tag 'abilities', options_for_select(@abilities.map {|ability| [ability.ability, ability.id]}), {:class => "habilidades_select form-control", :include_blank => true, :multiple => false}%>
             </div>
         </div>
     </div>

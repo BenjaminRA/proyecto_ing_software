@@ -26,6 +26,15 @@
         </div>
         <div class="col-sm-2">
             <div class="form-group">
+                <label class="col-form-label" for="apellido">Apellido</label>
+                <%= text_field_tag :apellido, params[:apellido], {
+                    :class => "form-control",
+                    :placeholder => "Apellido"
+                } %>
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <div class="form-group">
                 <label class="col-form-label" for="rut">Rut</label>
                 <%= text_field_tag :rut, params[:rut], {
                     :class => "form-control",
@@ -45,16 +54,13 @@
         <div class="col-sm-2">
             <div class="form-group">
                 <label class="col-form-label" for="perfil">Perfil</label>
-                <%= text_field_tag :perfil, params[:perfil], {
-                    :class => "form-control",
-                    :placeholder => "Perfil"
-                } %>
+                <%= select_tag "perfil", options_for_select(@profiles.map {|profile| [profile.profile, profile.id]}), {:class => "form-control", id: "profile_select", include_blank: true} %>
             </div>
         </div>
-        <div class="col-sm-4">
+        <div class="col-sm-2">
             <div class="form-group">
                 <label class="col-form-label" for="status">Estado</label>
-                <%= select_tag 'status', options_for_select(["Activo", "Inactivo"]), {:class => "form-control"}%>
+                <%= select_tag 'status', options_for_select([["Activo", 1], ["Inactivo", 2]]), {:class => "form-control", :include_blank => true}%>
             </div>
         </div>
     </div>
@@ -141,6 +147,15 @@
 
 $(function() {
     $('.footable').footable();
+
+    $("#profile_select").select2({
+        placeholder: "Seleccione el perfil",
+        language: {
+            noResults: function (params) {
+            return "No hay coincidencias";
+            }
+        }
+    })
 });
 
 </script>

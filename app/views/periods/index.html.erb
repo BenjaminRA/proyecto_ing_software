@@ -38,6 +38,12 @@
                                     <%= link_to "/periods/#{period.id}", :controller => "periods", :action => "show", :method => "get" do %>
                                         <button class="btn-white btn btn-xs" style="border-radius: 0px;">Ver</button>
                                     <% end %>
+                                    <%= link_to "/periods/#{period.id}/edit", :controller => "periods", :action => "edit", :method => "get" do %>
+                                        <button class="btn-warning btn btn-xs" style="border-radius: 0px;">Editar</button>
+                                    <% end %>
+                                    <%= link_to "/periods/#{period.id}", :controller => "periods", :action => "destroy", :method => "delete" do %>
+                                        <button class="btn-danger btn btn-xs" style="border-radius: 0px;">Borrar</button>
+                                    <% end %>
                                 </div>
                             </td>
                         </tr>

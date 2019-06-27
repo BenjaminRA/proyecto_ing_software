@@ -27,9 +27,7 @@
         <div class="col-sm">
             <div class="form-group">
                 <label class="col-form-label" for="categoria">Categoria</label>
-                <%= select_tag :category, options_for_select(
-                    @categories.map {|category| [category.category, category.id]}
-                ), {
+                <%= select_tag :category, options_for_select([["Técnicas", 1], ["Blandas", 2]]), {
                     :class => "form-control",
                     :id => "categories-buscador",
                     :include_blank => "Todo"
@@ -73,7 +71,7 @@
                             <td class="text-right">
                                 <div class="btn-group">
                                     <button data-toggle="modal" href="#modificar-habilidad-form" id="edit-button-<%= index %>" class="btn-warning btn btn-xs" style="border-radius: 0px;">Editar</button>
-                                    <%= link_to "/abilities/#{ability.id}", :controller => "abilities", :action => "destroy_index", :method => "delete" do %>
+                                    <%= link_to "/abilities/#{ability.id}", :controller => "abilities", :action => "destroy", :method => "delete" do %>
                                         <button class="btn-danger btn btn-xs" style="border-radius: 0px;">Borrar</button>
                                     <% end %>
                                 </div>
@@ -104,7 +102,8 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-sm"><h3 class="m-t-none m-b">Modificar Habilidad</h3>
-                        <form id="modificar-form" action="/abilities/1" accept-charset="UTF-8" method="put">
+                        <%= form_tag "abilities/1", :method => "put", :id => "modificar-form" do %>
+                            <input hidden name="route" value="/abilities">
                             <div class="form-group">
                                 <label>Habilidad</label>
                                 <%= text_field_tag :updated_ability, params[:updated_ability], {
@@ -123,7 +122,7 @@
                             <div>
                                 <button class="btn btn-primary float-right" type="submit"><strong>Guardar Cambios</strong></button>
                             </div>
-                        </form>
+                        <% end %>
                     </div>
                 </div>
             </div>

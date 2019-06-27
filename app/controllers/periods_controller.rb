@@ -15,19 +15,17 @@ class PeriodsController < ApplicationController
             .where(["evaluators.period_id = ?", params[:id]]).uniq
         @evaluators = Evaluation.joins(evaluator: {collaborator: :user})
             .where("evaluations.collaborator_id != evaluators.collaborator_id")
-            .where(["evaluators.period_id = ?", params[:id]])
+            .where(["evaluators.period_id = ?", params[:id]]).group("evaluators.collaborator_id")
 
         @to_evaluate = []
 
         @evaluators.each do |evaluator|
             aux = Evaluation.joins(collaborator: :user, evaluator: {collaborator: :user})
                     .where("evaluations.collaborator_id != evaluators.collaborator_id")
-                    .where(["evaluators.collaborator_id = ?", evaluator.collaborator.id])
+                    .where(["evaluators.collaborator_id = ?", evaluator.evaluator.collaborator.id])
                     .where(["evaluators.period_id = ?", params[:id]])
             @to_evaluate << aux
         end
-
-        # render :plain => @evaluators.inspect
 
     end
 
@@ -42,6 +40,8 @@ class PeriodsController < ApplicationController
             :name => collaborator.user.name,
             :last_name => collaborator.user.last_name,
         }}
+
+        gon.periods = Period.all
     end
 
     def create
@@ -73,7 +73,7 @@ class PeriodsController < ApplicationController
             end
         end if (params[:evaluates].present?)
 
-        redirect_to "/periods"
+        redirect_to "/periods/#{period.id}"
 
     end
 
@@ -115,5 +115,14 @@ class PeriodsController < ApplicationController
             }} : nil,
         }
 
+    end
+
+    def destroy
+        EvaluationAbility.joins(evaluation: :evaluator).where("evaluators.period_id = #{params[:id]}").delete_all
+        Evaluation.joins(:evaluator).where("evaluators.period_id = #{params[:id]}").delete_all
+        Evaluator.where(:period_id => params[:id]).delete_all
+        Period.find(params[:id]).delete
+
+        redirect_to "/periods"
     end
 end

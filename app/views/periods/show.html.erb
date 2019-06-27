@@ -70,61 +70,61 @@
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="ibox">
-                <div class="ibox-title">
-                    <h3>Evaluadores</h3>
-                </div>
-                <div class="ibox-content">
-                    <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="15">
-                        <thead>
-                        <tr>
-                            <th data-toggle="true">Nombre</th>
-                            <th data-toggle="true">Rut</th>
-                            <th data-toggle="true">Evalua a</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <% @to_evaluate.each do |evaluation| %>
-                            <% if (!evaluation.empty?) %>
+    <% unless @evaluators.empty? %>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox">
+                    <div class="ibox-title">
+                        <h3>Evaluadores</h3>
+                    </div>
+                    <div class="ibox-content">
+                        <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="15">
+                            <thead>
                             <tr>
-                                <td>
-                                    <%= evaluation[0].evaluator.collaborator.user.name %> <%= evaluation[0].evaluator.collaborator.user.last_name %>
-                                </td>
-                                <td>
-                                    <%= evaluation[0].evaluator.collaborator.user.rut %>
-                                </td>
-                                <td>
-                                    <% evaluation.each do |evaluator| %>
-                                        <div class="p-h-xs">
-                                            <div class="inline">
-                                                <%= evaluator.collaborator.user.name %> <%= evaluator.collaborator.user.last_name %> - <%= evaluator.collaborator.user.rut %> <br>
+                                <th data-toggle="true">Nombre</th>
+                                <th data-toggle="true">Rut</th>
+                                <th data-toggle="true">Evalua a</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <% @evaluators.each_with_index do |evaluation, index| %>
+                                <tr>
+                                    <td>
+                                        <%= evaluation.evaluator.collaborator.user.name %> <%= evaluation.evaluator.collaborator.user.last_name %>
+                                    </td>
+                                    <td>
+                                        <%= evaluation.evaluator.collaborator.user.rut %>
+                                    </td>
+                                    <td>
+                                        <% @to_evaluate[index].each do |evaluator| %>
+                                            <div class="p-h-xs">
+                                                <div class="inline">
+                                                    <%= evaluator.collaborator.user.name %> <%= evaluator.collaborator.user.last_name %> - <%= evaluator.collaborator.user.rut %> <br>
+                                                </div>
+                                                <% if has_been_evaluated(evaluator.id) %>
+                                                    <span class="label label-primary">Lista</span>
+                                                <% else %>
+                                                    <span class="label label-danger">Pendiente</span>
+                                                <% end %>
                                             </div>
-                                            <% if has_been_evaluated(evaluator.id) %>
-                                                <span class="label label-primary">Lista</span>
-                                            <% else %>
-                                                <span class="label label-danger">Pendiente</span>
-                                            <% end %>
-                                        </div>
-                                    <% end %>
+                                        <% end %>
+                                    </td>
+                                </tr>
+                            <% end %>
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <td colspan="6">
+                                    <ul class="pagination float-right"></ul>
                                 </td>
                             </tr>
-                            <% end %>
-                        <% end %>
-                        </tbody>
-                        <tfoot>
-                        <tr>
-                            <td colspan="6">
-                                <ul class="pagination float-right"></ul>
-                            </td>
-                        </tr>
-                        </tfoot>
-                    </table>
+                            </tfoot>
+                        </table>
 
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    <% end %>
 </div>
 </div>

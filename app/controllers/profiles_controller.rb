@@ -4,15 +4,17 @@ class ProfilesController < ApplicationController
     def index
         @title = "Perfiles"
         @abilities = Ability.all
-        @profiles = Profile.joins(:abilities)
+        @profiles = Profile.joins(profile_abilities: :ability)
         
 
 
         @profiles = @profiles.where(['profile like ?', "%#{params[:profile]}%"]) if params[:profile].present?
 
-        params[:abilities].each do |ability|
-            @profiles = @profiles.where(['profile_abilities.ability_id = ?', ability])
-        end if params[:abilities].present?
+        @profiles = @profiles.where(['profile_abilities.ability_id = ?', params[:abilities]]) if params[:abilities].present?
+
+        # params[:abilities].each do |ability|
+        #     @profiles = @profiles.where(['profile_abilities.ability_id = ?', ability])
+        # end if params[:abilities].present?
 
         @profiles = @profiles.uniq
     end
@@ -109,6 +111,10 @@ class ProfilesController < ApplicationController
 
     def update
         profile = Profile.find(params[:id])
+        profile.profile = params[:profile][:profile]
+        profile.objective = params[:profile][:objective]
+        profile.functions = params[:profile][:functions]
+        profile.save
 
         if (params[:reports_tos].present? && !params[:reports_tos].empty?)
             reports_tos = ReportsTo.where(sender_id: profile.id).map {|entry| entry.reciever_id}
@@ -164,12 +170,6 @@ class ProfilesController < ApplicationController
             end
         end
 
-        # ReportsTo.where(reciever_id: profile.id).delete_all
-
-        # DirectSupervision.where(from_id: profile.id).delete_all
-
-        # ReplaceBy.where(replacement_id: profile.id).delete_all
-        
         aux = profile.abilities.map {|ability| ability.id}
 
         params[:profile][:profile_abilities_attributes].each do |ability|
@@ -194,36 +194,6 @@ class ProfilesController < ApplicationController
             profile_ability = ProfileAbility.where(:profile_id => profile[:id], :ability_id => id).first
             profile_ability.destroy
         end
-
-        # if (params[:reports_tos].present? && !params[:reports_tos].empty?)
-        #     params[:reports_tos].each do |profile_id|
-        #         # ActiveRecord::Base.connection.execute("insert into reports_tos(sender_id, reciever_id, created_at, updated_at) values(#{profile.id}, #{profile_id}, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)")
-        #         ReportsTo.create({
-        #             :sender_id => profile.id,
-        #             :reciever_id => profile_id
-        #         })
-        #     end
-        # end
-        
-        # if (params[:direct_supervisions].present? && !params[:direct_supervisions].empty?)
-        #     params[:direct_supervisions].each do |profile_id|
-        #         # ActiveRecord::Base.connection.execute("insert into direct_supervisions(from_id, to_id, created_at, updated_at) values(#{profile_id}, #{profile.id}, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)")                
-        #         DirectSupervision.create({
-        #             :from_id => profile_id,
-        #             :to_id => profile.id
-        #         })
-        #     end 
-        # end
-
-        # if (params[:replace_bies].present? && !params[:replace_bies].empty?)
-        #     params[:replace_bies].each do |profile_id|
-        #         # ActiveRecord::Base.connection.execute("insert into replace_bies(to_replace_id, replacement_id, created_at, updated_at) values(#{profile.id}, #{profile_id}, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)")
-        #         ReplaceBy.create({
-        #             :to_replace_id => profile.id,
-        #             :replacement_id => profile_id
-        #         })
-        #     end
-        # end
 
         redirect_to profiles_path
     end

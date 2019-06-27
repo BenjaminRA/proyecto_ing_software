@@ -4,12 +4,12 @@ class AdminsController < ApplicationController
     def index
         @title = "Administradores"
         @admins = User.joins(:admin)
-        # puts @collaborators.inspect
 
+        @admins = @admins.where(['users.name like ?', "%#{params[:nombre]}%"]) if params[:nombre].present?
+        @admins = @admins.where(['users.last_name like ?', "%#{params[:apellido]}%"]) if params[:apellido].present?
+        @admins = @admins.where(["users.rut = ?", "#{params[:rut]}"]) if params[:rut].present?
+        @admins = @admins.where(["users.email like ?", "%#{params[:email]}%"]) if params[:email].present?
 
-
-
-        # render :plain => @collaborators[0].collaborator.profile.inspect
     end
 
     def new

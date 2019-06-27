@@ -39,6 +39,8 @@ class AbilitiesTecnicasController < ApplicationController
 
     def destroy
         ability = Ability.find(params[:id])
+        EvaluationAbility.where(:ability_id => ability.id).delete_all
+        ProfileAbility.where(:ability_id => ability.id).delete_all
         ability.destroy
 
         redirect_to "/abilities/tecnicas"

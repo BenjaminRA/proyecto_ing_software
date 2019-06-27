@@ -25,11 +25,11 @@
                     <div class="form-group row">
                         <div class="form-group col-md-6 col-sm-12">
                             <%= f.label "Nombre" %>
-                            <%= f.text_field :name, {:class => "form-control"} %>
+                            <%= f.text_field :name, {:class => "form-control", :required => ""} %>
                         </div>
                         <div class="form-group col-md-6 col-sm-12">
                             <%= f.label "Apellido" %>
-                            <%= f.text_field :last_name, {:class => "form-control"} %>
+                            <%= f.text_field :last_name, {:class => "form-control", :required => ""} %>
                         </div>
                     </div>
                     <div class="hr-line-dashed"></div>
@@ -37,7 +37,7 @@
                     <div class="form-group row">
                         <div class="form-group col-md-6 col-sm-12">
                             <%= f.label "Rut" %>
-                            <%= f.text_field :rut, {:class => "form-control", type: "text", :"data-mask" => "99999999-9"} %>
+                            <%= f.text_field :rut, {:class => "form-control", :type => "number", :required => ""} %>
                         </div>
                     </div>
                     <div class="hr-line-dashed"></div>
@@ -45,11 +45,11 @@
                     <div class="form-group row">
                         <div class="form-group col-md-6 col-sm-12">
                             <%= f.label "Mail" %>
-                            <%= f.text_field :email, {:class => "form-control"} %>
+                            <%= f.text_field :email, {:class => "form-control", :type => "email", :required => ""} %>
                         </div>
                         <div class="form-group col-md-6 col-sm-12">
                             <%= f.label "Contraseña" %>
-                            <%= f.text_field :password_digest, {:class => "form-control", type: "password"} %>
+                            <%= f.text_field :password_digest, {:class => "form-control", type: "password", :required => ""} %>
                         </div>
                     </div>
 
@@ -65,47 +65,3 @@
     </div>
 </div>
 </div>
-
-<% content_for :javascript do %>
-<script type="text/javascript">
-    $(function() {
-
-        $("#new_user").validate({
-            rules: {
-                "user[name]": {
-                    required: true,
-                },
-                "user[last_name]": {
-                    required: true,
-                },
-                "user[rut]": {
-                    required: true,
-                },
-                "user[email]": {
-                    required: true,
-                },
-                "user[password_digest]": {
-                    required: true,
-                },
-            },
-            messages: {
-                "user[name]": {
-                    required: "Este campo es requerido."
-                },
-                "user[last_name]": {
-                    required: "Este campo es requerido."
-                },
-                "user[rut]": {
-                    required: "Este campo es requerido."
-                },
-                "user[email]": {
-                    required: "Este campo es requerido."
-                },
-                "user[password_digest]": {
-                    required: "Este campo es requerido."
-                },
-            }
-        })
-    })
-</script>
-<% end %>

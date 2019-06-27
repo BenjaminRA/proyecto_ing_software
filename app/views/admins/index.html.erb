@@ -15,7 +15,7 @@
 <%= form_tag admins_path, :method => 'get' do %>
 <div class="ibox-content m-b-sm border-bottom">
     <div class="row">
-        <div class="col-sm-2">
+        <div class="col">
             <div class="form-group">
                 <label class="col-form-label" for="nombre">Nombre</label>
                 <%= text_field_tag :nombre, params[:nombre], {
@@ -24,7 +24,16 @@
                 } %>
             </div>
         </div>
-        <div class="col-sm-2">
+        <div class="col">
+            <div class="form-group">
+                <label class="col-form-label" for="apellido">Apellido</label>
+                <%= text_field_tag :apellido, params[:apellido], {
+                    :class => "form-control",
+                    :placeholder => "Apellido"
+                } %>
+            </div>
+        </div>
+        <div class="col">
             <div class="form-group">
                 <label class="col-form-label" for="rut">Rut</label>
                 <%= text_field_tag :rut, params[:rut], {
@@ -33,28 +42,13 @@
                 } %>
             </div>
         </div>
-        <div class="col-sm-2">
+        <div class="col">
             <div class="form-group">
                 <label class="col-form-label" for="email">Correo Electrónico</label>
                 <%= text_field_tag :email, params[:email], {
                     :class => "form-control",
                     :placeholder => "Correo Electrónico"
                 } %>
-            </div>
-        </div>
-        <div class="col-sm-2">
-            <div class="form-group">
-                <label class="col-form-label" for="perfil">Perfil</label>
-                <%= text_field_tag :perfil, params[:perfil], {
-                    :class => "form-control",
-                    :placeholder => "Perfil"
-                } %>
-            </div>
-        </div>
-        <div class="col-sm-4">
-            <div class="form-group">
-                <label class="col-form-label" for="status">Estado</label>
-                <%= select_tag 'status', options_for_select(["Activo", "Inactivo"]), {:class => "form-control"}%>
             </div>
         </div>
     </div>
@@ -102,7 +96,11 @@
                                     <button class="btn-warning btn btn-xs" style="border-radius: 0px;">Editar</button>
                                 <% end %>
                                 <%= link_to "/admins/#{user.id}", :controller => "admins", :action => "destroy", :method => "delete" do %>
-                                    <button class="btn-danger btn btn-xs" style="border-radius: 0px;">Borrar</button>
+                                    <% if user.id == session[:user_id]%>
+                                        <button disabled class="btn-danger btn btn-xs" style="border-radius: 0px;">Borrar</button>
+                                    <% else %>
+                                        <button class="btn-danger btn btn-xs" style="border-radius: 0px;">Borrar</button>
+                                    <% end %>
                                 <% end %>
                             </div>
                         </td>

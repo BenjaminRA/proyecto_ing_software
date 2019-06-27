@@ -32,6 +32,7 @@ Rails.application.routes.draw do
 
   post '/abilities', to: 'abilities#create'
   get '/abilities', to: 'abilities#index'
+  # get '/abilities/:id', to: 'abilities#update'
   delete '/abilities/:id', to: 'abilities#destroy'
   put '/abilities/:id', to: 'abilities#update'
 
