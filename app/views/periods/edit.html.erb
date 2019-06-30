@@ -15,7 +15,7 @@
 
 <div class="wrapper wrapper-content animated fadeInRight">
 <div class="ibox-content m-b-sm border-bottom">
-<%= form_tag "/periods", :method => "post", :id => "new_period", :autocomplete => "off"%>
+<%= form_tag "/periods/#{params[:id]}", :method => "put", :id => "new_period", :autocomplete => "off"%>
     <div class="form-group">
         <label>Inicio y término del periodo</label>
         <div class="input-daterange input-group" id="datepicker">
@@ -54,48 +54,48 @@
 
 <script>
 
-    let indexes_evaluators = []
-    let indexes_collaborators = []
-    let collaborators = []
-    let evaluators = []
-    let select_fields = []
-
-    addOption = function(e) {
-        for(let select_field of select_fields) {
-            $(select_field).append(e)
-            select_field
-        }
-    }
-
-    removeOption = function(element) {
-        const ids = $("#evaluators_select").val()
-        if (indexes_evaluators.length !== 0) {
-            let index = null
-            let step_index = 0
-            inner_loop:
-            for (let i = 0; i < indexes_evaluators.length; ++i) {
-                if (gon.collaborators[indexes_evaluators[i]].id === element) {
-                    index = indexes_evaluators[i]
-                    step_index = evaluators.indexOf(gon.collaborators[index].id)
-                    break inner_loop
-                }
-            }
-            if (index !== null) {
-                indexes_evaluators = indexes_evaluators.filter((e) => e !== index)
-                evaluators = evaluators.filter((e) => e !== evaluators[step_index])
-                select_fields = select_fields.filter((e) => e !== select_fields[step_index + 1])
-                $("#wizard").steps("remove",  step_index + 2)
-            }
-
-        }
-
-        for(let select_field of select_fields) {
-            $(`#${select_field[0].id} option[value="${element}"]`).remove();
-            $(`#${select_field[0].id}`).bootstrapDualListbox("refresh")
-        }
-    }
-
     $(function() {
+
+        let indexes_evaluators = []
+        let indexes_collaborators = []
+        let collaborators = []
+        let evaluators = []
+        let select_fields = []
+
+        addOption = function(e) {
+            for(let select_field of select_fields) {
+                $(select_field).append(e)
+                select_field
+            }
+        }
+
+        removeOption = function(element) {
+            const ids = $("#evaluators_select").val()
+            if (indexes_evaluators.length !== 0) {
+                let index = null
+                let step_index = 0
+                inner_loop:
+                for (let i = 0; i < indexes_evaluators.length; ++i) {
+                    if (gon.collaborators[indexes_evaluators[i]].id === element) {
+                        index = indexes_evaluators[i]
+                        step_index = evaluators.indexOf(gon.collaborators[index].id)
+                        break inner_loop
+                    }
+                }
+                if (index !== null) {
+                    indexes_evaluators = indexes_evaluators.filter((e) => e !== index)
+                    evaluators = evaluators.filter((e) => e !== evaluators[step_index])
+                    select_fields = select_fields.filter((e) => e !== select_fields[step_index + 1])
+                    $("#wizard").steps("remove",  step_index + 2)
+                }
+
+            }
+
+            for(let select_field of select_fields) {
+                $(`#${select_field[0].id} option[value="${element}"]`).remove();
+                $(`#${select_field[0].id}`).bootstrapDualListbox("refresh")
+            }
+        }
 
         $("#wizard").steps({
             enableAllSteps: true,

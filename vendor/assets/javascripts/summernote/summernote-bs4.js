@@ -7320,4 +7320,3 @@ $$1.summernote = $$1.extend($$1.summernote, {
 });
 
 })));
-//# sourceMappingURL=summernote-bs4.js.map
