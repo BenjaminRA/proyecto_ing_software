@@ -38,7 +38,7 @@
 
         <h1>Evaluadores</h1>
         <div class="step-content" style="position: relative">
-            <select name="evaluators[]" class="form-control evaulators_select" multiple>
+            <select id="evaluators_select" name="evaluators[]" class="form-control evaulators_select" multiple>
 
             </select>
         </div>
@@ -65,11 +65,16 @@
         }
     }
 
+    removeOption = function(element, select_id) {
+        console.log("entro a removeOption")
+        $(`#${select_id} option[value="${element}"]`).remove();
+        $(`#${select_id}`).bootstrapDualListbox("refresh")
+    }
+
     $(function() {
 
         $("#wizard").steps({
             enableAllSteps: true,
-            // enableFinishButton: false,
             labels: {
                 cancel: "Cancela",
                 current: "Página actual:",
@@ -158,7 +163,7 @@
         collaborators_select.on("change", function(e) {
             let ids = $(this).val()
             if(ids.length >= indexes_collaborators.length) {
-                for(let diff = 0; diff < Math.abs(ids.length - indexes_collaborators.length); ++diff) {
+                while(ids.length !== indexes_collaborators.length) {
                     let current_collaborator = null
                     inner_loop:
                     for (let i = 0; i < ids.length; ++i) {
@@ -175,31 +180,27 @@
                         text: `${current_collaborator.name} ${current_collaborator.last_name} - ${current_collaborator.rut}`
                     }))
                 }
-                console.log(indexes_collaborators)
             }
             else {
-                for(let diff = 0; diff < Math.abs(indexes_collaborators.length - ids.length); ++diff) {
+                while(ids.length !== indexes_collaborators.length) {
                     let index = null
-                    console.log(ids)
                     inner_loop:
                     for (let i = 0; i < indexes_collaborators.length; ++i) {
                         if (!ids.includes(gon.collaborators[i].id.toString())) {
-                            index = i
+                            index = indexes_collaborators[i]
                             break inner_loop
                         }
                     }
-                    console.log(`iteración: ${diff+1} -- index: ${index}`)
+                    removeOption(gon.collaborators[index].id, "evaluators_select")
                     indexes_collaborators = indexes_collaborators.filter((e) => e !== index)
-                    $("#wizard").steps("remove",  index + 2)
                 }
-                console.log(indexes_collaborators)
             }
         })
 
         evaulators_select.on("change", function(e) {
             let ids = $(this).val()
             if(ids.length >= indexes_evaluators.length) {
-                for(let diff = 0; diff < Math.abs(ids.length - indexes_evaluators.length); ++diff) {
+                while(ids.length !== indexes_evaluators.length) {
                     let current_collaborator = null
                     inner_loop:
                     for (let i = 0; i < ids.length; ++i) {
@@ -207,6 +208,7 @@
                             if(gon.collaborators[j].id == ids[i] && !indexes_evaluators.includes(j)) {
                                 indexes_evaluators.push(j)
                                 current_collaborator = gon.collaborators[j]
+                                evaluators.push(current_collaborator.id)
                                 break inner_loop
                             }
                         }
@@ -245,24 +247,23 @@
                     current_collaborators_select_container.find('.move i').removeClass().addClass('fa fa-arrow-right');
                     current_collaborators_select_container.find('.remove i').removeClass().addClass('fa fa-arrow-left');
                 }
-                console.log(indexes_evaluators)
             }
             else {
-                for(let diff = 0; diff < Math.abs(indexes_evaluators.length - ids.length); ++diff) {
+                while(ids.length !== indexes_evaluators.length) {
                     let index = null
-                    console.log(ids)
+                    let step_index = 0
                     inner_loop:
                     for (let i = 0; i < indexes_evaluators.length; ++i) {
                         if (!ids.includes(gon.collaborators[i].id.toString())) {
-                            index = i
+                            index = indexes_evaluators[i]
+                            step_index = evaluators.indexOf(gon.collaborators[index].id)
                             break inner_loop
                         }
                     }
-                    console.log(`iteración: ${diff+1} -- index: ${index}`)
                     indexes_evaluators = indexes_evaluators.filter((e) => e !== index)
-                    $("#wizard").steps("remove",  index + 2)
+                    evaluators = evaluators.filter((e) => e !== evaluators[step_index])
+                    $("#wizard").steps("remove",  step_index + 2)
                 }
-                console.log(indexes_evaluators)
             }
         })
     })
