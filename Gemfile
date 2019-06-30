@@ -7,6 +7,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 gem 'rails', '~> 5.2.3'
 gem 'bootstrap', '~> 4.1.0'
 gem 'font-awesome-rails', '4.7.0.4'
+gem 'glyphicons-rails', '~> 0.1.2'
 
 # Use sqlite3 as the database for Active Record
 gem 'sqlite3', git: "https://github.com/larskanis/sqlite3-ruby", branch: "add-gemspec"

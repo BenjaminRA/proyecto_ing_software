@@ -6,7 +6,7 @@
                 <a href="<%= url_for :controller => 'periods', :action => 'index' %>">Períodos</a>
             </li>
             <li class="breadcrumb-item">
-                <strong>Crear Período</strong>
+                <strong>Editar Período</strong>
             </li>
         </ol>
     </div>
@@ -30,7 +30,7 @@
         <div class="step-content" style="position: relative">
             <label>Seleccione a los colaboradores de este periodo</label>
             <select name="collaborators[]" class="form-control collaborators_select" multiple required>
-                <% @collaborators.each_with_index do |collaborator, index| %>
+                <% @collaborators.each do |collaborator| %>
                     <option value="<%= collaborator.id %>"><%= collaborator.user.name %> <%= collaborator.user.last_name %> - <%= collaborator.user.rut %></option>
                 <% end %>
             </select>
@@ -39,7 +39,9 @@
         <h1>Evaluadores</h1>
         <div class="step-content" style="position: relative">
             <select id="evaluators_select" name="evaluators[]" class="form-control evaulators_select" multiple>
-
+                <% @evaluators_select.each do |collaborator| %>
+                    <option value="<%= collaborator[:id] %>"><%= collaborator[:name] %> <%= collaborator[:last_name] %> - <%= collaborator[:rut] %></option>
+                <% end %>
             </select>
         </div>
     </div>
@@ -61,7 +63,7 @@
     addOption = function(e) {
         for(let select_field of select_fields) {
             $(select_field).append(e)
-            select_field.bootstrapDualListbox("refresh")
+            select_field
         }
     }
 
@@ -156,12 +158,6 @@
             infoTextEmpty: 'Lista vacía',
         })
 
-        const collaborators_select_container = $('select[name="collaborators[]"]').bootstrapDualListbox('getContainer');
-        collaborators_select_container.find('.moveall i').removeClass().addClass('fa fa-arrow-right');
-        collaborators_select_container.find('.removeall i').removeClass().addClass('fa fa-arrow-left');
-        collaborators_select_container.find('.move i').removeClass().addClass('fa fa-arrow-right');
-        collaborators_select_container.find('.remove i').removeClass().addClass('fa fa-arrow-left');
-
         const evaulators_select = $(".evaulators_select")
         evaulators_select.bootstrapDualListbox({
             selectorMinimalHeight: 160,
@@ -173,12 +169,6 @@
             iconRemove: 'fa-arrow-circle-o-left'
 
         })
-
-        const evaulators_select_container = $('select[name="evaluators[]"]').bootstrapDualListbox('getContainer');
-        evaulators_select_container.find('.moveall i').removeClass().addClass('fa fa-arrow-right');
-        evaulators_select_container.find('.removeall i').removeClass().addClass('fa fa-arrow-left');
-        evaulators_select_container.find('.move i').removeClass().addClass('fa fa-arrow-right');
-        evaulators_select_container.find('.remove i').removeClass().addClass('fa fa-arrow-left');
 
         select_fields.push(evaulators_select)
 
@@ -262,11 +252,6 @@
                         infoTextEmpty: 'Lista vacía',
                     })
                     current_option[0].parentNode.parentNode.style.position = "relative"
-                    const current_collaborators_select_container = current_option.bootstrapDualListbox('getContainer');
-                    current_collaborators_select_container.find('.moveall i').removeClass().addClass('fa fa-arrow-right');
-                    current_collaborators_select_container.find('.removeall i').removeClass().addClass('fa fa-arrow-left');
-                    current_collaborators_select_container.find('.move i').removeClass().addClass('fa fa-arrow-right');
-                    current_collaborators_select_container.find('.remove i').removeClass().addClass('fa fa-arrow-left');
 
                     select_fields.push(current_option)
                 }
@@ -291,9 +276,61 @@
                     }
                 }
             }
-            console.log(select_fields)
-            console.log(indexes_evaluators)
         })
+
+        // Init values
+
+        for (let collaborator of gon.eval_collaborators) {
+            $(`.collaborators_select option[value="${collaborator.id}"]`).prop('selected', true)
+            indexes_collaborators = Array.from(Array(gon.eval_collaborators.length).keys())
+        }
+        collaborators_select.bootstrapDualListbox("refresh")
+
+        for (let evaluator of gon.eval_evaluators) {
+            $(`.evaulators_select option[value="${evaluator.id}"]`).prop('selected', true)
+
+            $("#wizard").steps("add", {
+                title: `Evaluador: ${evaluator.name} ${evaluator.last_name}`,
+                content: `
+                <div class="step-content">
+                    <select id="evaluates_${evaluator.id}_select" name="evaluates[${evaluator.id}][]" class="form-control evaluates${evaluator.id}_select" multiple>
+
+                    </select>
+                </div>
+                `
+            })
+
+            indexes_evaluators = Array.from(Array(gon.eval_evaluators.length).keys())
+            evaluators.push(evaluator.id)
+
+            const current_option = $(`.evaluates${evaluator.id}_select`)
+            for (let index of indexes_collaborators) {
+                if (gon.collaborators[index].id !== evaluator.id)
+                    $(current_option).append($('<option>', {
+                        value: gon.collaborators[index].id,
+                        text: `${gon.collaborators[index].name} ${gon.collaborators[index].last_name} - ${gon.collaborators[index].rut}`
+                    }))
+            }
+            current_option.bootstrapDualListbox({
+                selectorMinimalHeight: 160,
+                filterPlaceHolder: "Buscar Colaborador",
+                preserveSelectionOnMove: 'moved',
+                infoText: 'Mostrando {0}',
+                infoTextFiltered: '<span class="label label-warning">Fildrados</span> {0} de {1}',
+                infoTextEmpty: 'Lista vacía',
+            })
+            current_option[0].parentNode.parentNode.style.position = "relative"
+
+            for(let collaborator of evaluator.to_evaluate)
+                $(`.evaluates${evaluator.id}_select option[value="${collaborator.id}"]`).prop('selected', true)
+            current_option.bootstrapDualListbox("refresh")
+
+            select_fields.push(current_option)
+
+        }
+        evaulators_select.bootstrapDualListbox("refresh")
+        
+
     })
 </script>
 

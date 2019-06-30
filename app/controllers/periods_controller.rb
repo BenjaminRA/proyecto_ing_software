@@ -78,7 +78,7 @@ class PeriodsController < ApplicationController
     end
 
     def edit
-        @title = "Crear Periodo"
+        @title = "Editar Periodo"
 
         @collaborators = Collaborator.all.joins(:user)
 
@@ -89,7 +89,7 @@ class PeriodsController < ApplicationController
             :last_name => collaborator.user.last_name,
         }}
 
-        @eval_collaborators = @autoevaluation = Evaluation.joins(evaluator: {collaborator: :user})
+        @eval_collaborators = Evaluation.joins(evaluator: {collaborator: :user})
             .where("evaluations.collaborator_id = evaluators.collaborator_id")
             .where(["evaluators.period_id = ?", params[:id]])
 
@@ -103,6 +103,9 @@ class PeriodsController < ApplicationController
 
         gon.eval_evaluators = @eval_evaluators.map {|evaluator| {
             :id => evaluator.evaluator.collaborator.id,
+            :name => evaluator.evaluator.collaborator.user.name,
+            :last_name => evaluator.evaluator.collaborator.user.last_name,
+            :rut => evaluator.evaluator.collaborator.user.rut,
             :to_evaluate => Evaluation.joins(collaborator: :user, evaluator: {collaborator: :user})
                 .where("evaluations.collaborator_id != evaluators.collaborator_id")
                 .where(["evaluators.collaborator_id = ?", evaluator.evaluator.collaborator.id])
@@ -111,7 +114,13 @@ class PeriodsController < ApplicationController
                 }}
         }}
 
-        render :plain => gon.eval_evaluators.inspect
+        @evaluators_select = @collaborators.map {|collaborator| {
+            :id => collaborator.id,
+            :rut => collaborator.user.rut,
+            :name => collaborator.user.name,
+            :last_name => collaborator.user.last_name,
+            :selected => @eval_collaborators.where("evaluations.collaborator_id = #{collaborator.id}").empty?
+        }}
     end
 
     def update

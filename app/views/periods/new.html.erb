@@ -156,12 +156,6 @@
             infoTextEmpty: 'Lista vacía',
         })
 
-        const collaborators_select_container = $('select[name="collaborators[]"]').bootstrapDualListbox('getContainer');
-        collaborators_select_container.find('.moveall i').removeClass().addClass('fa fa-arrow-right');
-        collaborators_select_container.find('.removeall i').removeClass().addClass('fa fa-arrow-left');
-        collaborators_select_container.find('.move i').removeClass().addClass('fa fa-arrow-right');
-        collaborators_select_container.find('.remove i').removeClass().addClass('fa fa-arrow-left');
-
         const evaulators_select = $(".evaulators_select")
         evaulators_select.bootstrapDualListbox({
             selectorMinimalHeight: 160,
@@ -173,12 +167,6 @@
             iconRemove: 'fa-arrow-circle-o-left'
 
         })
-
-        const evaulators_select_container = $('select[name="evaluators[]"]').bootstrapDualListbox('getContainer');
-        evaulators_select_container.find('.moveall i').removeClass().addClass('fa fa-arrow-right');
-        evaulators_select_container.find('.removeall i').removeClass().addClass('fa fa-arrow-left');
-        evaulators_select_container.find('.move i').removeClass().addClass('fa fa-arrow-right');
-        evaulators_select_container.find('.remove i').removeClass().addClass('fa fa-arrow-left');
 
         select_fields.push(evaulators_select)
 
@@ -262,11 +250,6 @@
                         infoTextEmpty: 'Lista vacía',
                     })
                     current_option[0].parentNode.parentNode.style.position = "relative"
-                    const current_collaborators_select_container = current_option.bootstrapDualListbox('getContainer');
-                    current_collaborators_select_container.find('.moveall i').removeClass().addClass('fa fa-arrow-right');
-                    current_collaborators_select_container.find('.removeall i').removeClass().addClass('fa fa-arrow-left');
-                    current_collaborators_select_container.find('.move i').removeClass().addClass('fa fa-arrow-right');
-                    current_collaborators_select_container.find('.remove i').removeClass().addClass('fa fa-arrow-left');
 
                     select_fields.push(current_option)
                 }
