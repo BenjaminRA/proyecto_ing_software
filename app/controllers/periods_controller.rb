@@ -130,7 +130,7 @@ class PeriodsController < ApplicationController
     end
 
     def update
-
+        
     end
 
     def report
