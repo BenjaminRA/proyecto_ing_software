@@ -82,6 +82,11 @@ class PeriodsController < ApplicationController
 
         @collaborators = Collaborator.all.joins(:user)
 
+        period = Period.find(params[:id])
+        
+        @start = "#{period.start_date.month.to_i < 10 ? "0#{period.start_date.month}" : period.start_date.month}/#{period.start_date.day.to_i < 10 ? "0#{period.start_date.day}" : period.start_date.day}/#{period.start_date.year}"
+        @end = "#{period.finish_date.month.to_i < 10 ? "0#{period.finish_date.month}" : period.finish_date.month}/#{period.finish_date.day.to_i < 10 ? "0#{period.finish_date.day}" : period.finish_date.day}/#{period.finish_date.year}"
+
         gon.collaborators = @collaborators.map {|collaborator| {
             :id => collaborator.id,
             :rut => collaborator.user.rut,
@@ -121,6 +126,7 @@ class PeriodsController < ApplicationController
             :last_name => collaborator.user.last_name,
             :selected => @eval_collaborators.where("evaluations.collaborator_id = #{collaborator.id}").empty?
         }}
+
     end
 
     def update
