@@ -47,11 +47,12 @@ class PeriodsController < ApplicationController
     end
 
     def create
-        aux_start = params[:start].split("/")
-        aux_end = params[:end].split("/")
+        aux_start = params[:start].split("-")
+        aux_end = params[:end].split("-")
+
         period = Period.create({
-            :start_date => "#{aux_start[2]}-#{aux_start[0]}-#{aux_start[1]}",
-            finish_date: "#{aux_end[2]}-#{aux_end[0]}-#{aux_end[1]}",
+            :start_date => "#{aux_start[2]}-#{aux_start[1]}-#{aux_start[0]}",
+            finish_date: "#{aux_end[2]}-#{aux_end[1]}-#{aux_end[0]}",
         })
 
         params[:collaborators].each do |collaborator_id|
@@ -59,18 +60,22 @@ class PeriodsController < ApplicationController
                 :collaborator_id => collaborator_id,
                 :period_id => period.id
             })
+            collaborator = Collaborator.find(collaborator_id)
             Evaluation.create({
                 :collaborator_id => collaborator_id,
-                :evaluator_id => evaluator.id
+                :evaluator_id => evaluator.id,
+                :profile_id => collaborator.profile.id
             })
         end if (params[:collaborators].present?)
 
         params[:evaluates].each do |aux|
             evaluator = Evaluator.where(:period_id => period.id, :collaborator_id => aux[0]).first
             aux[1].each do |collaborator_id|
+                collaborator = Collaborator.find(collaborator_id)
                 Evaluation.create({
                     :collaborator_id => collaborator_id,
-                    :evaluator_id => evaluator.id
+                    :evaluator_id => evaluator.id,
+                    :profile_id => collaborator.profile.id
                 })
             end
         end if (params[:evaluates].present?)
@@ -133,10 +138,10 @@ class PeriodsController < ApplicationController
 
     def update
         period = Period.find(params[:id])
-        aux_start = params[:start].split("/")
-        aux_end = params[:end].split("/")
-        period.start_date = "#{aux_start[2]}-#{aux_start[0]}-#{aux_start[1]}"
-        period.finish_date = "#{aux_end[2]}-#{aux_end[0]}-#{aux_end[1]}"
+        aux_start = params[:start].split("-")
+        aux_end = params[:end].split("-")
+        period.start_date = "#{aux_start[2]}-#{aux_start[1]}-#{aux_start[0]}"
+        period.finish_date = "#{aux_end[2]}-#{aux_end[1]}-#{aux_end[0]}"
         period.save
 
         EvaluationAbility.joins(evaluation: :evaluator).where("evaluators.period_id = #{params[:id]}").delete_all
@@ -148,18 +153,22 @@ class PeriodsController < ApplicationController
                 :collaborator_id => collaborator_id,
                 :period_id => period.id
             })
+            collaborator = Collaborator.find(collaborator_id)
             Evaluation.create({
                 :collaborator_id => collaborator_id,
-                :evaluator_id => evaluator.id
+                :evaluator_id => evaluator.id,
+                :profile_id => collaborator.profile.id
             })
         end if (params[:collaborators].present?)
 
         params[:evaluates].each do |aux|
             evaluator = Evaluator.where(:period_id => period.id, :collaborator_id => aux[0]).first
             aux[1].each do |collaborator_id|
+                collaborator = Collaborator.find(collaborator_id)
                 Evaluation.create({
                     :collaborator_id => collaborator_id,
-                    :evaluator_id => evaluator.id
+                    :evaluator_id => evaluator.id,
+                    :profile_id => collaborator.profile.id
                 })
             end
         end if (params[:evaluates].present?)
@@ -171,8 +180,12 @@ class PeriodsController < ApplicationController
     def report
         @title = "Reporte"
 
-        @collaborator = Collaborator.where(:id => params[:collaborator]).joins(:user, profile: {profile_abilities: :ability}).first
-        
+        @collaborator = Collaborator.where(:id => params[:collaborator]).joins(:user).first
+
+        @profile = Evaluation.joins(evaluator: {collaborator: :user}).joins(profile: {profile_abilities: :ability})
+            .where("evaluations.collaborator_id = #{params[:collaborator]}")
+            .where(["evaluators.period_id = ?", params[:period]]).first.profile
+
         @autoevaluation = Evaluation.joins(evaluator: {collaborator: :user})
             .where("evaluations.collaborator_id = evaluators.collaborator_id")
             .where("evaluations.collaborator_id = #{params[:collaborator]}")

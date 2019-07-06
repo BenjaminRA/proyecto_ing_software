@@ -4,10 +4,17 @@
             <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
         </div>
         <ul class="nav navbar-top-links navbar-right">
+
+            <% if active_period? && is_admin? %>
+               <li style="padding: 20px; color: red;">
+                    <i class="fa fa-warning"></i>
+                    <span class="m-r-sm welcome-message">Período activo. Algunas funciones de editar y eliminar van a estar limitadas</span>
+                </li>
+            <% end %>
             
             <li>
                 <a href="/logout">
-                    <i class="fa fa-sign-out"></i> Log out
+                    <i class="fa fa-sign-out"></i> Cerrar Sesión
                 </a>
             </li>
         </ul>

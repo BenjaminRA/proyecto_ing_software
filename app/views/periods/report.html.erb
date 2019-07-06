@@ -29,7 +29,7 @@
                 <div class="row">
                     <div class="col">
                         <h3>Nombre: <%= @collaborator.user.name %> <%= @collaborator.user.last_name %></h3> <br>
-                        <h3>Perfil: <%= @collaborator.profile.profile %></h3> <br>
+                        <h3>Perfil: <%= @profile.profile %></h3> <br>
                     </div>
                 </div>
             </div>
@@ -55,7 +55,7 @@
                 </div>
 
                 <% contador = 0 %>
-                <% @collaborator.profile.profile_abilities.each_with_index do |entry, index| %>
+                <% @profile.profile_abilities.each_with_index do |entry, index| %>
                     <% if entry.ability.abilities_type_id == 2 %>
                         <div class="row">
                             <div class="col-6 e-b-b vertical-center">
@@ -109,7 +109,7 @@
                     </div>
                 </div>
 
-                <% @collaborator.profile.profile_abilities.each_with_index do |entry, index| %>
+                <% @profile.profile_abilities.each_with_index do |entry, index| %>
                     <% if entry.ability.abilities_type_id == 1 %>
                         <div class="row">
                             <div class="col-6 e-b-b vertical-center">

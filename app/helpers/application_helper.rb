@@ -129,5 +129,13 @@ module ApplicationHelper
           return entry.value
         end
       end
+      return "-"
+    end
+
+    def active_period?
+      period = Period.where("start_date < :current_date and finish_date > :current_date", {
+            :current_date => "#{Date.today} 00:00:00"
+        }).first
+        return !period.nil?
     end
 end

@@ -19,10 +19,11 @@
     <div class="form-group">
         <label>Inicio y término del período</label>
         <div class="input-daterange input-group" id="datepicker">
-            <input required type="text" class="form-control-sm form-control" name="start" value="<%= @start %>"/>
+            <input required type="text" class="form-control-sm form-control" name="start" value="<%= @start %>" id="start_field"/>
             <span class="input-group-addon input-group-addon">Hasta</span>
-            <input required type="text" class="form-control-sm form-control" name="end" value="<%= @end %>"/>
+            <input required type="text" class="form-control-sm form-control" name="end" value="<%= @end %>" id="end_field"/>
         </div>
+        <span class="form-text m-b-none text-danger" id="dates-error"></span>
     </div>
     <div class="hr-line-dashed"></div>
     <div id="wizard">
@@ -109,38 +110,51 @@
                 loading: "Cargando..."
             },
             onFinished: function (event, currentIndex) {
-                $("#submit_button").trigger("click")
+                let start = $("#start_field").val()
+                let end = $("#end_field").val()
+                if (start === "" || end === "")
+                    $("#dates-error").html("Campos requeridos")
+                else {
+                    let overlapped = false
+                    let periodo = ""
+
+                    start = (new Date(start)).getTime()
+                    end = (new Date(end)).getTime()
+
+                    for (let period of gon.periods) {
+                        aux_start = (new Date(period.start_date)).getTime()
+                        aux_end = (new Date(period.finish_date)).getTime()
+
+                        if (
+                            (start > aux_start && start < aux_end) ||
+                            (aux_start > start && aux_start < end) ||
+                            (aux_start > start && aux_end > start)
+                        ) {
+                            overlapped = true
+                            periodo = `Periodo desde ${period.start_date} hasta ${period.finish_date}`
+                            break
+                        }
+                    }
+                    if (overlapped)
+                        $("#dates-error").html(`Estas fechas se solapa con: ${periodo}`)
+                    else
+                        $("#submit_button").trigger("click")
+                }
             },
         });
 
-        // jQuery.validator.addMethod("overlapped_date", function(value, element) {
-        //     let overlapped = false
-        //     const start = Date(value)
-        //     for(const period of gon.periods) {
-        //         period
-        //     }
-
-        //     return this.optional(element) || !overlapped;
-        // }, "Esta fecha se solapa con la de otro período");
-
-        // $("#new_period").validate({
-        //     rules: {
-        //         start: {
-        //             overlapped_date: true
-        //         },
-        //         end: {
-        //             required: true,
-        //         },
-        //     },
-        //     messages: {
-        //         start: {
-        //             required: "Este campo es requerido."
-        //         },
-        //         end: {
-        //             required: "Este campo es requerido."
-        //         },
-        //     }
-        // })
+        $.fn.datepicker.dates['en'] = {
+            days: ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sábado", "Domingo"],
+            daysShort: ["Dom", "Lun", "Mar", "Mie", "Jue", "Vie", "Sáb"],
+            daysMin: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sá"],
+            months: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
+            monthsShort: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
+            today: "Hoy",
+            clear: "Limpiar",
+            format: 'dd-mm-yyyy',
+            titleFormat: "MM yyyy",
+            weekStart: 0
+        }
         
         $('.input-daterange').datepicker({
             keyboardNavigation: false,

@@ -70,9 +70,9 @@
                             </td>
                             <td class="text-right">
                                 <div class="btn-group">
-                                    <button data-toggle="modal" href="#modificar-habilidad-form" id="edit-button-<%= index %>" class="btn-warning btn btn-xs" style="border-radius: 0px;">Editar</button>
+                                    <button <%= active_period? ? "disabled" : "" %> data-toggle="modal" href="#modificar-habilidad-form" id="edit-button-<%= index %>" class="btn-warning btn btn-xs" style="border-radius: 0px;">Editar</button>
                                     <%= link_to "/abilities/#{ability.id}", :controller => "abilities", :action => "destroy", :method => "delete" do %>
-                                        <button class="btn-danger btn btn-xs" style="border-radius: 0px;">Borrar</button>
+                                        <button <%= active_period? ? "disabled" : "" %> class="btn-danger btn btn-xs" style="border-radius: 0px;">Borrar</button>
                                     <% end %>
                                 </div>
                             </td>

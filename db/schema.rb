@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_23_165823) do
+ActiveRecord::Schema.define(version: 2019_07_06_170348) do
 
   create_table "abilities", force: :cascade do |t|
     t.string "ability"
@@ -84,8 +84,10 @@ ActiveRecord::Schema.define(version: 2019_06_23_165823) do
     t.integer "evaluator_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "profile_id"
     t.index ["collaborator_id"], name: "index_evaluations_on_collaborator_id"
     t.index ["evaluator_id"], name: "index_evaluations_on_evaluator_id"
+    t.index ["profile_id"], name: "index_evaluations_on_profile_id"
   end
 
   create_table "evaluators", force: :cascade do |t|

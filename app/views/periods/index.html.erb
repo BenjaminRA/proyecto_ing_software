@@ -53,10 +53,10 @@
                         <% @periods.each do |period| %>
                         <tr>
                             <td>
-                                <%= period.start_date %>
+                                <%= period.start_date.strftime("%d-%m-%Y") %>
                             </td>
                             <td>
-                                <%= period.finish_date %>
+                                <%= period.finish_date.strftime("%d-%m-%Y") %>
                             </td>
                             <td class="text-right">
                                 <div class="btn-group">
