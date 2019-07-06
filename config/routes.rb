@@ -10,6 +10,8 @@ Rails.application.routes.draw do
   resources :collaborators
   resources :admins
   resources :profiles
+  get "/profiles/:id/pdf.pdf", to: "profiles#pdf_report"
+
   resources :users
   resources :periods
   resources :profile_abilities

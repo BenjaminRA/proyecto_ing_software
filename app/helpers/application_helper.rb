@@ -75,7 +75,7 @@ module ApplicationHelper
 
     def to_autoevaluate?
       period = Period.where("start_date < :current_date and finish_date > :current_date", {
-        :current_date => Date.today
+        :current_date => "#{Date.today} 00:00:00"
       }).first
       if(period.nil?)
         return false
@@ -89,7 +89,7 @@ module ApplicationHelper
 
     def autoevalation_done?
       period = Period.where("start_date < :current_date and finish_date > :current_date", {
-        :current_date => Date.today
+        :current_date => "#{Date.today} 00:00:00"
       }).first
       if(period.nil?)
         return false
@@ -104,7 +104,7 @@ module ApplicationHelper
 
     def has_to_evaluate?
       period = Period.where("start_date < :current_date and finish_date > :current_date", {
-        :current_date => Date.today
+        :current_date => "#{Date.today} 00:00:00"
       }).first
       if(period.nil?)
         return false
@@ -121,5 +121,13 @@ module ApplicationHelper
       evaluation = Evaluation.where(:id => evaluation_id)
         .joins(evaluation_abilities: :ability)
       return !evaluation.empty?
+    end
+
+    def find_value(ability_id, collection)
+      collection.evaluation_abilities.each do |entry|
+        if (entry.ability.id == ability_id)
+          return entry.value
+        end
+      end
     end
 end

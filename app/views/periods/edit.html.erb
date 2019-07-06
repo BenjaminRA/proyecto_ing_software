@@ -65,7 +65,7 @@
         addOption = function(e) {
             for(let select_field of select_fields) {
                 $(select_field).append(e)
-                select_field
+                select_field.bootstrapDualListbox("refresh")
             }
         }
 
@@ -92,7 +92,7 @@
             }
 
             for(let select_field of select_fields) {
-                $(`#${select_field[0].id} option[value="${element}"]`).remove();
+                $(`#${select_field[0].id} option[value="${element}"]`).remove()
                 $(`#${select_field[0].id}`).bootstrapDualListbox("refresh")
             }
         }
@@ -281,8 +281,14 @@
         // Init values
 
         for (let collaborator of gon.eval_collaborators) {
+            inner_loop:
+            for (let i = 0; i < gon.collaborators.length; ++i) {
+                if(gon.collaborators[i].id == collaborator.id) {
+                    indexes_collaborators.push(i)
+                    break inner_loop
+                }
+            }
             $(`.collaborators_select option[value="${collaborator.id}"]`).prop('selected', true)
-            indexes_collaborators = Array.from(Array(gon.eval_collaborators.length).keys())
         }
         collaborators_select.bootstrapDualListbox("refresh")
 
@@ -300,7 +306,13 @@
                 `
             })
 
-            indexes_evaluators = Array.from(Array(gon.eval_evaluators.length).keys())
+            inner_loop:
+            for (let i = 0; i < gon.collaborators.length; ++i) {
+                if(gon.collaborators[i].id == evaluator.id) {
+                    indexes_evaluators.push(i)
+                    break inner_loop
+                }
+            }
             evaluators.push(evaluator.id)
 
             const current_option = $(`.evaluates${evaluator.id}_select`)

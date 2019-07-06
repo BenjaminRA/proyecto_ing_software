@@ -8,7 +8,7 @@ class AutoevaluationsController < ApplicationController
 
     def create
         period = Period.where("start_date < :current_date and finish_date > :current_date", {
-            :current_date => Date.today
+            :current_date => "#{Date.today} 00:00:00"
         }).first
         evaluation = Evaluation.joins(:evaluator)
             .where(["evaluations.collaborator_id = ?", session[:collaborator_id]])
@@ -29,7 +29,7 @@ class AutoevaluationsController < ApplicationController
     def edit
         @title = "Editar Evaluación"
         period = Period.where("start_date < :current_date and finish_date > :current_date", {
-            :current_date => Date.today
+            :current_date => "#{Date.today} 00:00:00"
         }).first
         @evaluation = Evaluation.joins(:evaluator)
             .where(["evaluations.collaborator_id = ?", session[:collaborator_id]])
@@ -43,7 +43,7 @@ class AutoevaluationsController < ApplicationController
 
     def update
         period = Period.where("start_date < :current_date and finish_date > :current_date", {
-            :current_date => Date.today
+            :current_date => "#{Date.today} 00:00:00"
         }).first
         evaluation = Evaluation.joins(:evaluator)
             .where(["evaluations.collaborator_id = ?", session[:collaborator_id]])
@@ -58,9 +58,9 @@ class AutoevaluationsController < ApplicationController
     end
 
     def index
-        @title = "Evaluaciones"
+        @title = "Autoevaluación"
         period = Period.where("start_date < :current_date and finish_date > :current_date", {
-            :current_date => Date.today
+            :current_date => "#{Date.today} 00:00:00"
         }).first
         if(!period.nil?)
             @evaluation = Evaluation.joins(:evaluator)

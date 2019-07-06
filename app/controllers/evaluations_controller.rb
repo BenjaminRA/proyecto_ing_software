@@ -1,7 +1,10 @@
 class EvaluationsController < ApplicationController
+    include EvaluationsHelper
+    before_action :check_period
+
     def index
         period = Period.where("start_date < :current_date and finish_date > :current_date", {
-            :current_date => Date.today
+            :current_date => "#{Date.today} 00:00:00"
         }).first
         if(!period.nil?)
             @evaluations = Evaluation.joins(:evaluator).joins(collaborator: :user)

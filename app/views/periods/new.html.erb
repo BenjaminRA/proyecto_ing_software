@@ -90,7 +90,7 @@
             }
 
             for(let select_field of select_fields) {
-                $(`#${select_field[0].id} option[value="${element}"]`).remove();
+                $(`#${select_field[0].id} option[value="${element}"]`).remove()
                 $(`#${select_field[0].id}`).bootstrapDualListbox("refresh")
             }
         }

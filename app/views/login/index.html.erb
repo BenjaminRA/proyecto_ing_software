@@ -1,6 +1,11 @@
 <div class="loginColumns animated fadeInDown">
+    <% if flash[:mensaje].present? %>
+        <div class="alert alert-danger alert-dismissable">
+            <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+            <%= flash[:mensaje] %>
+        </div>
+    <% end %>
     <div class="row">
-
         <div class="col-md-6 text-center">
             <img height="120px" src="<%= image_path('logo.png') %>">
             <p class="p-h-md">Tecnologías, Metodologías y Servicios Especializados para un enfoque integral de la Gestión de Operaciones y Activos</p>

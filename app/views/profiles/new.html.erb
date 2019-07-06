@@ -145,9 +145,23 @@
 
 <script type="text/javascript">
 
-var i = 0
+selectFilter = function(element, selects) {
+    for (let select of selects)
+        if (element.id !== select.id) {
+            if (select.value === element.value) {
+                select.parentElement.parentElement.parentElement.remove()
+            }
+            else {
+                $(`#${select.id} option[value="${aux.value}"]`).remove()
+            }
+        }
+}
+
 
 $(function() {
+
+    let select_blandas = [],
+        select_tecnicas = []
     
     $("#new_profile").validate({
         rules: {
@@ -188,22 +202,26 @@ $(function() {
                 }
             }
         })
-        $(ability_select).select2('open')
         button = insertedItem[0].lastChild.previousSibling.firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling
         $(button).on("click", (e) => {
             e.target.parentElement.parentElement.parentElement.remove()
         })
-        // valor_esperado = insertedItem[0].lastChild.previousSibling.firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling
-        // $(valor_esperado).TouchSpin({
-        //     min: 0,
-        //     max: 7,
-        //     step: 1,
-        //     verticalbuttons: true,
-        //     buttondown_class: 'btn btn-white',
-        //     buttonup_class: 'btn btn-white',
-        //     verticalupclass: 'fa fa-sort-asc',
-        //     verticaldownclass: 'fa fa-sort-desc'
-        // });
+
+        $(ability_select).on("select2:select", e => selectFilter({
+            id: e.target.id,
+            value: e.target.value
+        }, select_tecnicas))
+
+
+        if (gon.tecnicas.length === select_tecnicas.length)
+            console.log('No quedan mas abilitdades')
+        else
+            for (let aux of select_tecnicas)
+                $(`#${ability_select.id} option[value="${aux.value}"]`).remove()
+
+        select_tecnicas.push(ability_select)
+        $(ability_select).trigger("change")
+        $(ability_select).select2('open')
     })
 
     $('#add-blandas-association').on('cocoon:after-insert', (e, insertedItem) => {
@@ -218,24 +236,33 @@ $(function() {
                 }
             }
         })
-        $(ability_select).select2('open')
         button = insertedItem[0].lastChild.previousSibling.firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling
         $(button).on("click", (e) => {
             e.target.parentElement.parentElement.parentElement.remove()
         })
-        // $(valor_esperado).TouchSpin({
-        //     min: 0,
-        //     max: 7,
-        //     step: 1,
-        //     verticalbuttons: true,
-        //     buttondown_class: 'btn btn-white',
-        //     buttonup_class: 'btn btn-white',
-        //     verticalupclass: 'fa fa-sort-asc',
-        //     verticaldownclass: 'fa fa-sort-desc'
-        // });
+
+        $(ability_select).on("select2:select", e => selectFilter({
+            id: e.target.id,
+            value: e.target.value
+        }, select_blandas))
+
+        if (gon.blandas.length === select_blandas.length)
+            console.log('No quedan mas abilitdades')
+        else
+            for (let aux of select_blandas) 
+                $(`#${ability_select.id} option[value="${aux.value}"]`).remove()
+
+        select_blandas.push(ability_select)
+        $(ability_select).trigger("change")
+        $(ability_select).select2('open')
     })
 
-    $("#fisrt_blanda_select").select2({
+    // init first blandas select
+    const fisrt_blanda_select = $("#fisrt_blanda_select")
+
+    select_blandas.push(fisrt_blanda_select[0])
+
+    $(fisrt_blanda_select).select2({
         placeholder: "Seleccione la Competencia",
         language: {
             noResults: function (params) {
@@ -243,8 +270,19 @@ $(function() {
             }
         }
     })
-    
-    $("#fisrt_tecnica_select").select2({
+
+    $(fisrt_blanda_select).on("select2:select", e => selectFilter({
+        id: e.target.id,
+        value: e.target.value
+    }, select_blandas))
+
+
+    // init first blandas select
+    const fisrt_tecnica_select = $("#fisrt_tecnica_select")
+
+    select_tecnicas.push(fisrt_tecnica_select[0])
+
+    $(fisrt_tecnica_select).select2({
         placeholder: "Seleccione la Competencia",
         language: {
             noResults: function (params) {
@@ -252,6 +290,11 @@ $(function() {
             }
         }
     })
+
+    $(fisrt_tecnica_select).on("select2:select", e => selectFilter({
+        id: e.target.id,
+        value: e.target.value
+    }, select_tecnicas))
 
     $("#reports_to_fields").select2({
         placeholder: "Seleccione los perfiles",

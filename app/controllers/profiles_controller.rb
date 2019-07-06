@@ -80,7 +80,7 @@ class ProfilesController < ApplicationController
 
         ReplaceBy.where(to_replace_id: profile.id).delete_all
         ReplaceBy.where(replacement_id: profile.id).delete_all
-        
+
         profile.destroy
 
         redirect_to profiles_path
@@ -105,8 +105,9 @@ class ProfilesController < ApplicationController
         }
         @tecnicas = Ability.where('abilities_type_id = 1')
         @blandas = Ability.where('abilities_type_id = 2')
-
-        # render :plain => @profile.abilities.inspect
+        
+        gon.tecnicas = @tecnicas
+        gon.blandas = @blandas
     end
 
     def update
@@ -206,6 +207,9 @@ class ProfilesController < ApplicationController
 
         @tecnicas = Ability.where('abilities_type_id = 1')
         @blandas = Ability.where('abilities_type_id = 2')
+
+        gon.tecnicas = @tecnicas
+        gon.blandas = @blandas
     end
 
     def show
@@ -229,4 +233,40 @@ class ProfilesController < ApplicationController
             }}
         }}
     end
+
+    def pdf_report
+        @title = "Perfil"
+        @profile = Profile.joins(profile_abilities: :ability).find(params[:id])
+        @reports_to = ReportsTo.where(:sender_id => @profile.id)
+        @direct_supervision = DirectSupervision.where(:to_id => @profile.id)
+        @replace_by = ReplaceBy.where(:to_replace_id => @profile.id)
+
+        @reports_to = @reports_to.map{|entry| Profile.find(entry.reciever_id).profile}
+        @direct_supervision = @direct_supervision.map{|entry| Profile.find(entry.from_id).profile}
+        @replace_by = @replace_by.map{|entry| Profile.find(entry.replacement_id).profile}
+
+        categories = Category.all
+
+        @blandas = categories.map{|category| {
+            :category => category.category,
+            :areas => Area.where(:category_id => category.id).map{|area| {
+                :area => area.area,
+                :abilities => ProfileAbility.joins(:ability).where("abilities.area_id = #{area.id}").where("profile_abilities.profile_id = #{@profile.id}")
+            }}
+        }}
+        respond_to do |format|
+            format.html
+            format.pdf do
+                render pdf: "Perfil #{@profile.profile}",
+                page_size: 'A4',
+                template: "profiles/pdf_report.html.erb",
+                layout: "pdf.html",
+                orientation: "Landscape",
+                lowquality: true,
+                zoom: 1,
+                dpi: 75
+            end
+        end
+    end
+
 end

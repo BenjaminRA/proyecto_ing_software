@@ -3,7 +3,7 @@
     <div class="col-md-6 habilidad">
         <div class="form-group">
             <label>Competencia</label>
-            <%= f.select :ability, options_for_select(@tecnicas.map {|ability| [ability.ability, ability.id]}, f.object.ability_id), {}, {
+            <%= f.select :ability, options_for_select((@tecnicas.select {|ability| !@profile.abilities.where("profile_abilities.ability_id = #{ability.id}").exists? || f.object.ability.inspect[f.object.ability.inspect.index("ability_id: ").to_i + "ability_id: ".size + 2..f.object.ability.inspect.index(', ability: "').to_i-1] == "#{ability.id}" }).map {|ability| [ability.ability, ability.id]}, f.object.ability_id), {}, {
                 :class => "form-control select-tecnicas-#{f.object.ability_id}"
             } %>
         </div>
