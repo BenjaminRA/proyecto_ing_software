@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Contac | <%= @title %></title>
+    <link rel="icon" href="<%= image_path('favicon.png') %>">
+
+    <%= include_gon %>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <!-- Main css styles -->
+    <%= wicked_pdf_stylesheet_link_tag 'style' %>
+    <%= wicked_pdf_stylesheet_link_tag 'evaluations' %>
+    <%= wicked_pdf_stylesheet_link_tag 'profiles' %>
+
+    <!-- Main javascript files -->
+    <%= wicked_pdf_javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+
+
+</head>
+<body>
+    <div>
+        <div class="container-fluid e-b">
+            <div class="row">
+                <div class="col-xs-2 p-md e-b-r text-center">
+                    <%= wicked_pdf_image_tag 'logo.png', :height => '120px' %>
+                </div>
+                <div class="col-xs-10">
+                    <div class="row">
+                        <div class="col text-center">
+                            <h2><strong>PERFIL DE COMPETENCIAS</strong></h2>
+                            <h2><strong><%= @profile.profile.upcase %></strong></h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="p-sm"><h2>1.- IDENTIFICACIÓN DEL PERFIL</h2></div>
+        <div class="container-fluid e-b">
+            <div class="row">
+                <div class="col-4 e-b-r">
+                    <h3>Nombre del Perfil:</h3>
+                </div>
+
+                <div class="col-8">
+                    <div class="row">
+                        <div class="col">
+                            <h3><%= @profile.profile %></h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row e-b-t">
+                <div class="col-4 e-b-r">
+                    <h3>Reporta a:</h3>
+                </div>
+
+                <div class="col-8">
+                    <div class="row">
+                        <div class="col">
+                            <h3>
+                                <% @reports_to.each_with_index do |entry, index|%>
+                                    <% if index == 0 %>
+                                    <%= entry %>
+                                    <% else %>
+                                    / <%= entry %>
+                                    <% end %>
+                                <% end %>
+                            </h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row e-b-t">
+                <div class="col-4 e-b-r">
+                    <h3>Supervisión Directa:</h3>
+                </div>
+
+                <div class="col-8">
+                    <div class="row">
+                        <div class="col">
+                            <h3>
+                                <% @direct_supervision.each_with_index do |entry, index|%>
+                                    <% if index == 0 %>
+                                    <%= entry %>
+                                    <% else %>
+                                    / <%= entry %>
+                                    <% end %>
+                                <% end %>
+                            </h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row e-b-t">
+                <div class="col-4 e-b-r">
+                    <h3>Es Reemplazado por:</h3>
+                </div>
+
+                <div class="col-8">
+                    <div class="row">
+                        <div class="col">
+                            <h3>
+                                <% @replace_by.each_with_index do |entry, index|%>
+                                    <% if index == 0 %>
+                                    <%= entry %>
+                                    <% else %>
+                                    / <%= entry %>
+                                    <% end %>
+                                <% end %>
+                            </h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="p-sm"><h2>2.- OBJETIVO DEL PERFIL</h2></div>
+        <div class="container-fluid e-b p-sm">
+            <h3><%= @profile.objective %></h3>
+        </div>
+
+        <div class="p-sm"><h2>3.- FUNCIONES DEL PERFIL</h2></div>
+        <div class="container-fluid e-b p-sm">
+            <% @profile.functions.split("\r\n\r\n").each do |function| %>
+                <h3><%= function %></h3>
+            <% end %>
+        </div>
+        <div style="page-break-inside: avoid;">
+            <div class="p-sm"><h2>4.- REQUERIMIENTOS DE COMPETENCIAS BLANDAS</h2></div>
+            <div class="container-fluid e-b">
+                <div class="row e-b-b">
+                    <div class="col text-center">
+                        <h3>Competencias Profesionales</h3>
+                    </div>
+                </div>
+                
+                <div class="row text-center e-b-b">
+                    <div class="col-8 e-b-r">
+                        <h3>Competencia</h3>
+                    </div>
+                    <div class="col-4">
+                        <h3>Nivel Requerido</h3>
+                    </div>
+                </div>
+                
+                <% contador = 0 %>
+                <% @profile.profile_abilities.each do |entry|%>
+                    <% if entry.ability.abilities_type_id != 1 %>
+                        <div class="row">
+                            <div class="col-8 e-b-r <%= contador != 0 ? "e-b-t" : "" %> vertical-center">
+                                <h4><%= entry.ability.ability %></h4>
+                            </div>
+
+                            <div class="col-4 <%= contador != 0 ? "e-b-t" : "" %> text-center vertical-center">
+                                <h4><%= entry.value %></h4>
+                            </div>
+                        </div>
+                    <% contador += 1 %>
+                    <% end %>
+
+                <% end %>
+            </div>
+        </div>
+
+        <div style="page-break-inside: avoid;">
+            <div class="p-sm"><h2>5.- REQUERIMIENTOS DE COMPETENCIAS TÉCNICAS</h2></div>
+            <div class="container-fluid e-b">
+                <div class="row e-b-b">
+                    <div class="col text-center">
+                        <h3>Competencias Técnicas (conocimientos)</h3>
+                    </div>
+                </div>
+                
+                <div class="row text-center e-b-b">
+                    <div class="col-8 e-b-r">
+                        <h3>Competencia</h3>
+                    </div>
+                    <div class="col-4">
+                        <h3>Nivel Requerido</h3>
+                    </div>
+                </div>
+                
+                <% contador = 0 %>
+                <% @profile.profile_abilities.each do |entry|%>
+                    <% if entry.ability.abilities_type_id != 2 %>
+                        <div class="row">
+                            <div class="col-8 e-b-r <%= contador != 0 ? "e-b-t" : "" %> vertical-center">
+                                <h4><%= entry.ability.ability %></h4>
+                            </div>
+
+                            <div class="col-4 <%= contador != 0 ? "e-b-t" : "" %> text-center vertical-center">
+                                <h4><%= entry.value %></h4>
+                            </div>
+                        </div>
+                        <% contador += 1 %>
+                    <% end %>
+
+                <% end %>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

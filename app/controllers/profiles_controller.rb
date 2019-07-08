@@ -235,8 +235,8 @@ class ProfilesController < ApplicationController
     end
 
     def pdf_report
-        @title = "Perfil"
         @profile = Profile.joins(profile_abilities: :ability).find(params[:id])
+        @title = @profile.profile
         @reports_to = ReportsTo.where(:sender_id => @profile.id)
         @direct_supervision = DirectSupervision.where(:to_id => @profile.id)
         @replace_by = ReplaceBy.where(:to_replace_id => @profile.id)
@@ -256,15 +256,12 @@ class ProfilesController < ApplicationController
         }}
         respond_to do |format|
             format.html
+            format.json
             format.pdf do
                 render pdf: "Perfil #{@profile.profile}",
-                page_size: 'A4',
-                template: "profiles/pdf_report.html.erb",
-                layout: "pdf.html",
-                orientation: "Landscape",
-                lowquality: true,
-                zoom: 1,
-                dpi: 75
+                template: "profiles/pdf_report.pdf.erb",
+                size: "Letter",
+                lowquality: false
             end
         end
     end
