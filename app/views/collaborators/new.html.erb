@@ -57,7 +57,7 @@
                     <div class="form-group row">
                         <div class="form-group col-md-6 col-sm-12">
                             <%= f.label "Perfil Professional" %>
-                            <%= select_tag "user[profile_id]", options_for_select(@profiles.map {|profile| [profile.profile, profile.id]}), {:class => "form-control", id: "user_profile_id", include_blank: true} %>
+                            <%= select_tag "user[profile_id]", options_for_select(@profiles.map {|profile| [profile.profile, profile.id]}), {:class => "form-control", id: "user_profile_id", include_blank: true, :required => true} %>
                         </div>
                     </div>
 

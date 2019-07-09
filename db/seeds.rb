@@ -5,3 +5,12 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+
+AbilitiesType.create(:type_name => "Competencias Técnicas")
+AbilitiesType.create(:type_name => "Competencias Blandas")
+
+State.create(:state => "Activo")
+State.create(:state => "Inactivo")
+
+user = User.create(:name => "fulano", :last_name => "detal", :email => "fulano@contac.cl", :password_digest => "root", :rut => 195229120)
+Admin.create(:user_id => user.id)
