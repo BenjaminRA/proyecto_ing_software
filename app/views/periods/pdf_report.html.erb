@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Contac | <%= @title %></title>
+    <link rel="icon" href="<%= image_path('favicon.png') %>">
+
+    <%= include_gon %>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <!-- Main css styles -->
+    <%= wicked_pdf_stylesheet_link_tag '/bootstrap3.css' %>
+    <%= wicked_pdf_stylesheet_link_tag 'base/typography' %>
+    <%= wicked_pdf_stylesheet_link_tag 'base/base' %>
+    <%= wicked_pdf_stylesheet_link_tag 'evaluations' %>
+
+    <!-- Main javascript files -->
+    <%= wicked_pdf_javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+
+
+</head>
+<body>
+    <div class="pdf-report">
+        <div class="container-fluid e-b">
+        <div class="row">
+            <div class="col-xs-4 p-md e-b-l e-b-t">
+                <%= wicked_pdf_image_tag 'logo.png', :height => '120px' %>
+            </div>
+
+            <div class="col-xs-8 e-b-t e-b-r text-center">
+                <div class="row">
+                    <div class="col text-center">
+                        <h2><strong>Evaluación de desempeño</strong></h2>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <h3>Nombre: <%= @collaborator.user.name %> <%= @collaborator.user.last_name %></h3> <br>
+                        <h3>Perfil: <%= @profile.profile %></h3> <br>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-4 e-b-v e-b-r e-b-l">
+                <div class="text-center"><strong>COMPETENCIAS PROFESIONALES</strong></div>
+
+                <div class="row" >
+                    <div class="col-xs-6 e-b-v text-center vertical-center">
+                        <strong>Competencia</strong>
+                    </div>
+                    <div class="col-xs-2 e-b-v e-b-l text-center p-h-xs vertical-center">
+                        <strong>Nivel Requerido</strong>
+                    </div>
+                    <div class="col-xs-2 e-b-v e-b-l text-center p-h-xs vertical-center">
+                        <strong>Auto Evaluación</strong>
+                    </div>
+                    <div class="col-xs-2 e-b-v e-b-l text-center p-h-xs vertical-center">
+                        <strong>Evaluación</strong>
+                    </div>
+                </div>
+
+                <% contador = 0 %>
+                <% @profile.profile_abilities.each_with_index do |entry, index| %>
+                    <% if entry.ability.abilities_type_id == 2 %>
+                        <div class="row">
+                            <div class="col-xs-6 e-b-b vertical-center">
+                                <%= entry.ability.ability %>
+                            </div>
+                            <div class="col-xs-2 e-b-b e-b-l text-center vertical-center">
+                                <%= entry.value %>
+                            </div>
+                            <div class="col-xs-2 e-b-b e-b-l text-center vertical-center">
+                                <% if @autoevaluation.nil? %>
+                                    -
+                                <% else %>
+                                    <%= find_value(entry.ability.id, @autoevaluation) %>
+                                <% end %>
+                            </div>
+                            <div class="col-xs-2 e-b-b e-b-l text-center vertical-center">
+                                <% if @evaluation.nil? %>
+                                    -
+                                <% else %>
+                                    <%= find_value(entry.ability.id, @evaluation) %>
+                                <% end %>
+                            </div>
+                        </div>
+                        <% contador += 1 %>
+                    <% end %>
+                <% end %>
+
+            </div>
+
+            <div class="col-xs-8 e-b-t e-b-b text-center">
+                <canvas id="blandas"></canvas>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-4 e-b-v e-b-r e-b-l">
+                <div class="text-center"><strong>COMPETENCIAS TÉCNICAS</strong></div>
+
+                <div class="row" >
+                    <div class="col-xs-6 e-b-v text-center vertical-center">
+                        <strong>Competencia</strong>
+                    </div>
+                    <div class="col-xs-2 e-b-v e-b-l text-center p-h-xs vertical-center">
+                        <strong>Nivel Requerido</strong>
+                    </div>
+                    <div class="col-xs-2 e-b-v e-b-l text-center p-h-xs vertical-center">
+                        <strong>Auto Evaluación</strong>
+                    </div>
+                    <div class="col-xs-2 e-b-v e-b-l text-center p-h-xs vertical-center">
+                        <strong>Evaluación</strong>
+                    </div>
+                </div>
+
+                <% @profile.profile_abilities.each_with_index do |entry, index| %>
+                    <% if entry.ability.abilities_type_id == 1 %>
+                        <div class="row">
+                            <div class="col-xs-6 e-b-b vertical-center">
+                                <%= entry.ability.ability %>
+                            </div>
+                            <div class="col-xs-2 e-b-b e-b-l text-center vertical-center">
+                                <%= entry.value %>
+                            </div>
+                            <div class="col-xs-2 e-b-b e-b-l text-center vertical-center">
+                                <% if @autoevaluation.nil? %>
+                                    -
+                                <% else %>
+                                    <%= find_value(entry.ability.id, @autoevaluation) %>
+                                <% end %>
+                            </div>
+                            <div class="col-xs-2 e-b-b e-b-l text-center vertical-center">
+                                <% if @evaluation.nil? %>
+                                    -
+                                <% else %>
+                                    <%= find_value(entry.ability.id, @evaluation) %>
+                                <% end %>
+                            </div>
+                        </div>
+                    <% end %>
+                <% end %>
+
+            </div>
+
+            <div class="col-xs-8 e-b-t e-b-b text-center">
+                <canvas id="tecnicas"></canvas>
+            </div>
+        </div>
+        
+
+    </div>
+    </div>
+</body>
+</html>
+
+
+<% content_for :javascript do %>
+
+<script type="text/javascript">
+
+$(function(){
+
+    new Chart(document.getElementById("blandas").getContext("2d"), {
+            type: 'radar', 
+            data: {
+                labels: gon.collaborator.required.filter((e) => e.ability_type == 2).map((e) => e.ability),
+                datasets: [
+                    {
+                        label: "Nivel Requerido",
+                        backgroundColor: "rgba(68,114,196,0.0)",
+                        borderColor: "rgba(68,114,196,1)",
+                        data: gon.collaborator.required.filter((e) => e.ability_type == 2).map((e) => e.value)
+                    },
+                    {
+                        label: "Auto Evaluación",
+                        backgroundColor: "rgba(237,125,49,0.0)",
+                        borderColor: "rgba(237,125,49,1)",
+                        data: gon.collaborator.autoevaluation ? gon.collaborator.autoevaluation.filter((e) => e.ability_type == 2).map((e) => e.value) : []
+                    },
+                    {
+                        label: "Evaluación",
+                        backgroundColor: "rgba(165,165,165,0.0)",
+                        borderColor: "rgba(165,165,165,1)",
+                        data: gon.collaborator.evaluation ? gon.collaborator.evaluation.filter((e) => e.ability_type == 2).map((e) => e.value) : []
+                    }
+                ]
+            }, 
+            options: {
+                responsive: true,
+                scale: {
+                    ticks: {
+                        min: 0,
+                        max: 5,
+                        stepSize: 1
+                    }
+                }
+            }
+        }
+    )
+    
+    new Chart(document.getElementById("tecnicas").getContext("2d"), {
+            type: 'radar', 
+            data: {
+                labels: gon.collaborator.required.filter((e) => e.ability_type == 1).map((e) => e.ability),
+                datasets: [
+                    {
+                        label: "Nivel Requerido",
+                        backgroundColor: "rgba(68,114,196,0.0)",
+                        borderColor: "rgba(68,114,196,1)",
+                        data: gon.collaborator.required.filter((e) => e.ability_type == 1).map((e) => e.value)
+                    },
+                    {
+                        label: "Auto Evaluación",
+                        backgroundColor: "rgba(237,125,49,0.0)",
+                        borderColor: "rgba(237,125,49,1)",
+                        data: gon.collaborator.autoevaluation ? gon.collaborator.autoevaluation.filter((e) => e.ability_type == 1).map((e) => e.value) : []
+                    },
+                    {
+                        label: "Evaluación",
+                        backgroundColor: "rgba(165,165,165,0.0)",
+                        borderColor: "rgba(165,165,165,1)",
+                        data: gon.collaborator.evaluation ? gon.collaborator.evaluation.filter((e) => e.ability_type == 1).map((e) => e.value) : []
+                    }
+                ]
+            }, 
+            options: {
+                responsive: true,
+                scale: {
+                    ticks: {
+                        min: 0,
+                        max: 5,
+                        stepSize: 1
+                    }
+                }
+            }
+        }
+    )
+
+})
+
+</script>
+
+<% end %>

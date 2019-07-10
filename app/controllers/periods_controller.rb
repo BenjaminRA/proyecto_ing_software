@@ -221,6 +221,20 @@ class PeriodsController < ApplicationController
             }} : nil,
         }
 
+        respond_to do |format|
+            format.html
+            format.json
+            format.pdf do
+                render pdf: "Reporte",
+                template: "periods/pdf_report.html",
+                size: "Letter",
+                orientation: "Landscape",
+                :javascript_delay => 5000,
+                encoding:"UTF-8",
+                lowquality: false
+            end
+        end
+
     end
 
     def destroy
