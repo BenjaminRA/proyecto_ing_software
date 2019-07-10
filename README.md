@@ -1,9 +1,9 @@
 # Instrucciones
 
-## Solo la primera vez
-1) `docker-compose run web rails new .`
+- `bundle install`
 
-2) `docker-compose build`
+- `rake db:migrate`
 
-## Para levantar el servidor
-1) `docker-compose up`
+- `rake db:seed`
+
+- Entrar con el perfil `fulano@contac.cl` contraseña `root`
