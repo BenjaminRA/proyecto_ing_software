@@ -47,7 +47,7 @@ class PeriodsController < ApplicationController
 
         if (@collaborators.count == 0)
             flash[:mensaje] = "Debe crear al menos 1 Colaborador"
-            redirect_to "/collaborators"
+            redirect_to "/periods"
         end
     end
 

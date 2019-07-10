@@ -3,7 +3,7 @@ class LoginController < ApplicationController
 
     def index
         if(signed_in?)
-            redirect_to "/dashboard"
+            redirect_to "/periods"
         else
             @user = User.new
             session[:user_id] = nil
@@ -20,7 +20,7 @@ class LoginController < ApplicationController
         user = User.where(:email => params[:user][:email], :password_digest => params[:user][:password_digest]).first
         if(user)
             collaborator = Collaborator.where(:user_id => user.id).first
-            url = "/dashboard"
+            url = "/periods"
             if (collaborator)
                 session[:collaborator_id] = collaborator.id
                 url = "/autoevaluations"

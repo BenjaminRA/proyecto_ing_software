@@ -233,35 +233,15 @@ class ProfilesController < ApplicationController
                 :abilities => ProfileAbility.joins(:ability).where("abilities.area_id = #{area.id}").where("profile_abilities.profile_id = #{@profile.id}")
             }}
         }}
-    end
 
-    def pdf_report
-        @profile = Profile.joins(profile_abilities: :ability).find(params[:id])
-        @title = @profile.profile
-        @reports_to = ReportsTo.where(:sender_id => @profile.id)
-        @direct_supervision = DirectSupervision.where(:to_id => @profile.id)
-        @replace_by = ReplaceBy.where(:to_replace_id => @profile.id)
-
-        @reports_to = @reports_to.map{|entry| Profile.find(entry.reciever_id).profile}
-        @direct_supervision = @direct_supervision.map{|entry| Profile.find(entry.from_id).profile}
-        @replace_by = @replace_by.map{|entry| Profile.find(entry.replacement_id).profile}
-
-        categories = Category.all
-
-        @blandas = categories.map{|category| {
-            :category => category.category,
-            :areas => Area.where(:category_id => category.id).map{|area| {
-                :area => area.area,
-                :abilities => ProfileAbility.joins(:ability).where("abilities.area_id = #{area.id}").where("profile_abilities.profile_id = #{@profile.id}")
-            }}
-        }}
         respond_to do |format|
             format.html
             format.json
             format.pdf do
                 render pdf: "Perfil #{@profile.profile}",
-                template: "profiles/pdf_report.pdf.erb",
+                template: "profiles/pdf_report.html",
                 size: "Letter",
+                encoding:"UTF-8",
                 lowquality: false
             end
         end

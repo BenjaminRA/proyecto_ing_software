@@ -15,8 +15,8 @@
 //= require activestorage
 //= require turbolinks
 //= require_tree .
-//= require popper
 //= require bootstrap
+//= require popper
 //= require pace/pace.min.js
 //= require peity/jquery.peity.min.js
 //= require slimscroll/jquery.slimscroll.min.js

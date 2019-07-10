@@ -24,7 +24,7 @@
                 } %>
             </div>
         </div>
-        <div class="col-sm">
+        <div class="col-sm-8">
             <div class="form-group">
                 <label class="col-form-label" for="categoria">Categoria</label>
                 <%= select_tag :category, options_for_select([["Técnicas", 1], ["Blandas", 2]]), {
@@ -36,7 +36,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-lg-1 offset-lg-11">
+        <div class="col-lg-12">
             <%= button_tag :submit, {:class => "btn btn-primary float-right"} do %>
                 <i class="fa fa-search"></i>&nbsp;Buscar
             <% end %>

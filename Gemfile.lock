@@ -54,7 +54,7 @@ GEM
     archive-zip (0.12.0)
       io-like (~> 0.3.0)
     arel (9.0.0)
-    autoprefixer-rails (9.5.1)
+    autoprefixer-rails (9.6.1)
       execjs
     bcrypt (3.1.12)
     bcrypt (3.1.12-x64-mingw32)
@@ -251,7 +251,7 @@ PLATFORMS
 DEPENDENCIES
   bcrypt (~> 3.1.7)
   bootsnap (>= 1.1.0)
-  bootstrap (~> 4.1.0)
+  bootstrap (>= 4.1.0)
   byebug
   capybara (>= 2.15)
   chromedriver-helper
