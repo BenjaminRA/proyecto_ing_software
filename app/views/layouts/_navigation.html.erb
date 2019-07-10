@@ -82,7 +82,8 @@
                                 <label>Competencia</label>
                                 <%= text_field_tag :new_ability, params[:new_ability], {
                                     :class => "form-control",
-                                    :placeholder => "Competencia"
+                                    :placeholder => "Competencia",
+                                    :required => ""
                                 }%>
                             </div>
                             <div class="form-group">
@@ -147,7 +148,7 @@
         <div class="modal-content">
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-sm"><h3 class="m-t-none m-b">Crear Area</h3>
+                    <div class="col-sm"><h3 class="m-t-none m-b">Crear Área</h3>
                         <div class="form-group">
                             <label>Area</label>
                             <input class="form-control" id="new_area_blanda" placeholder="Area" autofocus/>
@@ -171,8 +172,12 @@ $(function() {
 
     $("#new_category").on('change', (e) => {
         if (e.target.value == 2) {
+            $("#new_blanda_category").prop("required", true)
+            $("#new_blanda_area").prop("required", true)
             $("#new_blanda_category_form_group").show("fast")
         } else {
+            $("#new_blanda_category").prop("required", false)
+            $("#new_blanda_area").prop("required", false)
             $("#new_blanda_category_form_group").hide("fast")
         }
     })
