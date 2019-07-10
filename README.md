@@ -6,4 +6,4 @@
 
 - `rake db:seed`
 
-- Entrar con el perfil `fulano@contac.cl` contraseña `root`
+- Entrar con el perfil `admin@contac.cl` contraseña `root`
