@@ -66,12 +66,6 @@
                                 <%= text_field_tag "profile[profile_abilities_attributes][first][value]", 0, {:class => "form-control", type: "number", min: "0", max: "5"} %>
                             </div>
                         </div>
-                        <div class="col-md-2">
-                            <div class="form-group">
-                                <label> &nbsp; </label>
-                                <button class="form-control btn btn-danger eliminar-competencia" type="button"><i class="fa fa-times"></i>&nbsp;&nbsp;&nbsp;Eliminar Competencia</button>
-                            </div>
-                        </div>
                     </div>
                     <div id="add-blandas-association" class="abilities-fields-blandas">
                         <%= f.fields_for :profile_abilities do |builder| %>
@@ -82,7 +76,7 @@
                         <div class="col-sm">
                             <%= link_to_add_association f, :profile_abilities, :partial => "blandas_profile_ability_fields", data: {
                                 association_insertion_node: '.abilities-fields-blandas', association_insertion_method: :append
-                            }, :class => "btn btn-primary float-right", :id => "add_association" do %>
+                            }, :class => "btn btn-primary float-right", :id => "add_association_blandas" do %>
                                 <i class="fa fa-plus"></i>&nbsp;Agregar Habilidad
                             <% end %>
                         </div>
@@ -96,20 +90,14 @@
                                 <label>Competencia</label>
                                 <%= select_tag "profile[profile_abilities_attributes][last][ability]", options_for_select( @tecnicas.map {|ability| [ability.ability, ability.id]} ), {
                                     :id => "fisrt_tecnica_select",
-                                    :class => "form-control"
+                                    :class => "form-control",
                                 } %>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label>Valor esperado</label>
-                                <%= text_field_tag "profile[profile_abilities_attributes][last][value]", 0, {:class => "form-control", type: "number", min: "0", max: "5"} %>
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="form-group">
-                                <label> &nbsp; </label>
-                                <button class="form-control btn btn-danger eliminar-competencia" type="button"><i class="fa fa-times"></i>&nbsp;&nbsp;&nbsp;Eliminar Competencia</button>
+                                <%= text_field_tag "profile[profile_abilities_attributes][last][value]", 0, {:class => "form-control", type: "number", min: "0", max: "5", :required => ""} %>
                             </div>
                         </div>
                     </div>
@@ -122,7 +110,7 @@
                         <div class="col-sm">
                             <%= link_to_add_association f, :profile_abilities, :partial => "tecnicas_profile_ability_fields", data: {
                                 association_insertion_node: '.abilities-fields-tecnicas', association_insertion_method: :append
-                            }, :class => "btn btn-primary float-right" do %>
+                            }, :class => "btn btn-primary float-right", :id => "add_association_tecnicas" do %>
                                 <i class="fa fa-plus"></i>&nbsp;Agregar Habilidad
                             <% end %>
                         </div>
@@ -146,15 +134,20 @@
 <script type="text/javascript">
 
 selectFilter = function(element, selects) {
+    let to_remove = []
     for (let select of selects)
         if (element.id !== select.id) {
             if (select.value === element.value) {
+                to_remove.push(select)
                 select.parentElement.parentElement.parentElement.remove()
             }
             else {
                 $(`#${select.id} option[value="${aux.value}"]`).remove()
             }
         }
+
+    for (let select of to_remove)
+        selects.filter(e => e !== select)
 }
 
 
@@ -162,6 +155,12 @@ $(function() {
 
     let select_blandas = [],
         select_tecnicas = []
+
+    if (gon.blandas.length === 1)
+        $("#add_association_blandas").hide()
+
+    if (gon.tecnicas.length === 1)
+        $("#add_association_tecnicas").hide()
     
     $("#new_profile").validate({
         rules: {
@@ -202,9 +201,11 @@ $(function() {
                 }
             }
         })
-        button = insertedItem[0].lastChild.previousSibling.firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling
+        const button = insertedItem[0].lastChild.previousSibling.firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling
         $(button).on("click", (e) => {
             e.target.parentElement.parentElement.parentElement.remove()
+            select_tecnicas.filter(e => e !== ability_select)
+            $("#add_association_tecnicas").show()
         })
 
         $(ability_select).on("select2:select", e => selectFilter({
@@ -213,8 +214,8 @@ $(function() {
         }, select_tecnicas))
 
 
-        if (gon.tecnicas.length === select_tecnicas.length)
-            console.log('No quedan mas abilitdades')
+        if (gon.tecnicas.length <= select_tecnicas.length)
+            $("#add_association_tecnicas").hide()
         else
             for (let aux of select_tecnicas)
                 $(`#${ability_select.id} option[value="${aux.value}"]`).remove()
@@ -236,9 +237,11 @@ $(function() {
                 }
             }
         })
-        button = insertedItem[0].lastChild.previousSibling.firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling
+        const button = insertedItem[0].lastChild.previousSibling.firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling
         $(button).on("click", (e) => {
+            select_blandas.filter(e => e !== ability_select)
             e.target.parentElement.parentElement.parentElement.remove()
+            $("#add_association_blandas").show()
         })
 
         $(ability_select).on("select2:select", e => selectFilter({
@@ -246,8 +249,8 @@ $(function() {
             value: e.target.value
         }, select_blandas))
 
-        if (gon.blandas.length === select_blandas.length)
-            console.log('No quedan mas abilitdades')
+        if (gon.blandas.length <= select_blandas.length)
+            $("#add_association_blandas").hide()
         else
             for (let aux of select_blandas) 
                 $(`#${ability_select.id} option[value="${aux.value}"]`).remove()

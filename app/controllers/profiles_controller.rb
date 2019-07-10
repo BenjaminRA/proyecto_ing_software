@@ -12,10 +12,6 @@ class ProfilesController < ApplicationController
 
         @profiles = @profiles.where(['profile_abilities.ability_id = ?', params[:abilities]]) if params[:abilities].present?
 
-        # params[:abilities].each do |ability|
-        #     @profiles = @profiles.where(['profile_abilities.ability_id = ?', ability])
-        # end if params[:abilities].present?
-
         @profiles = @profiles.uniq
     end
 
@@ -210,6 +206,11 @@ class ProfilesController < ApplicationController
 
         gon.tecnicas = @tecnicas
         gon.blandas = @blandas
+
+        if (@tecnicas.count == 0 || @blandas.count == 0)
+            flash[:mensaje] = "Debe crear al menos 1 Competencia Técnica y 1 Competencia Blanda"
+            redirect_to "/profiles"
+        end
     end
 
     def show

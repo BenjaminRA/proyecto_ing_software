@@ -59,7 +59,7 @@
                         <div class="col-sm">
                             <%= link_to_add_association f, :profile_abilities, :partial => "blandas_profile_ability_fields_edit", data: {
                                 association_insertion_node: '.abilities-fields-blandas', association_insertion_method: :append
-                            }, :class => "btn btn-primary float-right", :id => "add_association" do %>
+                            }, :class => "btn btn-primary float-right", :id => "add_association_blandas" do %>
                                 <i class="fa fa-plus"></i>&nbsp;Agregar Habilidad
                             <% end %>
                         </div>
@@ -76,7 +76,7 @@
                         <div class="col-sm">
                             <%= link_to_add_association f, :profile_abilities, :partial => "tecnicas_profile_ability_fields_edit", data: {
                                 association_insertion_node: '.abilities-fields-tecnicas', association_insertion_method: :append
-                            }, :class => "btn btn-primary float-right" do %>
+                            }, :class => "btn btn-primary float-right", :id => "add_association_tecnicas" do %>
                                 <i class="fa fa-plus"></i>&nbsp;Agregar Habilidad
                             <% end %>
                         </div>
@@ -100,6 +100,7 @@
 <script type="text/javascript">
 
 selectFilter = function(element, selects) {
+    let to_remove = []
     for (let select of selects)
         if (element.id !== select.id) {
             if (select.value === element.value) {
@@ -109,12 +110,21 @@ selectFilter = function(element, selects) {
                 $(`#${select.id} option[value="${aux.value}"]`).remove()
             }
         }
+
+    for (let select of to_remove)
+        selects.filter(e => e !== select)
 }
 
 $(function() {
 
     let select_blandas = [],
         select_tecnicas = []
+
+    if (gon.blandas.length === select_blandas.length)
+        $("#add_association_blandas").hide()
+
+    if (gon.tecnicas.length === 1select_tecnicas.length)
+        $("#add_association_tecnicas").hide()
 
     $("#edit_profile_<%= @profile.id %>").validate({
         rules: {
@@ -155,9 +165,11 @@ $(function() {
                 }
             }
         })
-        button = insertedItem[0].lastChild.previousSibling.firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling
+        const button = insertedItem[0].lastChild.previousSibling.firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling
         $(button).on("click", (e) => {
+            select_tecnicas.filter(e => e !== ability_select)
             e.target.parentElement.parentElement.parentElement.remove()
+            $("#add_association_tecnicas").show()
         })
 
         $(ability_select).on("select2:select", e => selectFilter({
@@ -166,8 +178,8 @@ $(function() {
         }, select_tecnicas))
 
 
-        if (gon.tecnicas.length === select_tecnicas.length)
-            console.log('No quedan mas abilitdades')
+        if (gon.tecnicas.length <= select_tecnicas.length)
+            $("#add_association_tecnicas").hide()
         else
             for (let aux of select_tecnicas)
                 $(`#${ability_select.id} option[value="${aux.value}"]`).remove()
@@ -189,9 +201,11 @@ $(function() {
                 }
             }
         })
-        button = insertedItem[0].lastChild.previousSibling.firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling
+        const button = insertedItem[0].lastChild.previousSibling.firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling
         $(button).on("click", (e) => {
+            select_blandas.filter(e => e !== ability_select)
             e.target.parentElement.parentElement.parentElement.remove()
+            $("#add_association_blandas").show()
         })
 
         $(ability_select).on("select2:select", e => selectFilter({
@@ -199,8 +213,8 @@ $(function() {
             value: e.target.value
         }, select_blandas))
 
-        if (gon.blandas.length === select_blandas.length)
-            console.log('No quedan mas abilitdades')
+        if (gon.blandas.length <= select_blandas.length)
+            $("#add_association_blandas").hide()
         else
             for (let aux of select_blandas) 
                 $(`#${ability_select.id} option[value="${aux.value}"]`).remove()

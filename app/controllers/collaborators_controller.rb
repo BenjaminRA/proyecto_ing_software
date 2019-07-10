@@ -18,6 +18,11 @@ class CollaboratorsController < ApplicationController
         @title = "Crear Colaborador"
         @collaborator = User.new
         @profiles = Profile.all
+
+        if (@profiles.count == 0)
+            flash[:mensaje] = "Debe crear al menos 1 Perfil"
+            redirect_to "/collaborators"
+        end
     end
 
     def show
@@ -41,9 +46,6 @@ class CollaboratorsController < ApplicationController
                 :abilities => ProfileAbility.joins(:ability).where("abilities.area_id = #{area.id}").where("profile_abilities.profile_id = #{@collaborator.profile.id}")
             }}
         }}
-
-        # render :plain => categories.inspect
-
     end
 
     def edit

@@ -11,6 +11,12 @@
 
 <div class="wrapper wrapper-content animated fadeInRight">
 
+<% if flash[:mensaje].present? %>
+    <div class="alert alert-danger alert-dismissable">
+        <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+        <%= flash[:mensaje] %>
+    </div>
+<% end %>
 
 <%= form_tag collaborators_path, :method => 'get' do %>
 <div class="ibox-content m-b-sm border-bottom">

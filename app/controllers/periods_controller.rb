@@ -44,6 +44,11 @@ class PeriodsController < ApplicationController
         }}
 
         gon.periods = Period.all
+
+        if (@collaborators.count == 0)
+            flash[:mensaje] = "Debe crear al menos 1 Colaborador"
+            redirect_to "/collaborators"
+        end
     end
 
     def create
