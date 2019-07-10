@@ -12,5 +12,5 @@ AbilitiesType.create(:type_name => "Competencias Blandas")
 State.create(:state => "Activo")
 State.create(:state => "Inactivo")
 
-user = User.create(:name => "fulano", :last_name => "detal", :email => "fulano@contac.cl", :password_digest => "root", :rut => 195229120)
+user = User.create(:name => "admin", :last_name => "", :email => "admin@contac.cl", :password_digest => "root", :rut => 0)
 Admin.create(:user_id => user.id)
